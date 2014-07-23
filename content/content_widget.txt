@@ -1,0 +1,23 @@
+<!-- Content widget -->
+<!--
+-- Don't change everything, copy and pate to widget content
+-- Không được thay đổi gì ở đây. 
+-- Copy pate toàn bộ vào content widget ... 
+-->
+
+<vb:if condition="$show['member']">
+	<vb:if condition="$vboptions[payment_enable] == 1">
+	<div class="cms_widget">
+		<div class="block">
+			<div class="cms_widget_header">
+			<h3>{vb:raw payment_title}</h3>
+			<h4>{vb:raw payment_detail}</h4>
+			</div>
+			<div class="cms_widget_content">
+				 {vb:raw payment_content}
+			</div>
+		</div>
+	</div>
+	</vb:if>
+</vb:if>
+<!-- End content widget --> 

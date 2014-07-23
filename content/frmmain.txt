@@ -1,0 +1,18 @@
+<!-- Content MAINFORM template-->
+<!--
+-- Don't change everything 
+-- Không được thay đổi gì ở đây. 
+-->
+
+<vb:if condition="$show['member']">
+	<vb:if condition="$vboptions[payment_enable] == 1">
+	<div id="form-gamebank" class="collapse wgo_block" style="float: left;">
+		<h2 class="blockhead">{vb:raw payment_title}</h2>		
+		<div class="blockbody formcontrols floatcontainer gamebank">
+			<strong>{vb:raw payment_detail}</strong>
+			{vb:raw payment_content}
+		</div>
+	</div>
+	</vb:if>
+</vb:if>
+<!-- End content MAINFORM template-->
