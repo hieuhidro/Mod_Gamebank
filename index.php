@@ -9,6 +9,7 @@
 		<link href="payment/css/custom.style.css" rel="stylesheet">
 	</head>
 	<body>
+		
 		<div class="container-payment">
 			<?php
 			include 'form.php';

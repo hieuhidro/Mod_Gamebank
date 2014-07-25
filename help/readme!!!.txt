@@ -1,5 +1,5 @@
 
-//####################################################################################################
+//#######################################       GAME BANK      #######################################
 
 import file product-game_bank.xml to install mod. 
 
@@ -11,9 +11,27 @@ insert 1 column to table user in database, add name column to setting value ... 
 //####################################################################################################
 
 
+<!-- Header template
+--
+-- Insert before Welcome <li> 
+--
+--> 
+
+{vb:raw ad_location.payment_url}
+
+<!-- End Header template -->
+
+<!-- ######################################################################################## -->
+<!-- Insert to navbar --> 
+<!--
+  --Before What New ... 
+  -->
+  {vb:raw template_hook.navtab_middle}
+<!-- End Insert to navbar --> 
+<!-- ######################################################################################## -->
 
 
-
+<!-- ####################################    widget   ####################################### -->
 <!-- Content widget -->
 <!--
 -- Don't change everything, copy and pate to widget content
@@ -37,8 +55,11 @@ insert 1 column to table user in database, add name column to setting value ... 
 	</vb:if>
 </vb:if>
 <!-- End content widget --> 
+<!-- ######################################################################################## -->
 
 
+
+<!-- ##################################  MAINFORM  ########################################### -->
 <!-- Content MAINFORM template-->
 <!--
 -- Don't change everything 
@@ -57,8 +78,10 @@ insert 1 column to table user in database, add name column to setting value ... 
 	</vb:if>
 </vb:if>
 <!-- End content MAINFORM template-->
+<!-- ######################################################################################## -->
 
 
+<!-- ######################################################################################## -->
 <!-- Content with header template -->
 <!-- 
 -- Pate to header template 
@@ -75,10 +98,11 @@ insert 1 column to table user in database, add name column to setting value ... 
 	</vb:if>
 </vb:if>
 <!-- Content with header template -->
+<!-- ######################################################################################## -->
 
 
 
-
+<!-- ######################################################################################## -->
 <!-- Content Content with another content -->
 <!-- 
 -- Edit everything 
@@ -99,4 +123,4 @@ insert 1 column to table user in database, add name column to setting value ... 
 	</vb:if>
 </vb:if>
 <!-- Content Content with another content -->
-
+<!-- ######################################################################################## -->

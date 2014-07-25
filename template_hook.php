@@ -1,20 +1,34 @@
 <?php
+//######################## REQUIRE BACK-END  ################# Delete when completed
+//require_once('./global.php');
+//require_once(DIR . '/includes/adminfunctions.php');
+//require_once(DIR . '/includes/class_bbcode.php');
+//#############################################################
 
 include_once ('payment/lib/nusoap.php');
 
 if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'])//Check if mod is enable and user is login ....................
-{	
+{		
 	//################   Start Get setting  #################
+	
 	/**
-	 * Get gamebank account from vbulletin option Your Payment
+	 * Get gamebank account from vbulletin option Your Payment (string)
 	 */
 	$gamebank_account = $vbulletin -> options['payment_id'] != "0" ? $vbulletin -> options['payment_id'] : "thien321091";
 	
 	/**
-	 * Get column name from vbulletin option Your Payment
+	 * Get column name from vbulletin option Your Payment (string)
 	 */
 	$gamebank_column = $vbulletin -> options['payment_column'];
 	
+	/**
+	 * Get column name from vbulletin option Your Payment (string)
+	 */
+	 $name_nav = $vbulletin -> options['payment_namenav'];
+	/**
+	 * Getting setting enable widget (boolean)
+	 */
+	$payment_enable_widget = $vbulletin -> options['payment_enable_widget'];
 	
 	/**
 	 * Get user detail from $vbulletin (userid, username, coins);
@@ -138,7 +152,8 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 		/**
 		 * Get content template
 		 */
-		require_once('payment/content/frmmain.txt');		
+		$php_frmmain_include = "";
+		require_once('payment/content/frmmain.txt');	
 		$php_frmmain_include = ob_get_contents();	
 		
 		/**
@@ -147,12 +162,20 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 		require_once('payment/content/content_widget.txt');		
 		$php_widget_include = ob_get_contents();
 	ob_end_clean();
-	
 	/**
 	 * Payment detail User detail, User coins (Username : coins)
 	 */
 	$payment_detail = $user_detail['username']." : ".$user_detail['coins'];
 	
+	if($name_nav != "") //Checking changed value name_menu
+	{
+	/**
+	 * Payment content link in header and navbar ... 
+	 */	
+	$header_cont = "<li><a class='navtab' href='forum.php#form-gamebank' href='#top' onclick='document.location.hash='form-gamebank'; return false;'>".$name_nav."</a></li>";
+	//add to menu
+	$template_hook['navtab_middle'] .= $header_cont;
+	}
 	/**
 	 * Import value to your_payment template page  
 	 */
@@ -161,14 +184,25 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 		$templater->register('payment_title','Payment Online');
 		$templater->register('payment_detail', $payment_detail);
 	$ad_location['your_payment'] .= $templater->render();
-	$ad_location['board_below_whats_going_on'] .= $templater->render();
+	
+	
+	
+	
+	/**
+	 * Insert content to widget if enable widget
+	 */
+	if($payment_enable_widget){
+		$ad_location['payment_content'] = $php_include;     
+		$ad_location['payment_title'] ='Payment Online';
+		$ad_location['payment_detail'] = $payment_detail;
+	} 
+	
    	/**
 	 * Import value to FORUMHOME template  
 	 */
-	vB_Template::preRegister('FORUMHOME', array('payment_content'=> $php_include,
-												'payment_title'=>'Payment Online',
-												'payment_detail'=> $payment_detail));
-	
+	//vB_Template::preRegister('FORUMHOME', array('payment_content'=> $php_include,
+	//											'payment_title'=>'Payment Online',
+	//											'payment_detail'=> $payment_detail));
 	
 	
 	
