@@ -1,8 +1,8 @@
 <?php
-	include_once('../global.php');
+	include_once('./global.php');
 	include_once(DIR.'/includes/adminfunctions.php');
 	include_once(DIR.'/includes/class_bbcode.php');
-	require_once('lib/class.paging.php');
+	require_once('payment/lib/class.paging.php');
 ?>
 
 <!DOCTYPE html>
@@ -13,8 +13,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Nạp thẻ điện thoại vào tài khoản gamebank</title>
 		<!-- Custom styles for this template -->
-		<link href="css/custom.style.css" rel="stylesheet">
-		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="payment/css/custom.style.css" rel="stylesheet">
+		<link href="payment/css/bootstrap.min.css" rel="stylesheet">
 	</head>
 	<body>
 		<header></header>
@@ -52,16 +52,18 @@
 							<th>Card Serial</th>
 							<th>Card Number</th>
 							<th>Coins</th>
+							<th>Status</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 							<td>1</td>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td>@mdo</td>
-							<td>@mdo</td>
-							<td>@mdo</td>
+							<td>User Name</td>
+							<td>Date Time</td>
+							<td>Card Serial</td>
+							<td>Card Number</td>
+							<td>Coins</td>
+							<td>Status</td>
 						</tr>						
 					</tbody>
 				</table>
@@ -71,8 +73,8 @@
 			
 			<!-- Paging contents -->
 			<?php 
-				$cur_page = new paging(20);
-				$cur_page->Compile_ToString();
+				$cur_page = new paging();
+				echo $cur_page->Compile_ToString();
 			?>	
 			<!-- /. Paging contents -->
 		</div>
