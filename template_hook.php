@@ -30,6 +30,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	 */
 	$payment_enable_widget = $vbulletin -> options['payment_enable_widget'];
 	
+	$payment_top_link = $vbulletin->options['payment_toplink'];
 	/**
 	 * Get user detail from $vbulletin (userid, username, coins);
 	 */
@@ -166,28 +167,38 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	 * Payment detail User detail, User coins (Username : coins)
 	 */
 	$payment_detail = $user_detail['username']." : ".$user_detail['coins'];
-	
+	$header_cont = "<li><a class='navtab' href='forum.php#form-gamebank' href='#top' onclick='document.location.hash='form-gamebank'; return false;'>Nạp card</a></li>";
 	if($name_nav != "") //Checking changed value name_menu
 	{
+		/**
+		 * Payment content link in header and navbar ... 
+		 */	
+		$header_cont = "<li><a class='navtab' href='forum.php#form-gamebank' href='#top' onclick='document.location.hash='form-gamebank'; return false;'>".$name_nav."</a></li>";
+		//add to menu
+		$template_hook['navtab_middle'] .= $header_cont;
+	}
+	
+	
 	/**
-	 * Payment content link in header and navbar ... 
+	 * 
+	 * Edit header content
+	 * 
 	 */	
-	$header_cont = "<li><a class='navtab' href='forum.php#form-gamebank' href='#top' onclick='document.location.hash='form-gamebank'; return false;'>".$name_nav."</a></li>";
-	//add to menu
-	$template_hook['navtab_middle'] .= $header_cont;
+	$vbulletin -> userinfo['username'] .= ":".$user_detail['coins'] ." coins";
+	
+	if($payment_top_link){
+		$ad_location['payment_url'] = $header_cont;
 	}
 	/**
 	 * Import value to your_payment template page  
-	 */
+	 */	 
 	$templater = vB_Template::create('your_payment');
 		$templater->register('payment_content', $php_include);
 		$templater->register('payment_title','Payment Online');
 		$templater->register('payment_detail', $payment_detail);
 	$ad_location['your_payment'] .= $templater->render();
-	
-	
-	
-	
+		
+		
 	/**
 	 * Insert content to widget if enable widget
 	 */
@@ -196,7 +207,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 		$ad_location['payment_title'] ='Payment Online';
 		$ad_location['payment_detail'] = $payment_detail;
 	} 
-	
+	//$vbulletin -> userinfo['username']  = $user_detail['username'];
    	/**
 	 * Import value to FORUMHOME template  
 	 */

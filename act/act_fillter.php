@@ -13,9 +13,8 @@ if ($vbulletin -> userinfo['userid']) {
 		$status = $_GET['status-filter'];
 	}
 
-	$cur_page = new paging($username, 5);
-
 	$username = ($username == "") ? ($vbulletin -> userinfo['username']) : $username;
+	$cur_page = new paging($username, 5);	
 	$payment_history = new payment_history($username);
 	if(!isset($_GET['page'])){
 		$cur_page -> Current(1);		

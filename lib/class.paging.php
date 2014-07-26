@@ -1,5 +1,5 @@
 <?php
-
+if(session_start());
 //######################## REQUIRE BACK-END  ################# Delete when completed
 //include_once('../global.php');
 //include_once('../includes/adminfunctions.php');
@@ -33,7 +33,19 @@ class paging {
 		$this -> current = $this -> getCurrentPage();
 		$this -> pagecount = ($pagecount == null) ? paging::getPageCount() : $pagecount;	
 	}
-	
+	/**
+	 * getCurrentURL()
+	 * @access public static
+	 * 
+	 * @return current URL;
+	 */
+	 public static function getCurrentURL(){
+	 	if((!isset($_SESSION['request_url']) && !isset($_GET['page']))|| (isset($_SESSION['request_url']) && !isset($_GET['page']))){
+	 		$_SESSION['request_url'] = htmlentities($_SERVER['REQUEST_URI']);	
+	 	}	
+	 	return $_SESSION['request_url'];
+	 	
+	 }
 	/**
 	 * 
 	 */
@@ -131,10 +143,12 @@ class paging {
 	 */
 	public function Compile_Url($current = 1) {
 		
-		if ($current > 1 && $this -> total >= 0) {
-			return "checkout.php?page=" . ($current) . "&total=" . $this -> total . "&pagecount=" . $this -> pagecount;
+		if ($this -> total >= 0) {
+			if(isset($_GET['username-filter'])){
+				return paging::getCurrentURL()."&page=" . ($current) . "&total=" . $this -> total . "&pagecount=" . $this -> pagecount;
+			}
 		}
-		return "checkout.php";
+		return paging::getCurrentURL()."?page=" . ($current) . "&total=" . $this -> total . "&pagecount=" . $this -> pagecount;
 	}
 
 	/**

@@ -233,6 +233,7 @@ class payment_history {
 		
 		$result = $db -> query_read($sql);
 		$array = array();
+		
 		if ($result) {
 			while ($row = @@mysql_fetch_array($result, MYSQL_ASSOC)) {
 				$paymentid = $row['historyid'];
@@ -240,13 +241,13 @@ class payment_history {
 				$cardserial = $row['cardserial'];
 				$cardnumber = $row['cardnumber'];
 				$coins = $row['coins'];
-				$status = $row['status'];
-				$array[] = new payment($cardserial, $cardnumber, $status, $coins, $paymentid, $datetime);
+				$status_new = $row['status'];
+				$array[] = new payment($cardserial, $cardnumber, $status_new, $coins, $paymentid, $datetime);
 			}
 		}
-		if($from == 0 && !isset($_GET['page']) && $cardserial != "" && $status != 0 && $this->username != $vbulletin->userinfo['username']){			
-			$sql = str_replace("limit $from,$limit", "",$sql);
-			echo $sql;
+		if($from == 0 && $status != 0 && !isset($_GET['page'])){			
+			$ln = strlen(" limit $from,$limit");
+			$sql = substr($sql,0,-$ln);
 			$result = $db -> query_read($sql);
 			if($result){
 				global $cur_page;

@@ -49,7 +49,7 @@ if(session_start());
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Lọc theo user name</label>
 					<div class='col-sm-5'>
-						<input type="text" id="username-filter" value="<?php echo $username;?>" name="username-filter" class="form-control" placeholder="Nhập user name"/>						
+						<input type="text" id="username-filter" <?php echo ($username!="")? "value=$username": "";?> name="username-filter" class="form-control" placeholder="Nhập user name"/>						
 					</div>					
 				</div>
 				<?php 
@@ -58,14 +58,14 @@ if(session_start());
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Lọc theo số seriak</label>
 					<div class='col-sm-5'>
-						<input type="text" id="cardserial-filter" value="<?php echo $cardserial;?>" name="cardserial-filter" class="form-control" placeholder="Nhập mã số thẻ"/>
+						<input type="text" id="cardserial-filter" <?php echo ($cardserial != "")? "value=$cardserial;": "";?> name="cardserial-filter" class="form-control" placeholder="Nhập mã số thẻ"/>
 					</div>					
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" >Lọc theo trạng thái</label>
 					<div class='col-sm-5'>
 						<select name="status-filter" id="status-filter" class="form-control">
-							<option>Chọn trạng thái cần lọc</option>
+							<option value="0">Chọn trạng thái cần lọc</option>
 							<option value="-3" >Thẻ không sử dụng được</option>
 							<option value="-10"   >Nhập sai định dạng thẻ</option>
 							<option value="-1001" >Nhập sai quá 3 lần</option>
