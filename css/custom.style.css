@@ -1,4 +1,13 @@
 /*Custom style with content payment*/
+.item_payment{
+	background:#D9EDF7;		
+}
+.item_payment:nth-child(2n+1){
+	background:#F7ECB5;
+}
+.item_payment td{
+	border: solid 1px #000000;
+}
 .body_wrapper{
 	overflow: hidden !important;
 }

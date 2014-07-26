@@ -28,12 +28,37 @@ class paging {
 	 * @param  integer $pagecount (default: 20)
 	 * @return void
 	 */
-	function __construct($pagecount = null) {
-		$this -> total = paging::getTotal();
+	function __construct($username, $pagecount = 20) {
+		$this -> total = paging::getTotal($username);
 		$this -> current = $this -> getCurrentPage();
 		$this -> pagecount = ($pagecount == null) ? paging::getPageCount() : $pagecount;	
 	}
-
+	
+	/**
+	 * 
+	 */
+	public function Current($value = null){
+		if($value != null){
+			$this->current = $value;
+		}
+		return $this->current;
+	}
+	/**
+	 * 
+	 */
+	public function Total($value = null){
+		if($value != null){
+			$this->total = $value;
+		}
+		return $this->total;
+	}
+	/**
+	 * pageCount()
+	 * @return int this->pagecount;
+	 */
+	 public function pageCount(){
+	 	return $this->pagecount;
+	 }
 	/**
 	 * getPageCount()
 	 *
@@ -60,28 +85,29 @@ class paging {
 			return 1;
 		}
 	}
-
+	
+	
+	
 	/**
 	 * getTotal()
 	 *
 	 * @access public
+	 * @param $username string user name
+	 * @param $sql string user name default = ""
 	 * @return int
+	 * 
 	 */
-	public static function getTotal() {
+	public static function getTotal($username) {
 		if (isset($_GET['total'])) {
 			return $_GET['total'];
 		} else {
-			global $vbulletin, $db;
-			if ($vbulletin -> userinfo['userid']) {
-				
-				$sql = "select count(userid) as total from payment_history where userid = " . $vbulletin -> userinfo['userid'];
+				global $vbulletin, $db;
+				$sql = "select count(username) as total from payment_history where username = '" . $username."'";
 				$result = $db -> query_first($sql);
-				if (@@mysql_num_rows($result) > 0) {
-					$row = @@mysql_fetch_array($result, MYSQL_ASSOC);
-					return $row['total'];
+				if ($result) {
+					return $result['total'];
 				}
 				return 0;
-			}
 		}
 	}
 
@@ -94,7 +120,7 @@ class paging {
 	 * @return int page count
 	 */
 	public static function calulatePage($total, $pagecount) {
-		return ($total / $pagecount) + 1;
+		return (int)($total / $pagecount) + 1;
 	}
 
 	/**
@@ -104,8 +130,9 @@ class paging {
 	 * @return string as URL
 	 */
 	public function Compile_Url($current = 1) {
-		if ($this -> current > 1 && $this -> total >= 0) {
-			return "checkout.php?page=" . ($current + 1) . "&total=" . $this -> total . "&pagecount=" . $this -> pagecount;
+		
+		if ($current > 1 && $this -> total >= 0) {
+			return "checkout.php?page=" . ($current) . "&total=" . $this -> total . "&pagecount=" . $this -> pagecount;
 		}
 		return "checkout.php";
 	}
@@ -136,10 +163,23 @@ class paging {
 		if ($current < paging::calulatePage($this -> total, $this -> pagecount)) {
 			return '<li ><a href="' . $this -> Compile_Url($current + 1) . '">&raquo;</a></li>';
 		} else {
-			return '<li class="disabled"><a href="#">&raquo;</a></li>';
+			return '<li class="disabled"><a>&raquo;</a></li>';
 		}
 	}
-
+	
+	/**
+	 * compile_path($i,$active) 
+	 * @access public
+	 * @param $i int Stt
+	 * @param $active boolean default false
+	 * @return string tag <li> element 
+	 */
+	public function compile_path($i,$active = false){
+		if($active){
+			return '<li class="active"><a href="' . $this -> Compile_Url($i) . '">' . ($i) . '<span class="sr-only">(current)</span></a></li>';
+		}
+		return '<li><a href="' . $this -> Compile_Url($i) . '">' . ($i) . '<span class="sr-only">(current)</span></a></li>';
+	}
 	/**
 	 * Compile_ToString()
 	 *
@@ -147,12 +187,33 @@ class paging {
 	 * @return string as HTML.
 	 *
 	 */
-	function Compile_ToString() {
+	public function Compile_ToString() {
 		$str_content = "<ul class='pagination pagination-sm'>";
-		$str_content .= $this -> forward($this -> current);
+		$str_content .= $this -> forward($this -> current);		
 		$numpage = paging::calulatePage($this -> total, $this -> pagecount);
-		for ($i = 0; $i < $numpage; $i++) {
-			$str_content .= '<li class="active"><a href="' . $this -> Compile_Url($i + 1) . '">' . ($i + 1) . '<span class="sr-only">(current)</span></a></li>';
+		$checked = 1;
+		for ($i = 1; $i <= $numpage; $i++) {
+			if($i == $this->getCurrentPage()){
+				if(($i > 3 && $i < $numpage - 2) || ($i <= $numpage - 2 && $i > 3)){
+					$str_content .= $this->compile_path($i-1);
+				}
+				$str_content .= $this->compile_path($i,true);
+				$i += 1;
+				if($i <= $numpage){
+					$str_content .= $this->compile_path($i);
+				}				
+				$checked = 1;
+				
+			}else{
+				if($i >= $numpage - 2 || $i <= 2){					
+					$str_content .= '<li><a href="' . $this -> Compile_Url($i) . '">' . $i . '<span class="sr-only">(current)</span></a></li>';	
+				}else{
+					$checked = ($checked == 1) ? 2 : 3;						
+					if($checked == 2){
+						$str_content .= '<li><a>...</a></li>';
+					}
+				}
+			}
 		}
 		$str_content .= $this -> nextpage($this -> current);
 		$str_content .= '</ul>';

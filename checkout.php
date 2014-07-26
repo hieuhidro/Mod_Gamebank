@@ -1,8 +1,8 @@
 <?php
-	include_once('./global.php');
-	include_once(DIR.'/includes/adminfunctions.php');
-	include_once(DIR.'/includes/class_bbcode.php');
-	require_once('payment/lib/class.paging.php');
+require_once ('./global.php');
+require_once (DIR . '/includes/adminfunctions.php');
+require_once (DIR . '/includes/class_bbcode.php');
+require_once ('payment/lib/class.payment_history.php');
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +38,54 @@
 		<!-- Start container -->
 		<div class="container">
 			<!-- Default panel contents -->
+			<?php
+			//Check admin ...
+			if($vbulletin->userinfo['usertitle'] == "Administrator")
+			{
+			?>
+			<form method="POST" id="form-history"class="form-horizontal" role="form">
+				<h2>Lọc lược sử</h2>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Lọc theo user name</label>
+					<div class='col-sm-5'>
+						<input type="text" id="username-fill" name="username-fill" class="form-control" placeholder="Nhập user name"/>						
+					</div>
+					<div class="col-sm-5">
+						<button type="submit" class="btn btn-info col-sm-3" name="fill-username">Lọc</button>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Lọc theo mã số thẻ</label>
+					<div class='col-sm-5'>
+						<input type="text" id="cardnumber-fill" name="cardnumber-fill" class="form-control" placeholder="Nhập mã số thẻ"/>
+					</div>
+					<div class="col-sm-5">
+						<button type="submit" class="btn btn-info col-sm-3" name="fill-cardnumber">Lọc</button>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" >Lọc theo trạng thái</label>
+					<div class='col-sm-5'>
+						<select name="option-fill" class="form-control">
+							<option>Chọn trạng thái cần lọc</option>
+							<option value="-3">Thẻ không sử dụng được</option>
+							<option value="-10">Nhập sai định dạng thẻ</option>
+							<option value="-1001">Nhập sai quá 3 lần</option>
+							<option value="-1002">Lỗi hệ thống</option>
+							<option value="-1003">IP vui lòng quay lại sau 5 phút</option>
+							<option value="-1004">Tên đăng nhập không đúng</option>
+							<option value="-1005">Loại thẻ không đúng</option>
+							<option value="-1006">Hệ thống đang bảo trì</option>
+							<option value="-1007">Kết nối thất bại</option>
+							<option value="10000">Nạp thẻ thành công</option>
+						</select>
+					</div>
+					<div class="col-sm-5">
+						<button type="submit" class="btn btn-info col-sm-3" name="fill-option">Lọc</button>
+					</div>
+				</div>
+			</form>
+			<?php } ?>
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					Your payment history
@@ -56,31 +104,36 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>1</td>
-							<td>User Name</td>
-							<td>Date Time</td>
-							<td>Card Serial</td>
-							<td>Card Number</td>
-							<td>Coins</td>
-							<td>Status</td>
-						</tr>						
+						<?php $cur_page = new paging(5);
+						if ($vbulletin -> userinfo['userid']) {
+							$payment_history = new payment_history($vbulletin -> userinfo['userid'], $vbulletin -> userinfo['username']);
+							$array_payment = $payment_history -> getItemLimit(($cur_page -> getCurrentPage() - 1) * $cur_page -> pageCount(), $cur_page -> pageCount());
+							foreach ($array_payment as $key => $value) {
+								echo "<tr class='item_payment'>
+										<td>".$value->paymentId()."</td>";
+								echo "<td>" . $vbulletin -> userinfo['username'] . "</td>";
+								echo $value -> toItemHTML();
+								echo '</tr>';
+							}
+						} else {
+							header("location: forum.php");
+						}
+						?>
 					</tbody>
 				</table>
 				<!-- /. table -->
 			</div>
 			<!-- /. Default panel contents -->
-			
+
 			<!-- Paging contents -->
-			<?php 
-				$cur_page = new paging();
-				echo $cur_page->Compile_ToString();
-			?>	
+			<?php
+			echo $cur_page -> Compile_ToString();
+			?>
 			<!-- /. Paging contents -->
 		</div>
 		<!-- /. container -->
 		<footer>
-			
+
 		</footer>
 	</body>
 </html>

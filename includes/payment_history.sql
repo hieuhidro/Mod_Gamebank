@@ -1,9 +1,13 @@
+--
+-- Table structure for table `payment_history`
+--
+
 -- phpMyAdmin SQL Dump
 -- version 3.4.10.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 24, 2014 at 05:47 PM
+-- Generation Time: Jul 25, 2014 at 10:22 PM
 -- Server version: 5.5.20
 -- PHP Version: 5.3.10
 
@@ -17,7 +21,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `test`
+-- Database: `forum_template`
 --
 
 -- --------------------------------------------------------
@@ -27,24 +31,23 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `payment_history` (
-  `paymentid` int(11) NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL,
+  `historyid` int(11) NOT NULL AUTO_INCREMENT,
+  `username` text COLLATE utf8_unicode_ci NOT NULL,
   `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `serial` text COLLATE utf8_unicode_ci NOT NULL,
+  `cardserial` text COLLATE utf8_unicode_ci NOT NULL,
   `cardnumber` text COLLATE utf8_unicode_ci NOT NULL,
-  `cardvalue` text COLLATE utf8_unicode_ci NOT NULL,
-  `status` int(11) NOT NULL DEFAULT '10000',
+  `coins` text COLLATE utf8_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '-1007',
   PRIMARY KEY (`historyid`),
-  KEY `userid` (`userid`)
+  KEY `username` (`username`(50))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Save history user exchange' AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `payment_history`
 --
 
-INSERT INTO `payment_history` (`historyid`, `userid`, `datetime`, `serial`, `cardnumber`, `cardvalue`, `status`) VALUES
-(1, 1, '2014-07-24 17:44:49', 'sdfsdsf', '123123', 'sfsdfsdf', 1223),
-(2, 1, '2014-07-24 17:47:30', '123123', '123123', 'sfsdfsdf', 1223);
+INSERT INTO `payment_history` (`username`, `serial`, `cardnumber`, `cardvalue`, `status`) VALUES
+('thien321091', 'sdfsdsf', '123123', '10000', -1001);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
