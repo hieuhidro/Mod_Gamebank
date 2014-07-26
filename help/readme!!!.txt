@@ -15,8 +15,7 @@ insert 1 column to table user in database, add name column to setting value ... 
 --
 -- Insert before Welcome <li> 
 --
---> 
-
+-->
 {vb:raw ad_location.payment_url}
 
 <!-- End Header template -->
