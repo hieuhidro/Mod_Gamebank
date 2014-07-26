@@ -3,6 +3,7 @@ require_once ('./global.php');
 require_once (DIR . '/includes/adminfunctions.php');
 require_once (DIR . '/includes/class_bbcode.php');
 require_once ('payment/lib/class.payment_history.php');
+if(session_start());
 ?>
 
 <!DOCTYPE html>
@@ -38,54 +39,50 @@ require_once ('payment/lib/class.payment_history.php');
 		<!-- Start container -->
 		<div class="container">
 			<!-- Default panel contents -->
-			<?php
-			//Check admin ...
-			if($vbulletin->userinfo['usertitle'] == "Administrator")
-			{
-			?>
-			<form method="POST" id="form-history"class="form-horizontal" role="form">
+			<form method="GET" id="form-history" class="form-horizontal" role="form" action="checkout.php">
 				<h2>Lọc lược sử</h2>
+				<?php				
+				include 'payment/act/act_fillter.php';			
+				if($vbulletin->userinfo['usertitle'] == "Administrator")
+				{
+				?>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Lọc theo user name</label>
 					<div class='col-sm-5'>
-						<input type="text" id="username-fill" name="username-fill" class="form-control" placeholder="Nhập user name"/>						
-					</div>
-					<div class="col-sm-5">
-						<button type="submit" class="btn btn-info col-sm-3" name="fill-username">Lọc</button>
-					</div>
+						<input type="text" id="username-filter" value="<?php echo $username;?>" name="username-filter" class="form-control" placeholder="Nhập user name"/>						
+					</div>					
 				</div>
+				<?php 
+				}
+				?>
 				<div class="form-group">
-					<label class="col-sm-2 control-label">Lọc theo mã số thẻ</label>
+					<label class="col-sm-2 control-label">Lọc theo số seriak</label>
 					<div class='col-sm-5'>
-						<input type="text" id="cardnumber-fill" name="cardnumber-fill" class="form-control" placeholder="Nhập mã số thẻ"/>
-					</div>
-					<div class="col-sm-5">
-						<button type="submit" class="btn btn-info col-sm-3" name="fill-cardnumber">Lọc</button>
-					</div>
+						<input type="text" id="cardserial-filter" value="<?php echo $cardserial;?>" name="cardserial-filter" class="form-control" placeholder="Nhập mã số thẻ"/>
+					</div>					
 				</div>
 				<div class="form-group">
 					<label class="col-sm-2 control-label" >Lọc theo trạng thái</label>
 					<div class='col-sm-5'>
-						<select name="option-fill" class="form-control">
+						<select name="status-filter" id="status-filter" class="form-control">
 							<option>Chọn trạng thái cần lọc</option>
-							<option value="-3">Thẻ không sử dụng được</option>
-							<option value="-10">Nhập sai định dạng thẻ</option>
-							<option value="-1001">Nhập sai quá 3 lần</option>
-							<option value="-1002">Lỗi hệ thống</option>
-							<option value="-1003">IP vui lòng quay lại sau 5 phút</option>
-							<option value="-1004">Tên đăng nhập không đúng</option>
-							<option value="-1005">Loại thẻ không đúng</option>
-							<option value="-1006">Hệ thống đang bảo trì</option>
-							<option value="-1007">Kết nối thất bại</option>
-							<option value="10000">Nạp thẻ thành công</option>
+							<option value="-3" >Thẻ không sử dụng được</option>
+							<option value="-10"   >Nhập sai định dạng thẻ</option>
+							<option value="-1001" >Nhập sai quá 3 lần</option>
+							<option value="-1002" >Lỗi hệ thống</option>
+							<option value="-1003" >IP vui lòng quay lại sau 5 phút</option>
+							<option value="-1004" >Tên đăng nhập không đúng</option>
+							<option value="-1005" >Loại thẻ không đúng</option>
+							<option value="-1006" >Hệ thống đang bảo trì</option>
+							<option value="-1007" >Kết nối thất bại</option>
+							<option value="10000" >Nạp thẻ thành công</option>
 						</select>
 					</div>
 					<div class="col-sm-5">
-						<button type="submit" class="btn btn-info col-sm-3" name="fill-option">Lọc</button>
-					</div>
+						<button type="submit" class="btn btn-info col-sm-3" name="btn-filter">Lọc</button>
+					</div>					
 				</div>
 			</form>
-			<?php } ?>
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					Your payment history
@@ -104,20 +101,9 @@ require_once ('payment/lib/class.payment_history.php');
 						</tr>
 					</thead>
 					<tbody>
-						<?php $cur_page = new paging(5);
-						if ($vbulletin -> userinfo['userid']) {
-							$payment_history = new payment_history($vbulletin -> userinfo['userid'], $vbulletin -> userinfo['username']);
-							$array_payment = $payment_history -> getItemLimit(($cur_page -> getCurrentPage() - 1) * $cur_page -> pageCount(), $cur_page -> pageCount());
-							foreach ($array_payment as $key => $value) {
-								echo "<tr class='item_payment'>
-										<td>".$value->paymentId()."</td>";
-								echo "<td>" . $vbulletin -> userinfo['username'] . "</td>";
-								echo $value -> toItemHTML();
-								echo '</tr>';
-							}
-						} else {
-							header("location: forum.php");
-						}
+						<?php 						
+							global $payment_history;
+							$payment_history -> printHtmlItems($array_payment);
 						?>
 					</tbody>
 				</table>
@@ -127,7 +113,7 @@ require_once ('payment/lib/class.payment_history.php');
 
 			<!-- Paging contents -->
 			<?php
-			echo $cur_page -> Compile_ToString();
+				echo $cur_page -> Compile_ToString();
 			?>
 			<!-- /. Paging contents -->
 		</div>
