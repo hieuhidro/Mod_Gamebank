@@ -97,7 +97,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 				$UserPay = new GameBank($user_detail['userid'], $user_payment);
 				if ($UserPay -> UpdatePayment()) //Update user coins to database 
 				{
-					$str_result .="N&#7841;p ti&#7873;n thành công!!!. B&#7841;n &#273;ã n&#7841;p :" . $result[0] . " vào tài kho&#7843;n";
+					$str_result .="Nạp tiền thành công!!!. bạn đã nạp :" . $result[0] . " vào tài khoản";
 				}
 				
 			} else {
@@ -129,7 +129,9 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 						break;
 					default :
 						$str_result .= "Ket noi voi Gamebank that bai";
-				}				
+				}
+				$payment_new  = new payment($seri,$code,$result[0],$result[0]);
+				$payment_new->insertItemp($user_detail['username']);		
 			}
 			$str_result .= "');</script>";
 			//Alert script to show result

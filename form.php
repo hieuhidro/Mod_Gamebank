@@ -24,4 +24,5 @@
 	<button type="submit" class="btn btn-primary" name="payment">
 		Nạp thẻ
 	</button>
+	<a href="checkout.php" class="btn">Lịch sử</a>
 </form>

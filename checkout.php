@@ -30,7 +30,7 @@ if(session_start());
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li class="active">
-							<a href="../forum.php">Forum</a>
+							<a href="forum.php">Forum</a>
 						</li>
 					</ul>
 				</div><!-- /.navbar-collapse -->
