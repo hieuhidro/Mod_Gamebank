@@ -10,44 +10,44 @@
 	</dependencies>
 	<codes>
 		<code version="1.0.0">
-			<installcode>
-			<![CDATA[/**--
-			 *-- Database: `user database`
+			<installcode><![CDATA[
+			/**--
+			 *-- Database: 'user database'
 			 *--
 			 *-- --------------------------------------------------------
 			 *--
-			 *-- Table structure for table `payment_history`
+			 *-- Table structure for table 'payment_history'
 			 *-- Query insert table...
 			 */
-			CREATE TABLE IF NOT EXISTS `payment_history` (
-			  `historyid` int(11) NOT NULL AUTO_INCREMENT,
-			  `username` text COLLATE utf8_unicode_ci NOT NULL,
-			  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			  `cardserial` text COLLATE utf8_unicode_ci NOT NULL,
-			  `cardnumber` text COLLATE utf8_unicode_ci NOT NULL,
-			  `coins` text COLLATE utf8_unicode_ci NOT NULL,
-			  `status` int(11) NOT NULL DEFAULT '-1007',
-			  PRIMARY KEY (`historyid`),
-			  KEY `username` (`username`(50))
-			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Save history user exchange' AUTO_INCREMENT=3 ;
+			global $db;
+			$sql = "CREATE TABLE IF NOT EXISTS `payment_history` (
+					  `historyid` int(11) NOT NULL AUTO_INCREMENT,
+					  `username` text COLLATE utf8_unicode_ci NOT NULL,
+					  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					  `cardserial` text COLLATE utf8_unicode_ci NOT NULL,
+					  `cardnumber` text COLLATE utf8_unicode_ci NOT NULL,
+					  `coins` int(11) NOT NULL DEFAULT '0',
+					  `status` int(11) NOT NULL DEFAULT '-1007',
+					  PRIMARY KEY (`historyid`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
 			
 			$db -> query_first($sql);
 
 			/**
 			 * Query insert column into table user of database
 			 */
-			$sql_clm = "ALTER TABLE  'user' ADD 'payment' INT NOT NULL DEFAULT '0'";
-			$db -> query_first($sql_clm);]]>
-		</installcode>
+			$sql_clm = "ALTER TABLE `user` ADD `payment` INT NOT NULL DEFAULT  '0'";
+			$db -> query_first($sql_clm);
+		]]></installcode>
 			<uninstallcode />
 		</code>
 	</codes>
 	<templates>
-		<template name="custom_widget" templatetype="template" date="1406226649" username="thien321091" version="4.1.11">
-		<![CDATA[<!-- Content widget -->
+		<template name="custom_widget" templatetype="template" date="1406226649" username="thien321091" version="1.0.0"><![CDATA[
+		<!-- Content widget -->
 		<!--
 		-- Don't change everything, copy and pate to widget content
-		-- Kh�ng du?c thay d?i g� ? d�y. 
+		-- Không được thay đổi gì ở đây.
 		-- Copy pate to�n b? v�o content widget ... 
 		-->
 
@@ -66,15 +66,15 @@
 		</div>
 			</vb:if>
 		</vb:if>
-		<!-- End content widget --> ]]>
-		</template>
-		<template name="your_payment" templatetype="template" date="1406099037" username="thien321091" version="4.1.11">
-		<![CDATA[<!-- Content MAINFORM template-->
+		<!-- End content widget --> 
+		]]></template>
+		<template name="your_payment" templatetype="template" date="1406099037" username="thien321091" version="1.0.0"><![CDATA[
+		<!-- Content MAINFORM template-->
 		<!--
 		-- Don't change everything 
-		-- Kh�ng du?c thay d?i g� ? d�y. 
+		-- Không được thay đổi gì ở đây. 
 		-->
-		<link href='payment/css/custom.style.css' rel='stylesheet'>
+		<link href='/payment/css/custom.style.css' rel='stylesheet'>
 		<vb:if condition="$show['member']">
 			<vb:if condition="$vboptions[payment_enable] == 1">
 			<div id="form-gamebank" class="collapse wgo_block" style="float: left;">
@@ -86,8 +86,8 @@
 			</div>
 			</vb:if>
 		</vb:if>
-		<!-- End content MAINFORM template-->]]>
-		</template>
+		<!-- End content MAINFORM template-->
+		]]></template>
 	</templates>
 	<stylevardfns>
 	</stylevardfns>
@@ -95,9 +95,19 @@
 	</stylevars>
 	<plugins>
 		<plugin active="1" executionorder="5">
+			<title>Download file price</title>
+			<hookname>attachment_process_start</hookname>
+			<phpcode><![CDATA[include ('payment/plugin/attacment_price.php');]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
 			<title>Your Payment</title>
 			<hookname>parse_templates</hookname>
 			<phpcode><![CDATA[include_once('payment/template_hook.php');]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>User Forum Visit</title>
+			<hookname>parse_templates</hookname>
+			<phpcode><![CDATA[include "/payment/plugin/visit_forum.php";]]></phpcode>
 		</plugin>
 	</plugins>
 	<phrases>
@@ -107,6 +117,9 @@
 
 <strong>Wanning!!!</strong> please insert 1 column in to table <b>user</b> form database]]></phrase>
 			<phrase name="setting_payment_column_title" date="1406219667" username="thien321091" version="1.0.0"><![CDATA[Set Column]]></phrase>
+			<phrase name="setting_payment_downloadprice_desc" date="1406535926" username="thien321091" version="1.0.0"><![CDATA[How many price to download file on forum 
+<strong>number</number>]]></phrase>
+			<phrase name="setting_payment_downloadprice_title" date="1406535926" username="thien321091" version="1.0.0"><![CDATA[Download file price]]></phrase>
 			<phrase name="setting_payment_enable_desc" date="1406090396" username="thien321091" version="1.0.0"><![CDATA[Set option to <b>Yes</b> to enable Game Bank Payment <br/><br/>
 
 <strong>Warning</strong> default add to bottom next to <b>What's Going On? form</b>]]></phrase>
@@ -122,6 +135,9 @@
 <br/><br/>
 <strong>Edited value to enable show in menu navbar</strong>]]></phrase>
 			<phrase name="setting_payment_namenav_title" date="1406219638" username="thien321091" version="1.0.0"><![CDATA[Name of Menu]]></phrase>
+			<phrase name="setting_payment_price_desc" date="1406521374" username="thien321091" version="1.0.0"><![CDATA[Custom forum/event  price
+<strong>Template:</strong>  forum id:price;]]></phrase>
+			<phrase name="setting_payment_price_title" date="1406521374" username="thien321091" version="1.0.0"><![CDATA[Forum Price]]></phrase>
 			<phrase name="setting_payment_toplink_desc" date="1406219571" username="thien321091" version="1.0.0"><![CDATA[Insert link Game Bank payment to top link]]></phrase>
 			<phrase name="setting_payment_toplink_title" date="1406219571" username="thien321091" version="1.0.0"><![CDATA[Show top link]]></phrase>
 			<phrase name="settinggroup_game_bank_payment" date="1406078367" username="thien321091" version="1.0.0"><![CDATA[Game Bank]]></phrase>
@@ -150,6 +166,15 @@
 			</setting>
 			<setting varname="payment_namenav" displayorder="31">
 				<datatype>free</datatype>
+			</setting>
+			<setting varname="payment_price" displayorder="41">
+				<datatype>free</datatype>
+				<optioncode>textarea</optioncode>
+				<defaultvalue>2:1000;</defaultvalue>
+			</setting>
+			<setting varname="payment_downloadprice" displayorder="51">
+				<datatype>number</datatype>
+				<defaultvalue>1000</defaultvalue>
 			</setting>
 		</settinggroup>
 	</options>

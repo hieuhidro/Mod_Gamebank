@@ -1,6 +1,5 @@
-<link href="payment/css/custom.style.css" rel="stylesheet">
-<link href="css/custom.style.css" rel="stylesheet">
-<form method="post" id="form-gamebank" action="">
+<link href="/payment/css/custom.style.css" rel="stylesheet">
+<form method="post" id="form-gamebank" action="/">
 	<h2>Nạp thẻ điện thoại</h2>
 	<div class="form-group">
 		<label for="lstTelco">Chọn nhà mạng</label>

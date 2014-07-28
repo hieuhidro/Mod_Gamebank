@@ -62,7 +62,8 @@ insert 1 column to table user in database, add name column to setting value ... 
 <!-- Content MAINFORM template-->
 <!--
 -- Don't change everything 
--- Không được thay đổi gì ở đây. 
+-- Không được thay đổi gì ở đây.
+-- include to tempate {vb:raw ad_location.your_payment}
 -->
 
 <vb:if condition="$show['member']">

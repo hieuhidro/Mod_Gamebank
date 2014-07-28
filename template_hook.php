@@ -5,10 +5,11 @@
 //require_once(DIR . '/includes/class_bbcode.php');
 //#############################################################
 
-include_once ('payment/lib/nusoap.php');
+include_once ('/payment/lib/nusoap.php');
+global $forumid;
 
 if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'])//Check if mod is enable and user is login ....................
-{		
+{
 	//################   Start Get setting  #################
 	
 	/**
@@ -19,6 +20,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	/**
 	 * Get column name from vbulletin option Your Payment (string)
 	 */
+	global $gamebank_column;
 	$gamebank_column = $vbulletin -> options['payment_column'];
 	
 	/**
@@ -34,12 +36,14 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	/**
 	 * Get user detail from $vbulletin (userid, username, coins);
 	 */
+	global $user_detail;
 	$user_detail = array(
 		'userid' => $vbulletin -> userinfo['userid'],
 		'username' => $vbulletin -> userinfo['username'],
 		'coins' => $vbulletin ->userinfo[$gamebank_column]		
 	);
 	//#######################################################
+	
 	
 	if ($gamebank_column != "") //Check if option is setting completed .................... 
 	{		
@@ -64,30 +68,11 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 			if ($result[0] >= 10000) {
 				//echo "Nap thanh cong ".$result[0];
 				//Nap tien thanh cong, $result['resultCode'] là mệnh giá thẻ khách nạp
+				/**
+				 * include class game bank 
+				 */
+				include("/lib/class.gamebank.php");
 				
-				//Create class object to update current user
-				class GameBank {
-					protected $userid;
-					protected $userpayment;
-					/*Construct create object
-					 * Validate 
-					 * $_userid is an id of user in request $vbulletin->userinfo['userid'];
-					 * $upayment is a new coins of user 
-					 */
-					function __construct($_userid, $upayment) {
-						$this -> userid = $_userid;
-						$this -> userpayment = $upayment;
-					}
-					
-					//Function update coins of current user
-					public function UpdatePayment() {
-						global $db;
-						$sql = "update user set '$gamebank_column' = " . $userpayment . " where userid = " . $userid;
-						return $result = $db -> query_first($sql);
-					}
-
-				}
-
 				/**
 				 * Calulate user coins 
 				 */
@@ -169,15 +154,15 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	 * Payment detail User detail, User coins (Username : coins)
 	 */
 	$payment_detail = $user_detail['username']." : ".$user_detail['coins'];
-	$header_cont = "<li><a class='navtab' href='forum.php#form-gamebank' href='#top' onclick='document.location.hash='form-gamebank'; return false;'>Nạp card</a></li>";
+	$header_cont = "<a class='navtab' href='/payment/' href='#top' onclick='document.location.hash='form-gamebank'; return false;'>Nạp card</a>";
 	if($name_nav != "") //Checking changed value name_menu
 	{
 		/**
 		 * Payment content link in header and navbar ... 
 		 */	
-		$header_cont = "<li><a class='navtab' href='forum.php#form-gamebank' href='#top' onclick='document.location.hash='form-gamebank'; return false;'>".$name_nav."</a></li>";
+		$header_cont = "<a class='navtab' href='/payment/' href='#top' onclick='document.location.hash='form-gamebank'; return false;'>".$name_nav."</a>";
 		//add to menu
-		$template_hook['navtab_middle'] .= $header_cont;
+		$template_hook['navtab_middle'] .= "<li>$header_cont</li>";
 	}
 	
 	
@@ -193,7 +178,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	}
 	/**
 	 * Import value to your_payment template page  
-	 */	 
+	 */
 	$templater = vB_Template::create('your_payment');
 		$templater->register('payment_content', $php_include);
 		$templater->register('payment_title','Payment Online');
@@ -209,6 +194,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 		$ad_location['payment_title'] ='Payment Online';
 		$ad_location['payment_detail'] = $payment_detail;
 	} 
+	
 	//$vbulletin -> userinfo['username']  = $user_detail['username'];
    	/**
 	 * Import value to FORUMHOME template  
