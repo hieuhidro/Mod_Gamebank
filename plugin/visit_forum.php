@@ -23,9 +23,11 @@ if ($forumid != -1) {
 				$checked = false;
 				foreach ($array_frm as $key => $value) {
 					$value_item = explode(":", $value);
-					if ($value_item[0] == $forumid) {
-						$checked = true;
-						break;
+					if($value_item[0]){					
+						if ($value_item[0] == $forumid) {
+							$checked = true;
+							break;
+						}
 					}
 				}
 				if ($checked == true) {

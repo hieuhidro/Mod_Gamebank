@@ -6,7 +6,7 @@
 //#############################################################
 
 include_once ('/payment/lib/nusoap.php');
-global $forumid;
+global $forumid, $vb;
 
 if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'])//Check if mod is enable and user is login ....................
 {
@@ -31,12 +31,21 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	 * Getting setting enable widget (boolean)
 	 */
 	$payment_enable_widget = $vbulletin -> options['payment_enable_widget'];
-	
+	/**
+	 * Get top link option 
+	 */	
 	$payment_top_link = $vbulletin->options['payment_toplink'];
+	/**
+	 * Get currency option 
+	 */
+	include_once ('/payment/plugin/config_currency.php');
+	
+	
 	/**
 	 * Get user detail from $vbulletin (userid, username, coins);
 	 */
 	global $user_detail;
+	
 	$user_detail = array(
 		'userid' => $vbulletin -> userinfo['userid'],
 		'username' => $vbulletin -> userinfo['username'],
@@ -76,7 +85,11 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 				/**
 				 * Calulate user coins 
 				 */
-				$user_payment = $result[0] += $user_detail['coins'];
+				if($currencys[$result[0]]){
+					$currencys[$result[0]] = $result[0];
+				}
+				
+				$user_payment =  $currencys[$result[0]] += $user_detail['coins'];
 				$user_detail['coins'] = $user_payment;
 								
 				$UserPay = new GameBank($user_detail['userid'], $user_payment);
