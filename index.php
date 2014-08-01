@@ -8,8 +8,7 @@
 		<!-- Custom styles for this template -->
 		<link href="payment/css/custom.style.css" rel="stylesheet">
 	</head>
-	<body>
-		
+	<body>		
 		<div class="container-payment">
 			<?php
 			include 'form.php';

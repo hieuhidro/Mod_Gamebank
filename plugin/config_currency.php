@@ -14,8 +14,6 @@ $currency_option = '10000:10000;
 					500000:500000;
 					10000000:10000000';
 
-
-
 $currency_option = $vbulletin->options['payment_currency'];
 $currency_array = explode(";",$currency_option);
 $currencys = array();

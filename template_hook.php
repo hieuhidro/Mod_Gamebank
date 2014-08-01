@@ -197,8 +197,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 		$templater->register('payment_title','Payment Online');
 		$templater->register('payment_detail', $payment_detail);
 	$ad_location['your_payment'] .= $templater->render();
-		
-		
+
 	/**
 	 * Insert content to widget if enable widget
 	 */

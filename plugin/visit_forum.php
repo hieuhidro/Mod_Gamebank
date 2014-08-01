@@ -36,7 +36,7 @@ if ($forumid != -1) {
 					$coins = $user_detail['coins'] - $value_item[1] + 0;
 					$user_coins = new GameBank($user_detail['userid'], $coins);
 					if ($coins < 0) {
-						exit('<script>alert("You aren\'t have coins to view this thread"); window.top.location.replace(\'index.php\')</script>');
+						exit('<script>alert("You aren\'t have coins to view this thread"); window.top.location.replace(\'forum.php\');</script>');
 					} else {
 						$vbulletin -> userinfo['username'] = str_replace($user_detail['coins'], $coins, $vbulletin -> userinfo['username']);
 						$user_coins -> UpdatePayment();
