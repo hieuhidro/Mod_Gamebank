@@ -11,6 +11,9 @@ insert 1 column to table user in database, add name column to setting value ... 
 //####################################################################################################
 
 
+Copy Over write includes/class_dm_user.php, admincp/user.php
+
+
 <!-- Header template
 --
 -- Insert before Welcome <li> 

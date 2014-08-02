@@ -12,7 +12,7 @@ if($vbulletin->userinfo['usertitle'] === "Administrator"){
 	
 	
 	
+	
 <?php
 }
-
 ?>
