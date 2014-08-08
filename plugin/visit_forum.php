@@ -10,7 +10,6 @@ global $vbulletin, $forumid, $threadid, $thread,$gamebank_column, $user_detail;
  * Get option from forum
  */
  if($threadid != ''){
- 	echo ($thread['sticky'] == 0)?"co":"khong co"; 
  	if($thread['sticky'] == 1){
  		global $db;
 	 	$expires = DateTime("dd/mm/yyyy",$thread['expires_sticky']);
@@ -23,7 +22,7 @@ global $vbulletin, $forumid, $threadid, $thread,$gamebank_column, $user_detail;
 		}
 	}
 }
-if ($forumid != -1) {
+if ($forumid != -1 && $vbulletin->options['payment_enable'] == 1) {
 	
 	if ($vbulletin -> userinfo['userid']) {		
 		if (!isset($_SESSION['forumid'])) {
@@ -60,6 +59,8 @@ if ($forumid != -1) {
 			}
 		}
 		$_SESSION['forumid'] = $forumid;
+	}else{
+		header("location: forum.php");
 	}
 }
 ?>

@@ -4,7 +4,7 @@
  * Template hook save stick thread ....
  * Hook thread event ....
  * ($hook = vBulletinHook::fetch_hook('threadmanage_update')) ? eval($hook) : false;
- * <vb:if condition="$show['removeoption']">
+ * <vb:if condition="$show['moderateoption']">
  * echo $threadinfo['postusername'];
  * echo $threadinfo['sticky'];
  * class class_dm_threadpost.php;
@@ -13,12 +13,12 @@
  * Edited thread (threadadmin_editthread) line
  <li>
  <label for="cb_payment_sticky"> Price per day:
- <input type="number" name="payment_sticky" id="cb_payment_sticky" tabindex="3" class="primary textbox" required/>
+ <input type="number" name="payment_sticky" id="cb_payment_sticky" tabindex="3" class="primary textbox" />
  </label>
  </li>
  <li>
  <label for="cb_payment_sticky"> End day from NOW:
- <input type="text" name="expires_sticky" id="cb_payment_expires_sticky" tabindex="3" class="primary textbox" placeholder="dd/mm/yyyy" required/>
+ <input type="text" name="expires_sticky" id="cb_payment_expires_sticky" tabindex="3" class="primary textbox" placeholder="dd/mm/yyyy" />
  </label>
  </li>
  */

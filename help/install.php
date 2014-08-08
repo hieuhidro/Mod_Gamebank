@@ -40,6 +40,8 @@ $db -> query_first($sql_clm);
 $sql_clm = "ALTER TABLE  `thread` ADD  `expires_sticky` INT NOT NULL DEFAULT  '0' AFTER  `sticky`";
 $db -> query_first($sql_clm);
 
+$sql_clm = "ALTER TABLE  `usergroup` ADD  `group_price` INT NOT NULL DEFAULT  '0' AFTER  `pmquota`";
+$db -> query_first($sql_clm);
 
 
 
