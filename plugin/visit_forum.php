@@ -5,12 +5,27 @@
  *
  */
 session_start();
-global $vbulletin, $forumid, $gamebank_column, $user_detail;
+global $vbulletin, $forumid, $threadid, $thread,$gamebank_column, $user_detail;
 /**
  * Get option from forum
  */
+ if($threadid != ''){
+ 	echo ($thread['sticky'] == 0)?"co":"khong co"; 
+ 	if($thread['sticky'] == 1){
+ 		global $db;
+	 	$expires = DateTime("dd/mm/yyyy",$thread['expires_sticky']);
+		$date_now = new DateTime("now");
+		$ddiff = $date_now->diff($expires);
+		$sumany = $ddiff -> Format("%a");
+		if($sumany <= 0){
+			$sql = "update post set sticky = 0";
+			$db->query_first($sql);
+		}
+	}
+}
 if ($forumid != -1) {
-	if ($vbulletin -> userinfo['userid']) {
+	
+	if ($vbulletin -> userinfo['userid']) {		
 		if (!isset($_SESSION['forumid'])) {
 			$_SESSION['forumid'] = $forumid;
 		}

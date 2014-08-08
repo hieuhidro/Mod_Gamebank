@@ -43,7 +43,7 @@ if(session_start());
 				<h2>Lọc lược sử</h2>
 				<?php				
 				include 'payment/act/act_fillter.php';			
-				if($vbulletin->userinfo['usertitle'] == "Administrator")
+				if($vbulletin->userinfo['usertitle'] === "Administrator")
 				{
 				?>
 				<div class="form-group">

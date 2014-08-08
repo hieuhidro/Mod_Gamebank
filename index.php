@@ -11,7 +11,7 @@
 	<body>		
 		<div class="container-payment">
 			<?php
-			include 'form.php';
+				include 'form.php';				
 			?>
 		</div>
 		<!-- /container -->

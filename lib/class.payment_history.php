@@ -108,7 +108,8 @@ class payment {
 	 */
 	public function insertItemp($userid = null) {
 		if ($userid != null) {
-			$sql = "INSERT INTO 'payment_history' ('userid', 'datetime', 'serial', 'cardnumber', 'cardvalue', 'status')	VALUES	(" . $userid . ", '" . $this -> datetime . "', '" . $this -> cardserial . "', '" . $this -> cardnumber . "', '" . $this -> coins . "', " . $this -> status . ")";
+			global $db;
+			$sql = "INSERT INTO `payment_history`(`username`, `cardserial`, `cardnumber`, `coins`, `status`) VALUES	('" . $userid . "','" . $this -> cardserial . "', '" . $this -> cardnumber . "', " . $this -> coins . ", " . $this -> status . ")";
 			$result = $db -> query_first($sql);
 			if ($result) {
 				$this->paymentid = $db -> insert_id();				

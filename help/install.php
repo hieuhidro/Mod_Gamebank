@@ -36,4 +36,12 @@ $db -> query_first($sql);
  */
 $sql_clm = "ALTER TABLE  'user' ADD 'payment' INT NOT NULL DEFAULT '0'";
 $db -> query_first($sql_clm);
+
+$sql_clm = "ALTER TABLE  `thread` ADD  `expires_sticky` INT NOT NULL DEFAULT  '0' AFTER  `sticky`";
+$db -> query_first($sql_clm);
+
+
+
+
+
 ?>

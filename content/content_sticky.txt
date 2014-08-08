@@ -1,0 +1,10 @@
+ <li>
+ 	<label for="cb_payment_sticky"> Price per day:
+ 		<input type="number" name="payment_sticky" id="cb_payment_sticky" tabindex="3" class="primary textbox" required/>
+ 	</label>
+ </li>
+ <li>
+ 	<label for="cb_payment_sticky"> End day from NOW:
+ 		<input type="date" name="payment_expires_sticky" id="cb_payment_expires_sticky" tabindex="4" class="primary textbox" placeholder="dd/mm/yyyy" required/>
+ 	</label>
+ </li>

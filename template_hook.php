@@ -6,6 +6,7 @@
 //#############################################################
 
 include_once ('/payment/lib/nusoap.php');
+include_once ('/payment/lib/class.payment_history.php');
 global $forumid, $vb;
 
 if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'])//Check if mod is enable and user is login ....................
@@ -24,7 +25,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	$gamebank_column = $vbulletin -> options['payment_column'];
 	
 	/**
-	 * Get column name from vbulletin option Your Payment (string)
+	 * Get nav name from vbulletin option Your Payment (string)
 	 */
 	 $name_nav = $vbulletin -> options['payment_namenav'];
 	/**
