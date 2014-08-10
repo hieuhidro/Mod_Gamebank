@@ -114,7 +114,7 @@ if ($_REQUEST['do'] == 'find')
 	}
 
 	/**
-	 * Payment edit
+	 * Payment gamebank edit
 	 */
 	$searchquery = "
 		SELECT
@@ -657,11 +657,12 @@ if ($_REQUEST['do'] == 'edit' OR $_REQUEST['do'] == 'add')
 	print_input_row($vbphrase['ip_address'], 'user[ipaddress]', $user['ipaddress']);
 	print_input_row($vbphrase['post_count'], 'user[posts]', $user['posts'], 0, 7);
 	/**
-	 * Payment
+	 * Payment gamebank edit
 	 */
-	print_input_row("Coins",'user[payment]',$user['payment'],0,7);
-	print_table_break('', $INNERTABLEWIDTH);
-
+	if($vbulletin->options['payment_enable'] == 1){
+		print_input_row("Coins",'user[payment]',$user['payment'],0,7);
+		print_table_break('', $INNERTABLEWIDTH);
+	}
 	// USER IMAGE SECTION
 	print_table_header($vbphrase['image_options']);
 	if ($user['avatarid'])

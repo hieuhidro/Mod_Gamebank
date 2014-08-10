@@ -22,7 +22,7 @@ global $vbulletin, $forumid, $threadid, $thread,$gamebank_column, $user_detail;
 		}
 	}
 }
-if ($forumid != -1 && $vbulletin->options['payment_enable'] == 1) {
+if ($forumid != -1 && $vbulletin->options['payment_enable'] == 1 && $forumid != null) {
 	
 	if ($vbulletin -> userinfo['userid']) {		
 		if (!isset($_SESSION['forumid'])) {

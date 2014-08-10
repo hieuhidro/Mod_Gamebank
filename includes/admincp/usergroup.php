@@ -227,12 +227,14 @@ if ($_REQUEST['do'] == 'add' OR $_REQUEST['do'] == 'edit')
 			}
 		}
 	}
+	if($vbulletin->options['payment_enable']){
 	//Edit by Gamebank --------------------
 		print_table_header(" Price perday to Join Group ");
 		print_input_row("Set price of group", "usergroup[group_price]",$usergroup['group_price'], 1, 20);
 		print_table_break();
 		print_column_style_code(array('width: 70%', 'width: 30%'));
 	//Edit by Gamebank ---------------------
+	}
 	foreach ($groupinfo AS $grouptitle => $group)
 	{
 
