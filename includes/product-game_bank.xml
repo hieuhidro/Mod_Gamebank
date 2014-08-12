@@ -10,8 +10,7 @@
 	</dependencies>
 	<codes>
 		<code version="1.0.0">
-			<installcode><![CDATA[
-			/**--
+			<installcode><![CDATA[			/**--
 			 *-- Database: 'user database'
 			 *--
 			 *-- --------------------------------------------------------
@@ -36,9 +35,17 @@
 			/**
 			 * Query insert column into table user of database
 			 */
-			$sql_clm = "ALTER TABLE `user` ADD `payment` INT NOT NULL DEFAULT  '0'";
-			$db -> query_first($sql_clm);
-		]]></installcode>
+			
+                        $sql_clm = "ALTER TABLE  'user' ADD 'payment' INT NOT NULL DEFAULT '0'";
+                        $db -> query_first($sql_clm);
+
+                        $sql_clm = "ALTER TABLE  `thread` ADD  `expires_sticky` INT NOT NULL DEFAULT  '0' AFTER  `sticky`";
+                        $db -> query_first($sql_clm);
+
+                        $sql_clm = "ALTER TABLE  `usergroup` ADD  `group_price` INT NOT NULL DEFAULT  '0' AFTER  `pmquota`";
+                        $db -> query_first($sql_clm);
+
+]]></installcode>
 			<uninstallcode />
 		</code>
 	</codes>
@@ -95,6 +102,11 @@
 	</stylevars>
 	<plugins>
 		<plugin active="1" executionorder="5">
+			<title>User Completed Leader</title>
+			<hookname>admin_usergroup_save_complete</hookname>
+			<phpcode><![CDATA[include ('payment/act/act_addgroup.php');]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
 			<title>Download file price</title>
 			<hookname>attachment_process_start</hookname>
 			<phpcode><![CDATA[include ('payment/plugin/attacment_price.php');]]></phpcode>
@@ -109,6 +121,16 @@
 			<hookname>parse_templates</hookname>
 			<phpcode><![CDATA[include "/payment/plugin/visit_forum.php";]]></phpcode>
 		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Jion Group Request</title>
+			<hookname>profile_insertjoinrequest</hookname>
+			<phpcode><![CDATA[include ('payment/act/act_joingroup.php');]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Jion Group</title>
+			<hookname>profile_joingroup_unmoderated</hookname>
+			<phpcode><![CDATA[include ('/payment/act/act_joingroup.php');]]></phpcode>
+		</plugin>
 	</plugins>
 	<phrases>
 		<phrasetype name="vBulletin Settings" fieldname="vbsettings">
@@ -117,6 +139,8 @@
 
 <strong>Wanning!!!</strong> please insert 1 column in to table <b>user</b> form database]]></phrase>
 			<phrase name="setting_payment_column_title" date="1406219667" username="thien321091" version="1.0.0"><![CDATA[Set Column]]></phrase>
+			<phrase name="setting_payment_currency_desc" date="1407536566" username="thien321091" version="1.0.0"><![CDATA[currency exchange (cash to coin)]]></phrase>
+			<phrase name="setting_payment_currency_title" date="1407536566" username="thien321091" version="1.0.0"><![CDATA[Currency exchange]]></phrase>
 			<phrase name="setting_payment_downloadprice_desc" date="1406535926" username="thien321091" version="1.0.0"><![CDATA[How many price to download file on forum 
 <strong>number</number>]]></phrase>
 			<phrase name="setting_payment_downloadprice_title" date="1406535926" username="thien321091" version="1.0.0"><![CDATA[Download file price]]></phrase>
@@ -171,6 +195,19 @@
 				<datatype>free</datatype>
 				<optioncode>textarea</optioncode>
 				<defaultvalue>2:1000;</defaultvalue>
+			</setting>
+			<setting varname="payment_currency" displayorder="42">
+				<datatype>free</datatype>
+				<optioncode>textarea</optioncode>
+				<defaultvalue>10000:10000;
+20000:20000;
+30000:30000;
+50000:50000;
+100000:100000;
+200000:200000;
+300000:300000;
+500000:500000;
+10000000:10000000</defaultvalue>
 			</setting>
 			<setting varname="payment_downloadprice" displayorder="51">
 				<datatype>number</datatype>

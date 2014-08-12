@@ -12,55 +12,54 @@
  *
  * Edited thread (threadadmin_editthread) line
  <li>
- <label for="cb_payment_sticky"> Price per day:
- <input type="number" name="payment_sticky" id="cb_payment_sticky" tabindex="3" class="primary textbox" />
- </label>
+	 <label for="cb_payment_sticky"> Price per day:
+	 <input type="number" name="payment_sticky" id="cb_payment_sticky" tabindex="3" class="primary textbox" />
+	 </label>
  </li>
  <li>
- <label for="cb_payment_sticky"> End day from NOW:
- <input type="text" name="expires_sticky" id="cb_payment_expires_sticky" tabindex="3" class="primary textbox" placeholder="dd/mm/yyyy" />
- </label>
+	 <label for="cb_payment_sticky"> End day from NOW:
+	 <input type="text" name="expires_sticky" id="cb_payment_expires_sticky" tabindex="3" class="primary textbox" placeholder="dd/mm/yyyy" />
+	 </label>
  </li>
  */
+global $threadinfo, $vbulletin, $db;
+if(isset($vbulletin->options['payment_enable'] == 1){
+	if (isset($_POST['payment_sticky']) && isset($_POST['expires_sticky'])) {
+		/**
+		 * Get setting of Payment MOD
+		 */
+		/** Column in user table */
+		$gamebank_column = $vbulletin -> options['payment_column'];
 
-if (isset($_POST['payment_sticky']) && isset($_POST['expires_sticky'])) {
+		$date_now = new DateTime("now");
 
-	global $threadinfo, $vbulletin, $db;
+		//echo $threadinfo['payment_sticky'];
+		//echo $threadinfo['expires_sticky'];
 
-	/**
-	 * Get setting of Payment MOD
-	 */
-	/** Column in user table */
-	$gamebank_column = $vbulletin -> options['payment_column'];
+		//echo $_POST['payment_sticky']. "<br/>";
 
-	$date_now = new DateTime("now");
+		$expires_sticky = new DateTime($_POST['expires_sticky']);
 
-	//echo $threadinfo['payment_sticky'];
-	//echo $threadinfo['expires_sticky'];
+		$threadinfo['expires_sticky'] = strtotime($expires_sticky);
 
-	//echo $_POST['payment_sticky']. "<br/>";
+		$ddiff = $date_now -> diff($expires_sticky);
 
-	$expires_sticky = new DateTime($_POST['expires_sticky']);
+		/*
+		 * Calculate Price of thread sticky with expires_sticky day
+		 */
+		$sumany = $ddiff -> Format("%a") * $_POST['payment_sticky'];
 
-	$threadinfo['expires_sticky'] = strtotime($expires_sticky);
-
-	$ddiff = $date_now -> diff($expires_sticky);
-
-	/*
-	 * Calculate Price of thread sticky with expires_sticky day
-	 */
-	$sumany = $ddiff -> Format("%a") * $_POST['payment_sticky'];
-
-	$sql = "select payment from user where userid = " . $threadinfo['firstpostid'];
-	$result = $db -> query_first($sql);
-	if ($result) {
-		$cur_payment = $result['payment'];
-	}	
-	if($cur_payment - $sumany >= 0){
-		$sql = "update user set payment = (payment - $sumany) where userid = " . $threadinfo['firstpostid'];
-	}else{
-		echo "<script>alert('User posted this thread, doesn't have price');</script>";
-		return;
+		$sql = "select payment from user where userid = " . $threadinfo['firstpostid'];
+		$result = $db -> query_first($sql);
+		if ($result) {
+			$cur_payment = $result['payment'];
+		}	
+		if($cur_payment - $sumany >= 0){
+			$sql = "update user set payment = (payment - $sumany) where userid = " . $threadinfo['firstpostid'];
+		}else{
+			echo "<script>alert('User posted this thread, doesn't have price');</script>";
+			return;
+		}
 	}
 }
 ?>
