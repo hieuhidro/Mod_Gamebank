@@ -34,13 +34,13 @@ $db -> query_first($sql);
 /**
  * Query insert column into table user of database
  */
-$sql_clm = "ALTER TABLE  'user' ADD 'payment' INT NOT NULL DEFAULT '0'";
+$sql_clm = "ALTER TABLE  '".TABLE_PREFIX."user' ADD 'payment' INT NOT NULL DEFAULT '0'";
 $db -> query_first($sql_clm);
 
-$sql_clm = "ALTER TABLE  `thread` ADD  `expires_sticky` INT NOT NULL DEFAULT  '0' AFTER  `sticky`";
+$sql_clm = "ALTER TABLE  `".TABLE_PREFIX."thread` ADD  `expires_sticky` INT NOT NULL DEFAULT  '0' AFTER  `sticky`";
 $db -> query_first($sql_clm);
 
-$sql_clm = "ALTER TABLE  `usergroup` ADD  `group_price` INT NOT NULL DEFAULT  '0' AFTER  `pmquota`";
+$sql_clm = "ALTER TABLE  `".TABLE_PREFIX."usergroup` ADD  `group_price` INT NOT NULL DEFAULT  '0' AFTER  `pmquota`";
 $db -> query_first($sql_clm);
 
 

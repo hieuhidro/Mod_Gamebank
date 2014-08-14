@@ -19,7 +19,7 @@ class GameBank {
 	//Function update coins of current user
 	public function UpdatePayment() {
 		global $db,$gamebank_column;
-		$sql = "update user set $gamebank_column = " . $this->userpayment . " where userid = " . $this->userid;		
+		$sql = "update ".TABLE_PREFIX."user set $gamebank_column = " . $this->userpayment . " where userid = " . $this->userid;		
 		return $result = $db -> query_first($sql);
 	}
 
