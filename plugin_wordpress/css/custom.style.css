@@ -30,10 +30,18 @@
 #form-gamebank{
 	margin:10px;
 }
+.wrap{
+	overflow: hidden;
+	background: #FFFFFF;
+}
+form{
+	overflow: hidden;
+}
 .form-group {
 	margin-bottom: 0;
 	vertical-align: middle;
 	margin-bottom: 15px;
+	overflow: hidden;
 }
 .gamebank {
 	padding: 10px;

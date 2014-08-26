@@ -103,16 +103,24 @@ class payment {
 	/**
 	 * insertItemp($userid = null)
 	 * @access public
-	 * @param $userid int. id of user will be add defalut = null (Not insert)
+	 * @param $username string. id of user will be add defalut = null (Not insert)
 	 * @return int id of row inserted (insert false return -1)
 	 */
-	public function insertItemp($userid = null) {
-		if ($userid != null) {
-			global $db;
-			$sql = "INSERT INTO `payment_history`(`username`, `cardserial`, `cardnumber`, `coins`, `status`) VALUES	('" . $userid . "','" . $this -> cardserial . "', '" . $this -> cardnumber . "', " . $this -> coins . ", " . $this -> status . ")";
-			$result = $db -> query_first($sql);
+	public function insertItemp($username = null) {
+		
+		if ($username != null) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'payment_history';
+			$result = $wpdb -> insert($table_name,
+										array(
+											'username' => $username,
+											'cardserial' => $this -> cardserial,
+											'cardnumber' => $this -> cardnumber,
+											'coins' => $this -> coins,
+											'status' => $this -> status
+										));			
 			if ($result) {
-				$this->paymentid = $db -> insert_id();				
+				$this->paymentid = $wpdb -> insert_id;				
 				return $this->paymentid;
 			}
 		}
@@ -153,7 +161,7 @@ class payment {
  */
 class payment_history {
 	protected $username;
-
+	
 	/**
 	 * __contruct($userid = 1,$username)
 	 * @access public
@@ -171,9 +179,10 @@ class payment_history {
 	 * @return array of payment
 	 */
 	public function getAllItem() {
-		global $db;
-		$sql = "select * from payment_history where username = $this->username";
-		$result = $db -> query_read($sql);
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'payment_history';
+		$sql = "select * from $table_name where username = '".$this->username."'";
+		$result = $wpdb -> get_results($sql);
 		$array = array();
 		if ($result) {
 			while ($row = @@mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -197,9 +206,11 @@ class payment_history {
 	 * @return array of payment
 	 */
 	public function getItemLimit($from = 0, $limit = 20) {
-		global $db;
-		$sql = "select * from payment_history where username = '$this->username' limit $from, $limit";
-		$result = $db -> query_read($sql);
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'payment_history';
+		$sql = "select * from $table_name where username = '".$this->username."' limit $from, $limit";
+		echo $sql;
+		$result = $wpdb -> get_results($sql);
 		$array = array();
 		if ($result) {
 			while ($row = @@mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -225,31 +236,30 @@ class payment_history {
 	 * @return array payment of user
 	 */
 	public function getItemFilter($cardserial = "",$status = 0,$from = 0,$limit = 20){
-		global $vbulletin, $db;		
+		global $wpdb;		
+		$table_name = $wpdb->prefix . 'payment_history';
 		if($status != 0){			
-			$sql = "select historyid, datetime,cardserial,cardnumber,coins,status from payment_history where username = '$this->username' and status = '$status' limit $from, $limit";
+			$sql = "select historyid, datetime,cardserial,cardnumber,coins,status from $table_name where username = '".$this->username."' and status = '$status' limit $from, $limit";
 		}else{
-			$sql = "select historyid, datetime,cardserial,cardnumber,coins,status from payment_history where username = '$this->username' and cardserial like '%$cardserial%' limit $from, $limit";
+			$sql = "select historyid, datetime,cardserial,cardnumber,coins,status from $table_name where username = '".$this->username."' and cardserial like '%$cardserial%' limit $from, $limit";
 		}
-		
-		$result = $db -> query_read($sql);
+		$result = $wpdb -> get_results($sql);
 		$array = array();
-		
 		if ($result) {
-			while ($row = @@mysql_fetch_array($result, MYSQL_ASSOC)) {
-				$paymentid = $row['historyid'];
-				$datetime = $row['datetime'];
-				$cardserial = $row['cardserial'];
-				$cardnumber = $row['cardnumber'];
-				$coins = $row['coins'];
-				$status_new = $row['status'];
-				$array[] = new payment($cardserial, $cardnumber, $status_new, $coins, $paymentid, $datetime);
-			}
+			foreach ($result as $key => $value) {
+				$paymentid = $value->historyid;
+				$datetime = $value->datetime;
+				$cardserial = $value->cardserial;
+				$cardnumber = $value->cardnumber;
+				$coins = $value->coins;
+				$status_new = $value->status;
+				$array[] =  new payment($cardserial, $cardnumber, $status_new, $coins, $paymentid, $datetime);
+			}				
 		}
 		if($from == 0 && $status != 0 && !isset($_GET['page'])){			
 			$ln = strlen(" limit $from,$limit");
 			$sql = substr($sql,0,-$ln);
-			$result = $db -> query_read($sql);
+			$result = $wpdb -> get_results($sql);
 			if($result){
 				global $cur_page;
 				$cur_page->Total(@@mysql_num_rows($result));

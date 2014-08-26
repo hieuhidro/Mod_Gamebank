@@ -110,12 +110,12 @@ class paging {
 	 * 
 	 */
 	public static function getTotal($username) {
-		if (isset($_GET['total'])) {
-			return $_GET['total'];
+		if (isset($_POST['total'])) {
+			return $_POST['total'];
 		} else {
-				global $vbulletin, $db;
+				global $wpdb;
 				$sql = "select count(username) as total from payment_history where username = '" . $username."'";
-				$result = $db -> query_first($sql);
+				$result = $wpdb -> get_results($sql);
 				if ($result) {
 					return $result['total'];
 				}
