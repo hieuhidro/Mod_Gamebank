@@ -74,7 +74,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 			 * create script to alert result 
 			 **/
 			$str_result = "<script> alert('";
-			
+			$status = 10000;
 			if ($result[0] >= 10000) {
 				//echo "Nap thanh cong ".$result[0];
 				//Nap tien thanh cong, $result['resultCode'] là mệnh giá thẻ khách nạp
@@ -101,6 +101,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 				
 			} else {
 				//Lỗi nạp tiền, dựa vào bảng mã lỗi để show thông tin khách hàng lên
+				$status = $result[0];
 				switch($result[0]) {
 					case -3 :
 						$str_result .= "The khong su dung duoc";
@@ -129,7 +130,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 					default :
 						$str_result .= "Ket noi voi Gamebank that bai";
 				}
-				$payment_new  = new payment($seri,$code,$result[0],$result[0]);
+				$payment_new  = new payment($seri,$code,$status,$result[0]);
 				$payment_new->insertItemp($user_detail['username']);		
 			}
 			$str_result .= "');</script>";
