@@ -1,0 +1,632 @@
+<?php
+$setting = new gamebank_setting();
+/**
+ * @file
+ * Enable threaded discussions about general topics.
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function gamebank_help($path, $arg) {
+	switch ($path) {
+    case 'admin/help#gamebank':
+		return "module of gamebank.vn";
+		break;
+	case 'admin/gamebank/settings':
+		
+		break;
+	};
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function gamebank_theme($existing, $type, $theme, $path) {	 
+}
+
+/**
+ * Implementation of hook_menu().
+ * 
+ * $items['admin/settings/thachhau'] = array(
+	   'title' => 'Thach Hau Admin',
+	   'page callback' => 'drupal_get_form',
+	   'page arguments' => array('thachhau_search_form'),
+	   'access arguments' => array('searching user thachhau'),
+	   'file' => 'thachhau_search.inc',
+	   'weight' => 0,
+ 	);
+ * 
+ * function thachhau_perm(){
+ return array(
+   'searching user thachhau',
+   'merge server thachhau',
+ );
+}
+ * 
+ * 
+ */
+function gamebank_menu() {
+	if(user_access('user_is_logged_in')){
+		$items = array();	
+		$items['gamebank'] = array(
+		    'title' => 'Gamebank',
+		    'page callback' => 'drupal_get_form',
+		    'page arguments'=> array('gamebank_add_form'),
+		    'access callback' => 'user_is_logged_in',
+		    'file' => 'gamebanks.inc',
+		    'weight'=>'10',
+		);
+		  
+		$items['gamebank/history'] = array(
+		   'title' => 'Gamebank History',
+		   'page callback' => 'drupal_get_form',
+		   'page arguments'=> array('gamebank_process_history'),
+		   'access callback' => 'user_is_logged_in',
+		   'parent' => 'gamebank',
+		   'file' => 'gamebanks-history.inc',
+		   'weight'=> '10',
+		);
+		 
+		$items['gamebank/settings'] = array(
+		    'title' => 'Gamebank Settings',
+		    'page callback' => 'drupal_get_form',
+		    'page arguments'=> array('gamebank_setting_form'),   
+		    'access arguments' => array('administer permissions'),	
+		    'parent' => 'gamebank',
+		    'type' => MENU_NORMAL_ITEM,
+		    'file' => 'gamebanks-setting.inc',
+		    'weight'=> '10',
+		);
+		
+		return $items;
+	}
+}
+/**
+ * Implementation of hook_perm().
+ */
+function gamebank_perm() {
+  return array('user_is_logged_in','administer gamebank');
+}
+
+/**
+ * Implementation of hook_init().
+ */
+function gamebank_init() {	
+	drupal_add_css(drupal_get_path('module', 'gamebank') .'/gamebank.css');
+	drupal_add_js(drupal_get_path('module', 'gamebank') .'/gamebank.js');
+};
+
+
+/**
+ *
+ * Class Payment_history.
+ *
+ * Get, insert current user payment history
+ * __contruct($userid)
+ * @param $userid int id of user will be get detail
+ * @param $username string string user name of current user
+ * @param $info array of object payment
+ */
+class payment_history {
+	protected $username;
+
+	/**
+	 * __contruct($userid = 1,$username)
+	 * @access public
+	 * @param $username string user name of current user (important)
+	 * @return void
+	 */
+	function __construct($username) {
+		$this -> username = $username;
+	}
+
+	/**
+	 *
+	 * getAllItem()
+	 * @access public
+	 * @return array of payment
+	 */
+	public function getAllItem() {
+		global $db;
+		$sql = "select * from payment_history where username = $this->username";
+		$result = db_query($sql);
+		$array = array();
+		if ($result) {
+			while ($row = db_fetch_array($result)) {
+				$paymentid = $row['historyid'];
+				$datetime = $row['datetime'];
+				$cardserial = $row['cardserial'];
+				$cardnumber = $row['cardnumber'];
+				$coins = $row['coins'];
+				$status = $row['status'];
+				$array[] = new payment($cardserial, $cardnumber, $status, $paymentid, $datetime);
+			}
+		}
+		return $array;
+	}
+
+	/**
+	 * getItemLimit()
+	 * @access public
+	 * @param $from (int), default = 0;
+	 * @param $limit (int), cout of select, default = 20;
+	 * @return array of payment
+	 */
+	public function getItemLimit($from = 0, $limit = 20) {
+		global $db;
+		$sql = "select * from payment_history where username = '$this->username' limit $from, $limit";
+		$result = db_query($sql);
+		$array = array();
+		if ($result) {
+			while ($row = db_fetch_array($result)) {
+				$paymentid = $row['historyid'];
+				$datetime = $row['datetime'];
+				$cardserial = $row['cardserial'];
+				$cardnumber = $row['cardnumber'];
+				$coins = $row['coins'];
+				$status = $row['status'];
+				$array[] = new payment($cardserial, $cardnumber, $status, $coins, $paymentid, $datetime);
+			}
+		}
+		return $array;
+	}
+	/**
+	 * getItemFilter($cardserial,$status)
+	 * @access public
+	 * @param $username string username default = "";
+	 * @param $cardserial string card serial default = "";
+	 * @param $status int status number default = "";
+	 * @param $from (int), default = 0;
+	 * @param $limit (int), cout of select, default = 20;
+	 * @return array payment of user
+	 */
+	public function getItemFilter($cardserial = '',$status = 0,$from = 0,$limit = 20){		
+		if($status != 0){			
+			$sql = "select historyid, datetime,cardserial,cardnumber,coins,status from payment_history where username = '$this->username' and status = '$status' limit $from, $limit";
+		}else{
+			$sql = "select historyid, datetime,cardserial,cardnumber,coins,status from payment_history where username = '$this->username' and cardserial like '%$cardserial%' limit $from, $limit";
+		}
+		
+		$result = db_query($sql);
+		$array = array();
+		
+		if ($result) {
+			while ($row = db_fetch_array($result)) {
+				$paymentid = $row['historyid'];
+				$datetime = $row['datetime'];
+				$cardserial = $row['cardserial'];
+				$cardnumber = $row['cardnumber'];
+				$coins = $row['coins'];
+				$status_new = $row['status'];
+				$array[] = new payment($cardserial, $cardnumber, $status_new, $coins, $paymentid, $datetime);
+			}
+			
+		}
+		if(($from == 0 && $status == 0) && !isset($_GET['page'])){			
+			$ln = strlen(" limit $from,$limit");
+			$sql = substr($sql,0,-$ln);
+			$result = db_query($sql);
+			global $cur_page;
+			$cur_page->Total($result->num_rows);
+		}
+		return $array;
+	}
+	
+	/**
+	 * stringHtmlItems($cur_page)
+	 * @access public
+	 * @param $array_payment object of payment default = null;
+	 */ 
+	 public function printHtmlItems($array_payment = null){
+	 	$curpage = paging::getCurrentPage() -1 ;
+		$pagecout = paging::getPageCount();
+		$strHtml = '';
+		foreach ($array_payment as $key => $value) {
+				$strHtml .= "<tr class='item_payment'>
+						<td>".($curpage *$pagecout + $key+1)."</td>";
+				$strHtml .= "<td>".$this->username."</td>";
+				$strHtml .= $value -> toItemHTML();
+				$strHtml .= '</tr>';
+		}
+		return $strHtml;
+	}
+}
+
+/**
+ * Class payment
+ *
+ * __contruct($cardserial,$cardnumber,$status,$value,$paymentid,$datetime)
+ *
+ * @param $paymentid int value id of item payment default = null
+ * @param $datetime string value date time of item payment default = null
+ * @param $cardserial string value card serial of item payment
+ * @param $cardnumber string value card number of item payment
+ * @param $status string value status of item payment
+ */
+class payment {
+
+	/**
+	 * Protected
+	 */	
+	protected $paymentid;
+	protected $datetime;
+	protected $cardserial;
+	protected $cardnumber;
+	protected $coins;
+	protected $status;
+
+	/** __construct($cardserial,$cardnumber,$status,$value,$paymentid,$datetime)
+	 *
+	 * @access public
+	 * @param $paymentid int value id of item payment default = null
+	 * @param $datetime string value date time of item payment default = null
+	 * @param $cardserial string value card serial of item payment
+	 * @param $cardnumber string value card number of item payment
+	 * @param $value string value card value of item card
+	 * @param $status string value status of item payment
+	 * @return void
+	 */
+	function __construct($cardserial, $cardnumber, $status, $value, $paymentid = null, $datetime = null) {
+		$this -> cardserial = $cardserial;
+		$this -> cardnumber = $cardnumber;
+		$this -> coins = $value;
+		$this -> status = $status;
+
+		//Default = null
+		$this -> datetime = $datetime;
+		$this -> paymentid = $paymentid;
+	}
+
+	/**
+	 * 
+	 * paymentId()
+	 * @return $paymentid
+	 */
+	 public function paymentId()
+	 {
+	 	return $this->paymentid;
+	 }
+	/**
+	 * getStatus()
+	 * @access public
+	 * @return String of status id
+	 */
+	public function getStatus() {
+
+		if ($this -> status >= 10000) {
+			return "Nap the thanh cong";
+		} else {
+			$str_result ="";
+			switch($this->status) {
+				case -3 :
+					$str_result = "The khong su dung duoc";
+					break;
+				case -10 :
+					$str_result = "Nhap sai dinh dang the";
+					break;
+				case -1001 :
+					$str_result = "Nhap sai qua 3 lan ";
+					break;
+				case -1002 :
+					$str_result = "Loi he thong ";
+					break;
+				case -1003 :
+					$str_result = "IP khong duoc phep truy cap vui long quay lai sau 5 phut";
+					break;
+				case -1004 :
+					$str_result = "Ten dang nhap gamebank khong dung";
+					break;
+				case -1005 :
+					$str_result = "Loai the khong dung";
+					break;
+				case -1006 :
+					$str_result = "He thong dang bao tri";
+					break;
+				default :
+					$str_result = "Ket noi voi Gamebank that bai";
+			}
+			return $str_result;
+		}
+	}
+
+	/**
+	 * insertItemp($userid = null)
+	 * @access public
+	 * @param $userid int. id of user will be add defalut = null (Not insert)
+	 * @return int id of row inserted (insert false return -1)
+	 */
+	public function insertItemp($userid = null) {
+		if ($userid != null) {
+			$time = strtotime('now');
+			$sql = "INSERT INTO `payment_history`(`username`,`datetime`, `cardserial`, `cardnumber`, `coins`, `status`) VALUES 
+												 ('" . $userid . "',$time,'" . $this -> cardserial . "', '" . $this -> cardnumber . "', " . $this -> coins . ", " . $this -> status . ")";
+			$result = db_query($sql);
+		}
+		return -1;
+	}
+
+	/**
+	 * toItemHTML()
+	 *
+	 * @access public
+	 * @return string itemp element HTML
+	 * 			<td>Date Time</td>
+	 *			<td>Card Serial</td>
+	 *			<td>Card Number</td>
+	 *			<td>Coins</td>
+	 * 			<td>Status</td>
+	 */
+	public function toItemHTML() {
+		$str_html .= "<td>".date('s:i:H d/m/Ys',$this->datetime)."</td>";
+		$str_html .= "<td>$this->cardserial</td>";
+		$str_html .= "<td>$this->cardnumber</td>";
+		$str_html .= "<td>$this->coins</td>";
+		$str_html .= "<td>".$this->getStatus()."</td>";
+		return $str_html;
+	}
+
+}
+
+
+/**
+ * public class paging, paging for payment history of user
+ *
+ * __contructer($pagecount);
+ *
+ * $total is a cout of row
+ */
+class paging {
+
+	/**
+	 * Cout row (number)
+	 */
+	protected $total;
+	protected $pagecount;
+	protected $current;
+	/**
+	 * __construct
+	 *
+	 * @access public
+	 * @param  integer $pagecount (default: 20)
+	 * @return void
+	 */
+	function __construct($username, $pagecount = 20) {
+		$this -> total = paging::getTotal($username);
+		$this -> current = $this -> getCurrentPage();
+		$this -> pagecount = ($pagecount == null) ? paging::getPageCount() : $pagecount;
+	}
+
+	/**
+	 * getCurrentURL()
+	 * @access public static
+	 *
+	 * @return current URL;
+	 */
+	public static function getCurrentURL() {
+		if ((!isset($_SESSION['request_url']) && !isset($_GET['page'])) || (isset($_SESSION['request_url']) && !isset($_GET['page']))) {
+			$_SESSION['request_url'] = htmlentities($_SERVER['REQUEST_URI']);
+		}
+		return $_SESSION['request_url'];
+
+	}
+
+	/**
+	 *
+	 */
+	public function Current($value = null) {
+		if ($value != null) {
+			$this -> current = $value;
+		}
+		return $this -> current;
+	}
+
+	/**
+	 *
+	 */
+	public function Total($value = null) {
+		if ($value != null) {
+			$this -> total = $value;
+		}
+		return $this -> total;
+	}
+
+	/**
+	 * pageCount()
+	 * @return int this->pagecount;
+	 */
+	public function pageCount() {
+		return $this -> pagecount;
+	}
+
+	/**
+	 * getPageCount()
+	 *
+	 * @access public static
+	 * @return int default return 20
+	 */
+	public static function getPageCount() {
+		if (isset($_GET['pagecount'])) {
+			return $_GET['pagecount'];
+		}
+		return 20;
+	}
+
+	/**
+	 * getCurrentPage()
+	 *
+	 * @access public static
+	 * @return int
+	 */
+	public static function getCurrentPage() {
+		if (isset($_GET['page'])) {
+			return $_GET['page'];
+		} else {
+			return 1;
+		}
+	}
+
+	/**
+	 * getTotal()
+	 *
+	 * @access public
+	 * @param $username string user name
+	 * @param $sql string user name default = ""
+	 * @return int
+	 *
+	 */
+	public static function getTotal($username) {
+		if (isset($_GET['total'])) {
+			return $_GET['total'];
+		} else {
+			global $user;
+			$sql = "select count(username) as total from payment_history where username = '" . $user->name . "'";
+			$result = db_query($sql);			
+			if ($result) {							
+				return $result->total;
+			}
+			return 0;
+		}
+	}
+
+	/**
+	 * calulatePage($total);
+	 *
+	 * @access public
+	 * @param $total int.
+	 * @param $countrow int
+	 * @return int page count
+	 */
+	public static function calulatePage($total, $pagecount) {
+		return (int)($total / $pagecount) + 1;
+	}
+
+	/**
+	 * Compile_Url()
+	 *
+	 * @access public
+	 * @return string as URL
+	 */
+	public function Compile_Url($current = 1) {
+
+		if ($this -> total >= 0) {
+			if (isset($_GET['username-filter'])) {
+				return paging::getCurrentURL() . "&page=" . ($current) . "&total=" . $this -> total . "&pagecount=" . $this -> pagecount;
+			}
+		}
+		return paging::getCurrentURL() . "&page=" . ($current) . "&total=" . $this -> total . "&pagecount=" . $this -> pagecount;
+	}
+
+	/**
+	 * forward();
+	 *
+	 * @access public
+	 * @param $current int default = 0
+	 * @return string
+	 */
+	public function forward($current = 1) {
+		if ($current == 1) {
+			return '<li class="disabled"><a>&laquo;</a></li>';
+		} else {
+			return '<li><a href="' . $this -> Compile_Url($current - 1) . '">&laquo;</a></li>';
+		}
+	}
+
+	/**
+	 * nextpage();
+	 *
+	 * @access public
+	 * @param $current int default = 0
+	 * @return string tag HTML
+	 */
+	public function nextpage($current = 1) {
+		if ($current < paging::calulatePage($this -> total, $this -> pagecount)) {
+			return '<li ><a href="' . $this -> Compile_Url($current + 1) . '">&raquo;</a></li>';
+		} else {
+			return '<li class="disabled"><a>&raquo;</a></li>';
+		}
+	}
+
+	/**
+	 * compile_path($i,$active)
+	 * @access public
+	 * @param $i int Stt
+	 * @param $active boolean default false
+	 * @return string tag <li> element
+	 */
+	public function compile_path($i, $active = false) {
+		if ($active) {
+			return '<li class="active"><a href="' . $this -> Compile_Url($i) . '">' . ($i) . '</a></li>';
+		}
+		return '<li><a href="' . $this -> Compile_Url($i) . '">' . ($i) . '</a></li>';
+	}
+
+	/**
+	 * Compile_ToString()
+	 *
+	 * @access public
+	 * @return string as HTML.
+	 *
+	 */
+	public function Compile_ToString() {
+		$str_content = "<ul class='pagination pagination-sm'>";
+		$str_content .= $this -> forward($this -> current);
+		$numpage = paging::calulatePage($this -> total, $this -> pagecount);
+		$checked = 1;
+		for ($i = 1; $i <= $numpage; $i++) {
+			if ($i == $this -> getCurrentPage()) {
+				if (($i > 3 && $i < $numpage - 2) || ($i <= $numpage - 2 && $i > 3)) {
+					$str_content .= $this -> compile_path($i - 1);
+				}
+				$str_content .= $this -> compile_path($i, true);
+				$i += 1;
+				if ($i <= $numpage) {
+					$str_content .= $this -> compile_path($i);
+				}
+				$checked = 1;
+
+			} else {
+				if ($i >= $numpage - 2 || $i <= 2) {
+					$str_content .= '<li><a href="' . $this -> Compile_Url($i) . '">' . $i . '</a></li>';
+				} else {
+					$checked = ($checked == 1) ? 2 : 3;
+					if ($checked == 2) {
+						$str_content .= '<li><a>...</a></li>';
+					}
+				}
+			}
+		}
+
+		$str_content .= $this -> nextpage($this -> current);
+		$str_content .= '</ul>';
+		return $str_content;
+	}
+}
+
+/**
+ * Class Setting 
+ * __construct()
+ */
+class gamebank_setting{
+	var $gamebank_account;
+	var $gamebank_column;
+	var $gamebank_channels;
+	var $gamebank_change;
+	var $gamebank_percent;
+	
+	/**
+	 * Function construct
+	 * @access public
+	 * @param $gamebank_enable bool, $gamebank_account string,
+	 * @param $gamebank_column string ,$gamebank_channels string,$gamebank_change string,$gamebank_percent string
+	 */
+	function __construct(){
+		$this->gamebank_account = variable_get('gamebank_account','thien321091');
+		$this->gamebank_column = variable_get('gamebank_column','coins');
+		$this->gamebank_channels = variable_get('gamebank_channels', 'http://pay.gamebank.vn/service/cardServiceV2.php/?wsdl');
+		$this->gamebank_change = variable_get('gamebank_change','10000:10000;20000:20000;30000:30000;50000:50000;100000:100000;200000:200000;300000:300000;500000:500000;1000000:1000000');
+		$this->gamebank_percent = variable_get('gamebank_percent','Viettel:0;MobiFone:0;Vinaphone:0;Gate:0;Vcoin:0');
+	}	 
+}
+
+?>
