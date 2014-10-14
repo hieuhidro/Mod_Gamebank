@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * Implementation of hook_install().
+ */
+function hook_gamebank_install() {
+	//if (!db_table_exists('payment_history')) {
+	//	drupal_install_schema('payment_history');		
+	//  db_create_table('payment_history', $schema['payment_history']);
+	//}	
+	
+	db_query("ALTER TABLE  `users` ADD  `coins` INT NOT NULL DEFAULT  '0' AFTER  `data`");
+	db_query("alter table `payment_history` MODIFY COLUMN historyid int(11) AUTO_INCREMENT;");
+}
+
+function hook_gamebank_enable(){
+	// if (!db_table_exists('payment_history')) {
+		// drupal_install_schema('payment_history');
+	// }
+}
+
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function hook_gamebank_uninstall(){
+	// if (!db_table_exists('payment_history')) {
+	// drupal_uninstall_schema('payment_history');
+	// }
+	db_query("ALTER TABLE  `users` Drop  `coins`");
+}
+
+
+/**
+ * Implementation of hook_schema().
+ *  `historyid` int(11) NOT NULL AUTO_INCREMENT,
+	`username` text COLLATE utf8_unicode_ci NOT NULL,
+	`datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`cardserial` text COLLATE utf8_unicode_ci NOT NULL,
+	`cardnumber` text COLLATE utf8_unicode_ci NOT NULL,
+	`coins` int(11) NOT NULL DEFAULT '0',
+	`status` int(11) NOT NULL DEFAULT '-1007',
+	PRIMARY KEY (`historyid`)
+ * 
+ */ 
+function hook_payment_history_schema() {
+	
+	$schema['payment_history'] = array(
+    'description' => t('Stores the relationship of nodes to forum terms.'),
+    'fields' => array(
+      'historyid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key:. historyid of the node.',
+      ),
+      'username' => array(
+        'type' => 'varchar',
+        'length'=> 255,
+        'not null' => TRUE,
+        'description' => 'user name pay card',
+      ),
+      'datetime' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'date time create',
+      ),
+      'cardserial' => array(
+        'type' => 'varchar',
+        'length'=> 25,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'card serial',
+      ),
+      'cardnumber' => array(
+        'type' => 'varchar',
+        'length'=> 25,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'card number',
+      ),
+      'coins' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'value of card',
+      ),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => -1007,
+        'description' => 'value of status',
+      ),
+    ),
+    'primary key' => array('historyid'),
+  );
+
+  return $schema;
+}
+
+

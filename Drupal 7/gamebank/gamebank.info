@@ -1,0 +1,5 @@
+name = Gamebank
+description = Moudle of gamebank.vn
+package = Gamebank
+version = 7.x-1.0.1
+core = 7.x

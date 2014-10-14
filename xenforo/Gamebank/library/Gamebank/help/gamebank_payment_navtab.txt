@@ -1,0 +1,7 @@
+<xen:if is="{$xenOptions.gamebank_enable} == '1'">
+	<xen:if is="{$visitor.user_id}">
+		<li class="navTab Popup PopupControl PopupClosed  PopupContainerControl">
+			<a href="#" class="navLink">Nạp card</a>
+		</li> 
+ 	</xen:if>
+</xen:if>

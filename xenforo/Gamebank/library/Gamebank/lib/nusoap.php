@@ -1,195 +1,5 @@
 <?php
 
-if(session_start());
-
-
-/**
- *
- */
-//Template gamebanks.tpl.php
-
-
-
-function gamebank_page() {
-	$output = drupal_get_form('gamebank_add_form');
-	return $output;
-}
-
-function gamebank_save_setting() {
-	
-}
-
-function gamebank_add_form($form_state){
-	$form = array();
- 	$value = drupal_map_assoc(array('1' => 'Viettel','2' => 'MobiFone','3' => 'Vinaphone','4' => 'Gate','5' => 'Vcoin'));
-	$form['lstTelco'] = array(
-		'#type' => 'select',
-		'#title' => t('Chon nha mang'),
-		'#default_value' => 1,
-		'#options'=>$value,
-	);
- 
-	$form['txtSeri'] = array(
-		'#title' => 'Card Serial',
-		'#type' => 'textfield',
-		'#required' => TRUE,
-		'#size' => '30',
-		'#required' => '',	
-	);
- 
-	$form['txtCode'] = array(
-		'#title' => 'Card Code',
-		'#type' => 'textfield',
-		'#required' => TRUE,
-		'#size' => '30',
-		'#required' => '',
-	);
- 
-	$form['payment'] = array(
-		'#type' => 'submit',
-		'#value' => t('Nạp thẻ'),		
-	);
-	$form['#submit'][] = 'gamebank_process';
-	
-	return $form;
-}
-
-
-function gamebank_process($form_id, $form_value) {
-	date_default_timezone_set('Asia/Saigon');
-	if ($_POST['op'] == 'Nạp thẻ') {
-		global $user;
-		
-		$setting = new gamebank_setting();
-		$cardtype =trim($form_id['#post']['lstTelco']);
-		$code = trim($form_id['#post']['txtCode']);
-		$seri = trim($form_id['#post']['txtSeri']);
-		
-		$result = db_query("select * from payment_history where coins > 0 and cardserial = '$seri' or cardnumber = '$code'");
-		if($result->num_rows <= 0){
-		
-		
-		$gamebank_account = $setting->gamebank_account;		
-		//http://pay.gamebank.vn/service/csv6.php/?wsdl , options=>'', website=> ''
-		$client = new nusoap_client(http://pay.gamebank.vn/service/csv6.php/?wsdl, true);
-		/*
-			<option value="1">Viettel</option>
-			<option value="2">MobiFone</option>
-			<option value="3">Vinaphone</option>
-			<option value="4">Gate</option>
-			<option value="5">Vcoin</option>
-		 */
-		$telco = 5;
-		switch ($cardtype){
-			case 'Viettel':
-				$telco = 1;
-				break;				
-			case 'MobiFone':
-				$telco = 2;
-				break;
-			case 'Vinaphone':
-				$telco = 3;
-				break;
-			case 'Gate':
-				$telco = 4;
-				break;
-			default:
-				$telco = 5;
-				break;
-		}
-			
-		$result = $client -> call("creditCard", array("seri" => $seri, "code" => $code, "cardtype" => $telco, "gamebank_account" => $gamebank_account, "option" => "drupal 6.x","website"=> $_SERVER['SERVER_NAME']));
-
-		//print_r($result);
-		$time = date('Y-m-d');
-		$status = '';
-		$sotien_nhanduoc = 0;
-		//$result[0] = 10000;
-		if ($result[0] >= 10000) {
-			//echo "Nap thanh cong ".$result[0];
-			//Nap tien thanh cong, $result['resultCode'] là mệnh giá thẻ khách nạp
-			//Chuyen menh gia 1:1, 10000= 10000 coins //Cai nay chac ban biet roi ? um
-			
-			$array_chuyen =  _gb_installing_value($setting->gamebank_change);
-			/**
-			 * Ty le 0% ...
-			 */			
-			$array_khuyenmai = _gb_installing_value($setting->gamebank_percent);
-			$tien = $result[0];
-			$sotien_nhanduoc = $array_chuyen[$tien] + ($tien * $array_khuyenmai[$cardtype]) / 100;
-			$status = "Ban da nap thanh cong $sotien_nhanduoc vao tai khoan";
-			$sql = "update {user} set coins = coins + $sotien_nhanduoc where uid = '". $user->uid;
-
-			db_query($sql);
-		} else {
-			//Lỗi nạp tiền, dựa vào bảng mã lỗi để show thông tin khách hàng lên			
-			switch($result[0]) {
-				case -3 :
-					$status = "The khong su dung duoc";
-					break;
-				case -10 :
-					$status = "Nhap sai dinh dang the";
-					break;
-				case -1001 :
-					$status = "Nhap sai qua 3 lan ";
-					break;
-				case -1002 :
-					$status = "Loi he thong ";
-					break;
-				case -1003 :
-					$status = "IP khong duoc phep truy cap vui long quay lai sau 5 phut";
-					break;
-				case -1004 :
-					$status = "Ten dang nhap gamebank khong dung";
-					break;
-				case -1005 :
-					$status = "Loai the khong dung";
-					break;
-				case -1006 :
-					$status = "He thong dang bao tri";
-					break;
-				default :
-					$status = "Ket noi voi Gamebank that bai";
-			}
-		}
-		
-		$history = new payment($seri,$code,$result[0],$sotien_nhanduoc);
-		$history->insertItemp($user->name);
-		}else{
-			$status = "The da duoc nap vui long kiem tra lai";
-		}
-		drupal_set_message("$status");		
-	}
-}
-
-
-
-
-
-/**
- * function installing_value
- * @access public 
- * @param $string_array string (option of change and percent)
- * @return  array (array of change or percent)
- */	 
-function _gb_installing_value($string_array = ''){		
-	$currency_array = explode(";",$string_array);
-	$currencys = array();
-	foreach ($currency_array as $key => $value)
-	{
-		$option = explode(":",$value);
-		if($option[0]){
-			$currencys[$option[0]] = $option[1];
-		}
-	}
-	return $currencys;
-}
-
-
-
-
-
-
 /*
 $Id: nusoap.php,v 1.123 2010/04/26 20:15:08 snichol Exp $
 
@@ -1091,6 +901,7 @@ class nusoap_base {
 * @return	mixed ISO 8601 date string or false
 * @access   public
 */
+if(!function_exists('timestamp_to_iso8601')){
 function timestamp_to_iso8601($timestamp,$utc=true){
 	$datestr = date('Y-m-d\TH:i:sO',$timestamp);
 	$pos = strrpos($datestr, "+");
@@ -1122,7 +933,7 @@ function timestamp_to_iso8601($timestamp,$utc=true){
 		return $datestr;
 	}
 }
-
+}
 /**
 * convert ISO 8601 compliant date string to unix timestamp
 *
@@ -1130,6 +941,7 @@ function timestamp_to_iso8601($timestamp,$utc=true){
 * @return	mixed Unix timestamp (int) or false
 * @access   public
 */
+if(!function_exists('iso8601_to_timestamp')){
 function iso8601_to_timestamp($datestr){
 	$pattern = '/'.
 	'([0-9]{4})-'.	// centuries & years CCYY-
@@ -1161,7 +973,7 @@ function iso8601_to_timestamp($datestr){
 		return false;
 	}
 }
-
+}
 /**
 * sleeps some number of microseconds
 *
@@ -1169,6 +981,7 @@ function iso8601_to_timestamp($datestr){
 * @access   public
 * @deprecated
 */
+if(!function_exists('usleepWindows')){
 function usleepWindows($usec)
 {
 	$start = gettimeofday();
@@ -1181,10 +994,7 @@ function usleepWindows($usec)
 	}
 	while ($timePassed < $usec);
 }
-
-?><?php
-
-
+}
 
 /**
 * Contains information for a SOAP fault.
@@ -8335,5 +8145,4 @@ if (!extension_loaded('soap')) {
 	class soapclient extends nusoap_client {
 	}
 }
-
 ?>

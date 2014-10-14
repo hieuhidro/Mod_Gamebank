@@ -84,7 +84,7 @@ if(!class_exists('GameBank_Payment')) {
 			$this->column = get_option('gamebank_option_column');
 			$this->enable = get_option('gamebank_option_enable');
 		}
-		 
+	 
 		
 		/*
 		 * Required function **nusoap** 
@@ -94,8 +94,8 @@ if(!class_exists('GameBank_Payment')) {
 			// Include core files
 			require PAYMENT_PLUGIN_PATH . '/lib/nusoap.php';
 			require PAYMENT_PLUGIN_PATH . '/lib/class.gamebank.php';
-			require PAYMENT_PLUGIN_PATH . '/lib/class.payment_history.php';
-			$this->Nusoap_clien = new nusoap_client("http://pay.gamebank.vn/service/cardServiceV2.php/?wsdl",true);
+			require PAYMENT_PLUGIN_PATH . '/lib/class.payment_history.php';			
+			$this->Nusoap_clien = new nusoap_client("http://pay.gamebank.vn/service/csv6.php/?wsdl",true);
 		}
 		
 		/**
@@ -219,14 +219,19 @@ if(!class_exists('GameBank_Payment')) {
 				//	URL cho kênh V5 ____	http://pay.gamebank.vn/service/csv5.php/?wsdl
 				//	URL cho kênh V2 ____	http://pay.gamebank.vn/service/cardServiceV2.php/?wsdl
 				//		
-				
-				$result = $this->Nusoap_clien->call("creditCard",array("seri"=>$str_CardSerial,"code"=> $str_CardCode,"cardtype"=> $str_CardType, "gamebank_account"=>$gamebank_account));
+				$table_name = $wpdb->prefix . 'payment_history';
+				$sql = "select * from $table_name where coins > 0 and cardserial = '$str_CardSerial' or cardnumber = '$str_CardCode'";
+				$result = $wpdb -> get_results($sql);
+				if(@@mysql_num_rows($result) <= 0){
+				$result = $this->Nusoap_clien->call("creditCard",array("seri"=>$str_CardSerial,"code"=> $str_CardCode,"cardtype"=> $str_CardType, "gamebank_account"=>$gamebank_account, "option" => "nap bang wordpress","website"=> $_SERVER['SERVER_NAME']));
 				
 				//print_r($result);
+				$status = 10000;
 				if($result[0] >= 10000)
 				{		
 					echo "Nap thanh cong ".$result[0];
 					$table_name = $wpdb->prefix.'users';
+					
 					$wpdb->update(
 						$table_name,
 						array(
@@ -240,7 +245,8 @@ if(!class_exists('GameBank_Payment')) {
 				}
 				else
 				{
-					//Lỗi nạp tiền, dựa vào bảng mã lỗi để show thông tin khách hàng lên	
+					//Lỗi nạp tiền, dựa vào bảng mã lỗi để show thông tin khách hàng lên
+					$status = $result[0];	
 					switch($result[0])
 					{
 						case -3: 
@@ -272,8 +278,11 @@ if(!class_exists('GameBank_Payment')) {
 					}
 				}
 				
-				$payment = new payment($str_CardSerial,$str_CardCode,$result[0],$result[0]);
+				$payment = new payment($str_CardSerial,$str_CardCode,$status,$result[0]);
 				$payment->insertItemp($current_user->user_login);
+				}else{
+					echo "Thẻ đã được nạp trước đó vui lòng kiểm tra lại";
+				}
 			}
 		}
 			

@@ -1,5 +1,5 @@
-<link href="/payment/css/custom.style.css" rel="stylesheet">
-<form method="post" id="form-gamebank" action="/">
+<xen:require css="custom.style.css" />
+<form method="post" id="form-gamebank" action="">
 	<h2>Nạp thẻ điện thoại</h2>
 	<div class="form-group">
 		<label for="lstTelco">Chọn nhà mạng</label>
@@ -20,6 +20,9 @@
 		<label for="">Nhập mã số</label>
 		<input type="txtCode" class="form-control" id="txtCode" name="txtCode" placeholder="Mã số" required>
 	</div>
-	<input type="submit" class="btn btn-primary" name="payment" value="Nạp thẻ"/>
+	<button type="submit" class="btn btn-primary" name="payment">
+		Nạp thẻ
+	</button>
 	<a href="/checkout.php" class="btn">Lịch sử</a>
-</form>
+</form> 
+          

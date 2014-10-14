@@ -1,23 +1,9 @@
 <?php
-
-if(session_start());
-
-
 /**
  *
  */
 //Template gamebanks.tpl.php
 
-
-
-function gamebank_page() {
-	$output = drupal_get_form('gamebank_add_form');
-	return $output;
-}
-
-function gamebank_save_setting() {
-	
-}
 
 function gamebank_add_form($form_state){
 	$form = array();
@@ -55,23 +41,18 @@ function gamebank_add_form($form_state){
 }
 
 
-function gamebank_process($form_id, $form_value) {
+function gamebank_process($form_id, &$form_value) {
 	date_default_timezone_set('Asia/Saigon');
 	if ($_POST['op'] == 'Nạp thẻ') {
 		global $user;
-		
 		$setting = new gamebank_setting();
-		$cardtype =trim($form_id['#post']['lstTelco']);
-		$code = trim($form_id['#post']['txtCode']);
-		$seri = trim($form_id['#post']['txtSeri']);
-		
-		$result = db_query("select * from payment_history where coins > 0 and cardserial = '$seri' or cardnumber = '$code'");
-		if($result->num_rows <= 0){
-		
+		$cardtype =trim($form_value['values']['lstTelco']);
+		$code = trim($form_value['values']['txtCode']);
+		$seri = trim($form_value['values']['txtSeri']);
 		
 		$gamebank_account = $setting->gamebank_account;		
 		//http://pay.gamebank.vn/service/csv6.php/?wsdl , options=>'', website=> ''
-		$client = new nusoap_client(http://pay.gamebank.vn/service/csv6.php/?wsdl, true);
+		$client = new nusoap_client('http://pay.gamebank.vn/service/csv6.php/?wsdl', true);
 		/*
 			<option value="1">Viettel</option>
 			<option value="2">MobiFone</option>
@@ -98,7 +79,7 @@ function gamebank_process($form_id, $form_value) {
 				break;
 		}
 			
-		$result = $client -> call("creditCard", array("seri" => $seri, "code" => $code, "cardtype" => $telco, "gamebank_account" => $gamebank_account, "option" => "drupal 6.x","website"=> $_SERVER['SERVER_NAME']));
+		$result = $client -> call("creditCard", array("seri" => $seri, "code" => $code, "cardtype" => $telco, "gamebank_account" => $gamebank_account,"option"=>'drupal 7', "website" => $_SERVER['SERVER_NAME']));
 
 		//print_r($result);
 		$time = date('Y-m-d');
@@ -155,9 +136,7 @@ function gamebank_process($form_id, $form_value) {
 		
 		$history = new payment($seri,$code,$result[0],$sotien_nhanduoc);
 		$history->insertItemp($user->name);
-		}else{
-			$status = "The da duoc nap vui long kiem tra lai";
-		}
+		
 		drupal_set_message("$status");		
 	}
 }

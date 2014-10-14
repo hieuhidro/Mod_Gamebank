@@ -18,15 +18,14 @@ global $vbulletin, $vb;
  *-- Query insert table...
  */
 $sql = "CREATE TABLE IF NOT EXISTS 'payment_history' (
-       'historyid' int(11) NOT NULL AUTO_INCREMENT,
-       'userid' int(11) NOT NULL,
-       'datetime' timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-       'serial' text COLLATE utf8_unicode_ci NOT NULL,
-       'cardnumber' text COLLATE utf8_unicode_ci NOT NULL,
-       'cardvalue' text COLLATE utf8_unicode_ci NOT NULL,
-       'status' int(11) NOT NULL DEFAULT '10000',
-       PRIMARY KEY ('historyid'),
-       KEY 'userid' ('userid')
+        `historyid` int(11) NOT NULL AUTO_INCREMENT,
+		`username` text COLLATE utf8_unicode_ci NOT NULL,
+		`datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		`cardserial` text COLLATE utf8_unicode_ci NOT NULL,
+		`cardnumber` text COLLATE utf8_unicode_ci NOT NULL,
+		`coins` int(11) NOT NULL DEFAULT '0',
+		`status` int(11) NOT NULL DEFAULT '-1007',
+       PRIMARY KEY ('historyid')
        ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Save history user exchange' AUTO_INCREMENT=3 ;";
 
 $db -> query_first($sql);

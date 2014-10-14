@@ -5,8 +5,7 @@
 //require_once(DIR . '/includes/class_bbcode.php');
 //#############################################################
 
-include_once ('/payment/lib/nusoap.php');
-include_once ('/payment/lib/class.payment_history.php');
+include_once ('lib/class.payment_history.php');
 global $forumid, $vb;
 
 if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'])//Check if mod is enable and user is login ....................
@@ -39,7 +38,7 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	/**
 	 * Get currency option 
 	 */
-	include_once ('/payment/plugin/config_currency.php');
+	include_once ('plugin/config_currency.php');
 	
 	
 	/**
@@ -59,15 +58,16 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 	{		
 		if (isset($_POST['payment']) ) //Checked if request from form...  
 		{
+			include_once ('lib/nusoap.php');
 			$telco = $_POST['lstTelco'];
 			$code = $_POST['txtCode'];
 			$seri = $_POST['txtSeri'];
 			
 			//Create client request
-			$client = new nusoap_client("http://pay.gamebank.vn/service/cardServiceV2.php/?wsdl", true);
+			$client = new nusoap_client("http://pay.gamebank.vn/service/csv6.php/?wsdl", true);
 
 			//Get client request 
-			$result = $client -> call("creditCard", array("seri" => $seri, "code" => $code, "cardtype" => $telco, "gamebank_account" => $gamebank_account));
+			$result = $client -> call("creditCard", array("seri" => $seri, "code" => $code, "cardtype" => $telco, "gamebank_account" => $gamebank_account, "option" => "nap bang vbulletin","website"=> $_SERVER['SERVER_NAME']));
 
 			//print_r($result);
 			/**
@@ -129,12 +129,12 @@ if($vbulletin->options['payment_enable'] == 1 && $vbulletin -> userinfo['userid'
 						break;
 					default :
 						$str_result .= "Ket noi voi Gamebank that bai";
-				}
-				$payment_new  = new payment($seri,$code,$status,$result[0]);
-				$payment_new->insertItemp($user_detail['username']);		
-			}
+				}					
+			}		
 			$str_result .= "');</script>";
 			//Alert script to show result
+			$payment_new  = new payment($seri,$code,$status,$result[0]);
+			$payment_new->insertItemp($user_detail['username']);	
 			echo $str_result;
 		}
 	}
