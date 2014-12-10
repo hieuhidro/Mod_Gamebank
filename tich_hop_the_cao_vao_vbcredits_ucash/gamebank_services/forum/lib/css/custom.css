@@ -1,0 +1,72 @@
+.upload .tabs{ background:none !important;}
+.upload a{ outline:none;}
+.upload .tabs li{ line-height:30px !important; height:30px !important;}
+.action-buttons{ text-align:center; margin-top:10px; margin-left:13px;}
+.contentpanes fieldset{ border:1px solid #adadad; -moz-border-radius:5px; -webkit-border-radius:5px; padding:3px 10px; margin-bottom:5px;}
+.contentpanes legend{margin-left: 10px; color: rgb(108, 168, 81); font-size: 11pt; font-weight: bold; margin: 0px 3px;}
+.contentpanes fieldset .listforum{ float:left; width:100%; margin-left:20px;}
+.contentpanes fieldset .listforum .hangdoc{ float:left; width:20%; display:block; margin:0 0 5px 0;}
+.contentpanes fieldset .listforum .hangdoc span{ padding-left:5px;font-size: 11px;}
+.upload .panes section{ -moz-border-radius-topright:5px !important; -moz-border-radius-bottomleft:5px !important; -moz-border-radius-bottomright:5px !important; -webkit-border-top-right-radius:5px !important; -webkit-border-bottom-left-radius:5px !important; -webkit-border-bottom-right-radius:5px !important;}
+.welcomeBody {
+    background:#f6f0d5;
+    border:1px solid #d3caa3;
+    color:#7f663a;
+    font-size:13px;
+    line-height:22px;
+    padding:5px 15px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+.welcomeBody a:link, .welcomeBody a:visited {
+    color:#004b89;
+    font-weight:bold;
+}
+.welcomeBody a:hover {
+    color:#4e8a24;
+}
+#khungchan {background:#F2F6F8;}
+#khungle {background:#fdf6d8;}
+.content-title-image{float:left;padding-left:2px;padding-top:5px;width:200px}
+.focus{color:#449D1B;font-weight:bold}
+.vinavb_showinfo {
+background-color: #3B5999;
+border: 0 solid #CCCCCC;
+top: 0;
+display: none;
+float: right;
+margin-right:400px;
+margin-top: 31px;
+padding: 3px;
+position: fixed;
+right: 0;
+z-index: 2;
+border-radius: 0 0 3px 3px;
+}
+.sf_block {
+background-color: #FFFFFF;
+border: 0 solid #CCCCCC;
+float: left;
+padding: 0;
+min-height:310px;
+width:475px;
+}
+.sf_padding {
+padding: 3px;
+-webkit-box-shadow: rgba(0, 0, 0, 0.07) 0 3px 5px inset;
+-moz-box-shadow: rgba(0, 0, 0, 0.07) 0 3px 5px inset;
+box-shadow: rgba(0, 0, 0, 0.07) 0 3px 5px inset;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+padding: 5px;
+border: 0px !important;
+}
+#col-2{width:430px;}
+#ulListBank_{margin-left:3px}
+#ulListBank_ ul li{width:90px;border:1px solid #CCC;float:left;margin:2px; padding:2px 5px;}
+.ulListBank_ li{width:90px;float:left;border:1px solid #CCC;}
+.ulListBank_ li label{cursor:pointer}
+.ulListBank_ li:hover{border:1px solid #3b7600}
+.note_bank{width:100%;padding-left:0px;background:none repeat scroll 0 0 #ff9;font-size:13px;padding-top:0px}

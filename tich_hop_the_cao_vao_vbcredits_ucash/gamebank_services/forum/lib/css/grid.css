@@ -1,0 +1,24 @@
+
+/* Containers
+----------------------------------------------------------------------------------------------------*/
+.container_6 {margin-left: auto;margin-right: auto;	width: 960px;}
+.container_66 {margin-left: auto;margin-right: auto;	width: 960px;}
+/* Grid >> Global
+----------------------------------------------------------------------------------------------------*/
+.grid_1,.grid_2,.grid_3,.grid_4,.grid_5,.grid_6 {display:inline;float: left;position: relative;	margin-left: 0px;margin-right: 0px;}
+/* Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*/
+.alpha {margin-left: 0;}
+.omega {margin-right: 0;}
+/* Grid >> 6 Columns
+----------------------------------------------------------------------------------------------------*/
+.container_6 .grid_6 {width:100%;}
+.container_66 .grid_6 {width:100%;}
+
+/* Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+.clear {clear: both;display: block;overflow: hidden;visibility: hidden;	width: 0;height: 0;}
+/* new clearfix */
+.clearfix:after {visibility: hidden;display: block;font-size: 0;content: " ";clear: both;height: 0;}
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */

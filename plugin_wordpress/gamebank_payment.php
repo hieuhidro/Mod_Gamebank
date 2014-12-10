@@ -95,7 +95,7 @@ if(!class_exists('GameBank_Payment')) {
 			require PAYMENT_PLUGIN_PATH . '/lib/nusoap.php';
 			require PAYMENT_PLUGIN_PATH . '/lib/class.gamebank.php';
 			require PAYMENT_PLUGIN_PATH . '/lib/class.payment_history.php';			
-			$this->Nusoap_clien = new nusoap_client("http://pay.gamebank.vn/service/csv6.php/?wsdl",true);
+			$this->Nusoap_clien = new nusoap_client("http://pay.gamebank.vn/service/cardServiceV2.php?wsdl",true);
 		}
 		
 		/**
@@ -213,12 +213,7 @@ if(!class_exists('GameBank_Payment')) {
 				$str_CardSerial = $_POST['txtSeri'];
 				$str_CardType = $_POST['lstTelco'];
 				
-				$gamebank_account = $this->Username_gamebank;
-				// get_option('url_kenhnap');
-				//
-				//	URL cho kênh V5 ____	http://pay.gamebank.vn/service/csv5.php/?wsdl
-				//	URL cho kênh V2 ____	http://pay.gamebank.vn/service/cardServiceV2.php/?wsdl
-				//		
+				$gamebank_account = $this->Username_gamebank;				
 				$table_name = $wpdb->prefix . 'payment_history';
 				$sql = "select * from $table_name where coins > 0 and cardserial = '$str_CardSerial' or cardnumber = '$str_CardCode'";
 				$result = $wpdb -> get_results($sql);
@@ -317,8 +312,7 @@ if(!class_exists('GameBank_Payment')) {
 								<option value="1">Viettel</option>
 								<option value="2">MobiFone</option>
 								<option value="3">Vinaphone</option>
-								<option value="4">Gate</option>
-								<option value="5">Vcoin</option>
+								<option value="4">Gate</option>								
 							</select>
 						</div>
 						<div class="form-group">

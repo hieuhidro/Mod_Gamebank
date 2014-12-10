@@ -1,0 +1,1521 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="credits" active="1">
+	<title>DragonByte Tech: vBCredits II Deluxe (Pro)</title>
+	<description><![CDATA[The Ultimate Points System by Darkwaltz4 [blackwaltz4@msn.com] enables users to gain currency for their actions on your site, and spend them on many third party applications!]]></description>
+	<version>2.0.0</version>
+	<url>http://www.dragonbyte-tech.com/product.php?credits</url>
+	<versioncheckurl>http://www.dragonbyte-tech.com/product.php?latest=credits</versioncheckurl>
+	<dependencies>
+	</dependencies>
+	<codes>
+		<code version="*">
+			<installcode><![CDATA[if (!file_exists(DIR . '/dbtech/credits/credits_installer.php'))
+{
+	print_dots_stop();
+	print_cp_message('In order to upgrade or install vBCredits, you must upload credits_installer.php to the plugins folder within your forum directory!');
+}
+
+$doinstall = true;
+require_once(DIR . '/dbtech/credits/credits_installer.php');]]></installcode>
+			<uninstallcode><![CDATA[if (!file_exists(DIR . '/dbtech/credits/credits_installer.php'))
+{
+	print_dots_stop();
+	print_cp_message('In order to uninstall vBCredits, you must upload credits_installer.php to the plugins folder within your forum directory!');
+}
+
+$doinstall = false;
+require_once(DIR . '/dbtech/credits/credits_installer.php');]]></uninstallcode>
+		</code>
+	</codes>
+	<templates>
+		<template name="credits_display_credits_row" templatetype="template" date="1280369842" username="Darkwaltz4" version="1.2.0"><![CDATA[<if condition="$vb4"><dl class="stats"><dt>$currency[title]</dt><dd>
+<else /><tr><td class="alt1 smallfont">$currency[title]: </if>
+<a href="credits.php$session[sessionurl_q]" rel="credits-$currency[currencyid]-$user[userid];$user[username]">$useramt</a>
+<if condition="$vb4"></dd></dl><else /></td></tr></if>]]></template>
+		<template name="credits_display_memberlist" templatetype="template" date="1278100270" username="Darkwaltz4" version="1.0"><![CDATA[<if condition="$vb4"><th><a class="blocksubhead"<else /><td class="thead" nowrap="nowrap"><a</if> href="$sorturl<if condition="!$show['sorturlnoargs']">&amp;</if>order=$oppositesort&amp;sort=$fieldname&amp;pp=$perpage$usergrouplink">$currency[title]<if condition="$vb4"> $arrowsort</a></th><else /></a> $arrowsort</td></if>]]></template>
+		<template name="credits_display_memberlist_row" templatetype="template" date="1280369852" username="Darkwaltz4" version="1.2"><![CDATA[<td class="$GLOBALS[bgclass] currency"><a href="credits.php$session[sessionurl_q]" rel="credits-$currency[currencyid]-$user[userid];$user[username]">$useramt</a></td><if condition="exec_switch_bg()"></if>]]></template>
+		<template name="credits_display_navbar" templatetype="template" date="1278104984" username="Darkwaltz4" version="1.0"><![CDATA[<if condition="$vb4">
+<li class="popupmenu">
+	<a href="#" class="popupctrl">$vbphrase[currency]</a>
+	<ul class="popupbody popuphover">
+		$currencies
+	</ul>
+</li>
+<else />
+	<td class="vbmenu_control"><a id="currencies" href="$show[nojs_link]#currencies" accesskey="3">$vbphrase[currency]</a> <script type="text/javascript"> vbmenu_register("currencies"); </script>
+	<div class="vbmenu_popup" id="currencies_menu" style="display:none;margin-top:3px" align="$stylevar[left]">
+		<table cellpadding="4" cellspacing="1" border="0">
+			$currencies
+		</table>
+	</div>
+	</td>
+</if>]]></template>
+		<template name="credits_display_navbar_row" templatetype="template" date="1280369864" username="Darkwaltz4" version="1.2"><![CDATA[<if condition="$vb4"><li><else /><tr><td class="vbmenu_option"></if><a href="credits.php$session[sessionurl_q]" rel="credits-$currency[currencyid]-$user[userid];$user[username]">$currency[title]: <b>$useramt</b></a><if condition="$vb4"></li><else /></td></tr></if>]]></template>
+		<template name="credits_display_postbit_row" templatetype="template" date="1280369874" username="Darkwaltz4" version="1.2"><![CDATA[<if condition="$vb4"><dt>$currency[title]</dt> <dd><else /><div>$currency[title]: </if>
+<a href="credits.php$session[sessionurl_q]" rel="credits-$currency[currencyid]-$user[userid];$user[username]">$useramt</a>
+<if condition="$vb4"></dd><else /></div></if>]]></template>
+		<template name="credits_display_profile" templatetype="template" date="1278103003" username="Darkwaltz4" version="1.0"><![CDATA[<if condition="$vb4"><h3 class="subsubsectionhead">$vbphrase[currency]</h3><else /><fieldset class="statistics_group"><legend>$vbphrase[currency]</legend><ul class="list_no_decoration"></if>
+$currencies<if condition="!$vb4"></ul></fieldset></if>]]></template>
+		<template name="credits_display_profile_row" templatetype="template" date="1280369884" username="Darkwaltz4" version="1.2"><![CDATA[<if condition="$vb4"><dl class="stats"><dt>$currency[title]</dt><dd>
+<else /><li><span class="shade">$currency[title]:</span> </if>
+<a href="credits.php$session[sessionurl_q]" rel="credits-$currency[currencyid]-$user[userid];$user[username]">$useramt</a>
+<if condition="$vb4"></dd></dl><else /></li></if>]]></template>
+		<template name="credits_home" templatetype="template" date="1280367909" username="Darkwaltz4" version="1.2.0"><![CDATA[$stylevar[htmldoctype]
+<html xmlns="http://www.w3.org/1999/xhtml"<if condition="$vboptions['enablefacebookconnect']"> xmlns:fb="http://www.facebook.com/2008/fbml"</if>  dir="$stylevar[textdirection]" lang="$stylevar[languagecode]" id="vbulletin_html">
+<head>
+
+	$headinclude
+	<title>$pagetitle - $vboptions[bbtitle]</title>
+	<if condition="$vb4">
+	<link rel="stylesheet" type="text/css" href="{$vbcsspath}usercp.css" />
+	<style type="text/css">
+	dl.stats { line-height: 2em; padding: 0 10px; }
+	dl.stats dd { float: $stylevar[right]; }
+	</style>
+        $headinclude_bottom
+	</if>
+</head>
+<body>
+
+$header
+$navbar
+
+<if condition="$vb4"><div id="usercp_nav" style="position: relative;"><else /><table cellpadding="$stylevar[cellpadding]" cellspacing="$stylevar[cellspacing]" border="0" width="100%" align="center"><tr><td width="200" valign="top"></if>
+<if condition="$vb4">
+        <div class="block">
+                <h2 class="blockhead">$vbphrase[currency]</h2>
+                <div class="blockbody">$template_hook[credits_display_currencies]</div>
+        </div>
+<else />
+	<table class="tborder" cellpadding="$stylevar[cellpadding]" cellspacing="$stylevar[cellspacing]" border="0" width="100%" align="center">
+	<tr><td class="thead">$vbphrase[currency]</td></tr>
+	$template_hook[credits_display_currencies]
+	</table>
+</if>
+        $richest
+<if condition="$vb4"></div><div id="usercp_content"><else /></td><td valign="top"></if>
+
+	<div class="cp_content">
+		<div class="floatcontainer" id="controls_above">
+			<if condition="$pagenav">
+			<div id="pagination_top" style="float:$stylevar[right]">
+				$pagenav
+			</div>
+			</if>
+			<form action="credits.php$session[sessionurl_q]" method="get"><input type="hidden" name="u" value="$userinfo[userid]" /><select name="currencyid"><option value="">$vbphrase[credits_all_currencies]</option>$allcurrencies</select> <select name="actionid"><option value="">$vbphrase[credits_all_actions]</option>$allactions</select> <input class="button" type="submit" value="$vbphrase[go]" /></form>
+		</div>
+		<br />
+
+<if condition="$vb4">
+		<h2 class="blockhead"><if condition="$userinfo['userid']"><phrase 1="$userinfo[userid]" 2="$userinfo[username]">$vbphrase[credits_latest_transactions_user]</phrase><else />$vbphrase[credits_latest_transactions]</if></h2>
+		<div class="blockbody settings_form_border">
+			<div class="table" style="width: 100%;">
+				<div class="tr" style="width: 100%;">
+					<div class="td blocksubhead">$vbphrase[date]</div>
+					<div class="td blocksubhead">$vbphrase[action]</div>
+					<if condition="!$userinfo['userid']"><div class="td blocksubhead">$vbphrase[user]</div></if>
+					<div class="td blocksubhead">$vbphrase[amount]</div>
+					<div class="td blocksubhead">$vbphrase[note]</div>
+				</div>
+				$transactions
+			</div>
+		</div>
+<else />
+<table class="tborder" cellpadding="$stylevar[cellpadding]" cellspacing="$stylevar[cellspacing]" border="0" width="100%" align="center">
+<thead>
+	<tr>
+	  <td class="tcat" colspan="<if condition="!$userinfo['userid']">5<else />4</if>"><if condition="$userinfo['userid']"><phrase 1="$userinfo[userid]" 2="$userinfo[username]">$vbphrase[credits_latest_transactions_user]</phrase><else />$vbphrase[credits_latest_transactions]</if></td>
+	</tr>
+	<tr align="center">
+	  <td class="thead">$vbphrase[date]</td>
+	  <td class="thead">$vbphrase[action]</td>
+	  <if condition="!$userinfo['userid']"><td class="thead">$vbphrase[user]</td></if>
+	  <td class="thead">$vbphrase[amount]</td>
+	  <td class="thead">$vbphrase[note]</td>
+	</tr>
+</thead>
+$transactions
+</table>
+</if>
+		<if condition="$pagenav">
+		<br />
+		<div class="floatcontainer" id="controls_below">
+			<div id="pagination_bottom" style="float:$stylevar[right]">
+				$pagenav
+			</div>	
+		</div>
+		</if>
+	</div>
+
+<if condition="$vb4"></div><else /></td></tr></table></if>
+
+$footer
+	
+</body>
+</html>]]></template>
+		<template name="credits_navtab" templatetype="template" date="1279749669" username="Darkwaltz4" version="1.1.0"><![CDATA[<li<if condition="$vbulletin->options['selectednavtab'] == 'vbcredits'"> class="selected"</if>><a class="navtab" href="credits.php$session[sessionurl_q]">$vbphrase[credits_transactions]</a></li>]]></template>
+		<template name="credits_popup" templatetype="template" date="1292147478" username="Darkwaltz4" version="2.0.0"><![CDATA[<form action="credits.php" method="post">
+
+<if condition="$vb4">
+
+<div id="credits_popup" class="block popupbody">
+	<h3 class="blockhead">$vbphrase[currency]</h3>
+	<div class="blockbody formcontrols">
+		<h3 class="blocksubhead">$vbphrase[credits_initiate_transfer] - <a id="credits_trans_link" href="credits.php$session[sessionurl_q]">$vbphrase[credits_transactions]</a></h3>
+		<div class="blockrow popupmenu nomouseover noclick nohovermenu popupcustom" id="credits_suggest_target">
+
+			<table width="100%">
+			<tr>
+				<td width="50%">
+
+<else />
+
+<div id="credits_popup" style="display: none; position: absolute;">
+<table class="tborder" cellpadding="$stylevar[cellpadding]" cellspacing="$stylevar[cellspacing]" border="0" width="100%" align="center">
+<tr>
+	<td class="tcat">$vbphrase[currency]</td>
+</tr>
+<tr>
+	<td class="thead">$vbphrase[credits_initiate_transfer] - <a id="credits_trans_link" href="credits.php$session[sessionurl_q]">$vbphrase[credits_transactions]</a></td>
+</tr>
+<tr>
+	<td class="panelsurround" align="center">
+	<div class="panel">
+		<div align="$stylevar[left]">
+
+			<table class="smallfont" width="100%" cellpadding="0" cellspacing="$stylevar[formspacer]" border="0">
+			<tr>
+				<td id="credits_suggest_target" width="50%">
+
+</if>
+
+			<label for="credits_donate_target" style="float: none;">$vbphrase[credits_account_to]<span id="credits_target_change"> - <a href="#">Change</a></span>:</label>
+			<b><span id="credits_target_set"></span></b><span id="credits_target_edit"><input type="text" class="primary textbox popupctrl" style="width: 85%;" maxlength="250" name="target_user" id="credits_donate_target"/></span>
+
+				</td><td>
+
+			<b id="credits_target_currency_text"></b><select name="target_currency" id="credits_target_currency">$tocurs</select>
+
+				</td></tr></table><if condition="$vb4"></div><div class="blockrow"></if><table width="100%"><tr><td width="50%">
+
+			<label for="credits_actionid" style="display: block;">$vbphrase[credits_account_from]:</label>
+			<b id="credits_actionid_text"></b><select name="actionid" id="credits_actionid">$doacts</select>
+
+				</td><td>
+
+			<span id="credits_show_donate" style="display: none;">
+				<b id="credits_donate_currency_text"></b><select name="donate_currency" id="credits_donate_currency">$fromcurs</select>
+			</span>
+			<span id="credits_show_adjust" style="display: none;">
+				<label style="display: inline;"><input type="radio" name="adjust_method" value="1" checked="checked" /> $vbphrase[give]</label>
+				<label style="display: inline;"><input type="radio" name="adjust_method" value="-1" /> $vbphrase[take]</label>
+			</span>
+			<span id="credits_show_purchase" style="display: none;">
+				<span id="credits_purchase_bad">$vbphrase[credits_purchase_instruction]</span>
+				<span id="credits_purchase_good" style="display: none;"><b id="credits_purchase_price"></b> <b id="credits_purchase_money_text"></b><select name="purchase_money" id="credits_purchase_money">$realcurs</select><br />
+				<b id="credits_purchase_service_text"></b><select name="purchase_service" id="credits_purchase_service">$avapros</select></span>
+			</span>
+			<span id="credits_show_redeem" style="display: none;">
+				<b>$vbphrase[unknown]</b><br />$vbphrase[enter_code]
+			</span>
+			$template_hook[credits_popup_panels]
+
+				</td></tr></table><if condition="$vb4"></div><div class="blockrow"></if><table width="100%"><tr><td width="30%">
+
+			<label for="credits_value" style="display: block;">$vbphrase[amount]:</label>
+			<b id="credits_value_text"></b><select id="credits_value" style="display: none;">$valopts</select><input type="text" class="primary textbox" style="width: 80%;" maxlength="250" name="value" id="credits_value_input" />
+
+				</td><td>
+
+			<label for="credits_note" style="display: block;">$vbphrase[credits_optional_note]:</label>
+			<input type="text" class="primary textbox" style="width: 95%;" maxlength="250" name="note" id="credits_note" />
+
+				</td>
+			</tr>
+			</table>
+
+		</div>
+	</div>
+
+<if condition="$vb4">
+	<div class="blockfoot actionbuttons">
+		<div class="group">
+<else />
+	<div style="margin-top:$stylevar[cellpadding]px;">
+</if>
+			<input type="hidden" name="do" value="popup" />
+			<input type="hidden" name="s" value="$session[sessionhash]" />
+			<input type="hidden" name="securitytoken" value="$bbuserinfo[securitytoken]" />
+			<input type="submit" class="button" value="$vbphrase[submit]" />
+		</div>
+	<if condition="$vb4"></div><else /></td></tr></table></if>
+</div>
+</form>
+
+<span id="credits_purchase_form"></span>
+<script type="text/javascript" src="clientscript/vbulletin_ajax_<if condition="$vb4">suggest<else />namesugg</if>.js?v=$vboptions[simpleversion]"></script>
+<script type="text/javascript" src="clientscript/jquery/jquery-1.4.4.min.js?v=$vboptions[simpleversion]"></script>
+
+<script type="text/javascript">
+var vbc = new vB_AJAX_NameSuggest('vbc', 'credits_donate_target', 'credits_suggest_target');
+
+function checkown($)
+{
+	$.each(chargeowns, function()
+	{	//mark owned buttons
+		$('input[rel=' + this + ']').val(chargeown);
+	});
+}
+
+$.noConflict(true)(function($)
+{	//use jQuery only here
+	$(document).click(function() { popup.hide(); }); //clicking outside the popup to close
+	var popup = $('#credits_popup').hide().css('width', 300).click(function(e) { e.stopPropagation(); });
+
+	var money = $('#credits_purchase_money'), service = $('#credits_purchase_service'), charges = $('input.credits_charge[rel]');
+	var options = $options, main = $('#credits_target_currency'), action = $('#credits_actionid'), donate = $('#credits_donate_currency')
+	var valtext = $('#credits_value_input'), baseurl = 'credits.php$session[sessionurl_q]', last = null;
+
+	$('a[rel^=credits-]').click(function(e)
+	{	//link only opens popup
+		e.preventDefault(); e.stopPropagation();
+
+		var self = $(this), offset = self.offset(), name = self.attr('rel').split(';'), open = name[0].split('-'), doc = $(document);
+		var boxwidth = popup.width(), boxheight = popup.height(), winopen = { left: offset.left + self.width() + 5, top: offset.top };
+
+		if (winopen.left + boxwidth > doc.width()) winopen.left = offset.left - boxwidth - 5;
+		if (winopen.top + boxheight > doc.height()) winopen.top = offset.top + self.height() - boxheight;
+
+		$('#credits_trans_link').attr('href', baseurl + ( '$session[sessionurl_q]' ? '' : '?' ) + 'u=' + open[2] + '&currencyid=' + open[1]);
+		$('#credits_target_change, #credits_target_set').toggle(name[1] != '');
+		$('#credits_target_edit').toggle(name[1] == '');
+		$('#credits_target_set').text(name[1]);
+
+		$('#credits_donate_target').val(name[1]);
+		$('#credits_value_input, #credits_note').val(''); //set from and to to this currency if possible
+		$('select[name=donate_currency] option[selected], select[name=target_currency] option[selected]').removeAttr('selected');
+		$('select[name=donate_currency] option[value=' + open[1] + '], select[name=target_currency] option[value=' + open[1] + ']').attr('selected', 'selected');
+
+		selects('target_currency', false);
+		popup.css({ top: winopen.top, left: winopen.left }).show();
+	});
+	$('#credits_target_change a').click(function(e)
+	{	//editize
+		e.preventDefault();
+		$('#credits_trans_link').attr('href', baseurl);
+		$('#credits_target_change, #credits_target_set').hide();
+		$('#credits_target_edit').show();		
+	});
+	popup.parent().submit(function(e)
+	{	//submit ajax form
+		e.preventDefault();
+
+		$.post('credits.php', SESSIONURL + 'securitytoken=' + SECURITYTOKEN + '&ajax=1&' + $.param($(this).serializeArray()), function(data)
+		{	//post whole form
+			var error = $('error', data);
+
+			if (error.length) alert(error.text().replace(/<br ?\/?>/gi, '\n')); else
+			{	//parse vb error
+				var test = data.split('|');
+
+				if (test.length == 3)
+				{	//send to somewhere
+					$('<form action="' + test[0] + '" method="' + test[1] + '">').html(test[2]).appendTo('#credits_purchase_form').submit();
+				}
+				else
+				{	//show message
+					popup.hide();
+					alert(data);
+				}
+			}
+		});
+	});
+
+	var selects = function(select, shown)
+	{	//show specific items and possibly replace with text
+		var sel = $('#credits_' + select), tex = $('#credits_' + select + '_text');
+		var opts = $('option', sel), count = 0;
+		if (shown) opts.hide().removeAttr('selected');
+
+		var check = function(i, str)
+		{	//do some or all
+			var self = ( shown ? $('option[value=' + str + ']', sel) : $(this) );
+			if (shown) self.show();
+
+			if (!count++)
+			{	//selected
+				tex.text(self.text());
+				if (shown) self.attr('selected', 'selected');
+			}
+		};
+
+		if (shown) $.each(shown, check);
+		else $('option', sel).each(check);
+
+		sel.toggle(count > 1).change();
+		tex.toggle(count == 1);
+	};
+
+	money.change(function()
+	{	//set providers
+		valtext.keyup();
+		var val = money.val(), mval = main.val();
+		if (options[mval].purchase) selects('purchase_service', options[mval].purchase[val]);
+	});
+
+	valtext.bind('keyup keydown', function()
+	{
+		var actionid = action.val();
+
+		if (actionid == 'purchase' || actionid == 'redeem')
+		{	//yay concurrency
+			$.post('credits.php', SESSIONURL + 'securitytoken=' + SECURITYTOKEN + '&ajax=1&info=1&' + $.param(popup.parent().serializeArray()), function(data)
+			{	//post whole form
+				var error = $('error', data);
+
+				if (error.length) alert(error.text().replace(/<br ?\/?>/gi, '\n')); else
+				{	//get back info
+					if (actionid == 'purchase')
+					{	//switch to message or price
+						$('#credits_purchase_bad').toggle(data == '');
+						$('#credits_purchase_good').toggle(data != '');
+						$('#credits_purchase_price').text(data);
+					}
+
+					data = ( data ? data.split('|') : ['$vbphrase[enter_code]', '$vbphrase[unknown]'] );
+					if (actionid == 'redeem') $('#credits_show_redeem').html('<b>' + data[1] + '</b><br />' + data[0])
+				}
+			});
+		}
+	});
+
+	action.change(function()
+	{	//change panel shown
+		var val = action.val();
+		if (last) $('#credits_show_' + last).hide();
+		$('#credits_show_' + val).show();
+		last = val;
+
+		var selopts = $('#credits_value');
+		$('label[for=credits_value]').text(( val == 'redeem' ? '$vbphrase[code]' : '$vbphrase[amount]' ) + ':');
+
+		if (val == 'donate' && $('option', selopts).length)
+		{	//switch to dropdown
+			valtext.hide().removeAttr('name');
+			selopts.show().attr('name', 'value');
+			selects('credits_value', false);
+		}
+		else
+		{	//switch to input
+			selopts.hide().removeAttr('name');
+			valtext.show().attr('name', 'value').keyup();
+		}
+	});
+
+	main.change(function()
+	{	//source currency
+		var show = [], val = main.val();
+
+		$.each(options[val], function(i)
+		{	//set action
+			show[show.length] = i;
+		});
+
+		selects('actionid', show);
+		if (options[val].donate) selects('donate_currency', options[val].donate);
+
+		if (options[val].purchase)
+		{
+			var curs = [];
+
+			$.each(options[val].purchase, function(i)
+			{	//set money
+				curs[curs.length] = i;
+			});
+
+			selects('purchase_money', curs);
+		}
+	});
+
+	if (charges.length)
+	{	//only if any buttons around
+		charges.live('click', function(e)
+		{
+			e.preventDefault();
+			var self = $(this), post = self.closest('[id]').attr('id').split('_'), postid = parseInt(post[post.length - 1]);
+	
+			$.post('credits.php', SESSIONURL + 'securitytoken=' + SECURITYTOKEN + '&ajax=1&do=charge&postid=' + postid + '&hash=' + self.attr('rel'), function(data)
+			{	//replace button with content
+				var error = $('error', data); //check for error
+				if (error.length) alert(error.text().replace(/<br ?\/?>/gi, '\n')); else self.replaceWith(data);
+				checkown($);
+			});
+		});
+		//mark owned content
+		if (chargeowns) checkown($);
+	}
+});
+</script>]]></template>
+		<template name="credits_richest" templatetype="template" date="1278358551" username="Darkwaltz4" version="1.0"><![CDATA[<if condition="$vb4">
+        <div class="block">
+                <h2 class="blockhead"><phrase 1="$currency[title]">$vbphrase[most_currency]</phrase></h2>
+                <div class="blockbody">$topusers</div>
+        </div>
+<else /><br />
+	<table class="tborder" cellpadding="$stylevar[cellpadding]" cellspacing="$stylevar[cellspacing]" border="0" width="100%" align="center">
+	<tr><td class="thead"><phrase 1="$currency[title]">$vbphrase[most_currency]</phrase></td></tr>
+	$topusers
+	</table>
+</if>]]></template>
+		<template name="credits_richest_user" templatetype="template" date="1281237925" username="Darkwaltz4" version="1.2.0"><![CDATA[<if condition="$vb4"><dl class="stats"><dt><a class="username" href="member.php?u=$user[userid]">$user[musername]</a></dt><dd>
+<else /><tr><td class="alt1 smallfont"><a class="username" href="member.php?u=$user[userid]">$user[musername]</a>: </if>
+<a href="credits.php$session[sessionurl_q]" rel="credits-$currencyid-$user[userid];$user[username]">$useramt</a>
+<if condition="$vb4"></dd></dl><else /></td></tr></if>]]></template>
+		<template name="credits_transaction" templatetype="template" date="1280367812" username="Darkwaltz4" version="1.2.0"><![CDATA[<if condition="$vb4">
+			<div class="tr" style="width: 100%;">
+				<div class="td blockrow"><if condition="$tranlink"><a href="$tranlink">$transdate</a><else />$transdate</if></div>
+				<div class="td blockrow">$tranaction</div>
+				<if condition="!$userinfo['userid']"><div class="td blockrow"><a class="username" href="credits.php?u=$tran[userid]">$tran[username]</a></div></if>
+				<div class="td blockrow">$tranamount</div>
+				<div class="td blockrow">$trannote</div>
+			</div>
+<else />
+<tr width="100%">
+<td class="smallfont alt2" width="2$f%"><if condition="$tranlink"><a href="$tranlink">$transdate</a><else />$transdate</if></td>
+<if condition="!$userinfo['userid']"><td class="smallfont alt1" align="center" width="15%"><a class="username" href="credits.php?u=$tran[userid]">$tran[username]</a></td></if>
+<td class="smallfont alt1" align="center" width="15%">$tranaction</td>
+<td class="smallfont alt2" align="center" width="2$f%">$tranamount</td>
+<td class="smallfont alt1" width="3$f%">$trannote</td>
+</tr>
+</if>]]></template>
+	</templates>
+	<stylevardfns>
+	</stylevardfns>
+	<stylevars>
+	</stylevars>
+	<plugins>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Define Admin</title>
+			<hookname>admindata_start</hookname>
+			<phpcode><![CDATA[$this->validfields['creditspermissions'] = array(TYPE_UINT, REQ_NO);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Delete Confirmation</title>
+			<hookname>admin_delete_confirmation</hookname>
+			<phpcode><![CDATA[if (substr($table, 0, 8) == 'credits_') $idfield = substr($idfield, 8);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Process Transactions</title>
+			<hookname>admin_maintenance</hookname>
+			<phpcode><![CDATA[if ($_REQUEST['do'] == 'chooser')
+{
+	echo '<a name="credits_transactions"></a>';
+	print_form_header('credits_admin', 'process_transactions');
+	print_table_header('Process Pending Transactions');
+	print_input_row($vbphrase['number_of_users_to_process_per_cycle'], 'perpage', 1000);
+	print_submit_row('Process Transactions');
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Select Currency Setting</title>
+			<hookname>admin_options_print</hookname>
+			<phpcode><![CDATA[if ($setting['optioncode'] == 'currency')
+{
+	$handled = true;
+	$currencies = array();
+	foreach ($vbulletin->vbcredits['currency'] AS $currencyid => $currency) $currencies[$currencyid] = $currency['title'];
+	print_select_row($description, $name, $currencies, $setting['value']);
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Admin Permissions</title>
+			<hookname>admin_permissions_form</hookname>
+			<phpcode><![CDATA[print_yes_no_row('Can Administer vBCredits', "creditspermissions[1]", ($user['creditspermissions'] & 1 ? 1 : 0));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Save Admin</title>
+			<hookname>admin_permissions_process</hookname>
+			<phpcode><![CDATA[$vbulletin->input->clean_array_gpc('p', array(
+	'creditspermissions' => TYPE_ARRAY_INT
+));
+
+$creditsperms = 0;
+foreach ($vbulletin->GPC['creditspermissions'] AS $bit => $value)
+{
+	if ($value) $creditsperms += $bit;
+}
+
+$admindm->set('creditspermissions', $creditsperms);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Download</title>
+			<hookname>attachment_display</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::download();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Lightbox</title>
+			<hookname>attachment_lightbox</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::download();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Parser</title>
+			<hookname>bbcode_fetch_tags</hookname>
+			<phpcode><![CDATA[if ($charge = $vbulletin->options['credits_action_content_bbcode'])
+{
+	$tag_list['option'][$charge] = array(
+		'external_callback' => 'credits_charge',
+		'callback' => 'handle_external',
+		'option_regex' => '/^[\d\.]+$/',
+		'strip_empty' => true
+	);
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Strip</title>
+			<hookname>bbcode_parse_complete</hookname>
+			<phpcode>$text = VBCREDITS::charge_strip_raw($text);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Display Templates</title>
+			<hookname>cache_templates</hookname>
+			<phpcode>global $vb4;
+if ($vb4) VBCREDITS::templates($cache); else VBCREDITS::templates($globaltemplates);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Check Admin</title>
+			<hookname>can_administer</hookname>
+			<phpcode><![CDATA[foreach ($do AS $field)
+{
+	if ($field == 'credits' AND ($admin['creditspermissions'] & 1))
+	{
+		$return_value = true;
+		break;
+	}
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Rebuild Transactions</title>
+			<hookname>credits_actions_rebuild</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::rebuild($actionid, $user);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Transaction Cleanup</title>
+			<hookname>cron_script_cleanup_daily</hookname>
+			<phpcode><![CDATA[$vbulletin->db->query_write("DELETE FROM " . TABLE_PREFIX . "credits_transaction WHERE eventid = 0 AND status = 1");
+$vbulletin->db->query_write("ANALYZE TABLE " . TABLE_PREFIX . "credits_transaction"); //optimize locks innodb?]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Discussion Delete</title>
+			<hookname>discussiondata_delete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::discuss($this, true);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Discussion Save</title>
+			<hookname>discussiondata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::discuss($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Discussion</title>
+			<hookname>discussiondata_presave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::prediscuss($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Toolbar</title>
+			<hookname>editor_toolbar_end</hookname>
+			<phpcode><![CDATA[if ($show['editor_toolbar'] AND $allow_custom_bbcode AND $charge = $vbulletin->options['credits_action_content_bbcode']) $extrabuttons[] = array('buttonimage' => 'images/editor/charge.gif', 'bbcodetag' => $charge, 'tag' => strtoupper($charge), 'twoparams' => 1);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Load Post Credits</title>
+			<hookname>editpost_edit_ajax</hookname>
+			<phpcode>VBCREDITS::user($hook_query_fields, $hook_query_joins);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Event Delete</title>
+			<hookname>eventdata_delete</hookname>
+			<phpcode><![CDATA[VBCREDITS::action('calendar', $this->fetch_field('userid'), $this->fetch_field('eventid'), true, array('multiplier' => $this->fetch_field('event')));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Event Save</title>
+			<hookname>eventdata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::event($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Event</title>
+			<hookname>eventdata_presave</hookname>
+			<phpcode><![CDATA[$this->vbcredits = VBCREDITS::action('calendar', $this->fetch_field('userid'), true, false, array('multiplier' => $this->fetch_field('event')));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Load User Credits</title>
+			<hookname>fetch_userinfo_query</hookname>
+			<phpcode>VBCREDITS::user($hook_query_fields, $hook_query_joins);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Define Popup</title>
+			<hookname>global_setup_complete</hookname>
+			<phpcode>VBCREDITS::regular();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Navbar Display and Time Actions</title>
+			<hookname>global_setup_complete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::navbartime();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Shutdown</title>
+			<hookname>global_shutdown</hookname>
+			<phpcode><![CDATA[if (class_exists('VBCREDITS')) VBCREDITS::shutdown();]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Message Delete</title>
+			<hookname>groupmessagedata_delete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::reply($this, true);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Message Save</title>
+			<hookname>groupmessagedata_postsave</hookname>
+			<phpcode>if (!isset($new_discussion)) VBCREDITS_VBULLETIN::reply($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Message</title>
+			<hookname>groupmessagedata_presave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::prereply($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Infraction Delete</title>
+			<hookname>infractiondata_delete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::infraction($this, true);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Infraction</title>
+			<hookname>infractiondata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::infraction($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Load Core</title>
+			<hookname>init_startup</hookname>
+			<phpcode><![CDATA[require_once(DIR . '/dbtech/credits/credits_core.php');
+require_once(DIR . '/dbtech/credits/credits_vbulletin.php');]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Sticky Inline</title>
+			<hookname>inlinemod_stickunstick</hookname>
+			<phpcode><![CDATA[foreach ($threadarray AS $threadid => $thread) VBCREDITS::action('sticky', $thread['postuserid'], $threadid, $_POST['do'] == 'unstick', array('forumid' => $thread['forumid']));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Memberlist Display</title>
+			<hookname>memberlist_bit</hookname>
+			<phpcode><![CDATA[VBCREDITS::display('memberlist', $userinfo, $template_hook);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Load Memberlist Credits</title>
+			<hookname>memberlist_fetch</hookname>
+			<phpcode>VBCREDITS::user($hook_query_fields, $hook_query_joins);
+VBCREDITS_VBULLETIN::memberlist($hook_query_fields, $template_hook);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - View Profile</title>
+			<hookname>member_execute_start</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::profile();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Profile Display</title>
+			<hookname>member_profileblock_fetch_unwrapped</hookname>
+			<phpcode><![CDATA[if (empty($template_hook)) $template_hook = array();
+if (in_array($id, array('aboutme', 'stats'))) VBCREDITS::display('profile', $userinfo, $template_hook);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Upload Complete</title>
+			<hookname>newattachment_attach</hookname>
+			<phpcode><![CDATA[VBCREDITS::apply($vbcredits, $currentattachment['attachmentid']);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Upload</title>
+			<hookname>newattachment_start</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::upload();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Load Post Credits</title>
+			<hookname>newreply_post_ajax</hookname>
+			<phpcode>VBCREDITS::user($hook_query_fields, $hook_query_joins);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Strip</title>
+			<hookname>newreply_quote</hookname>
+			<phpcode>$pagetext = VBCREDITS::charge_strip_raw($pagetext);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="2">
+			<title>vBCredits II - Apply Event</title>
+			<hookname>parse_templates</hookname>
+			<phpcode>VBCREDITS::verify($cronimage, $cbf);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Poll Save</title>
+			<hookname>polldata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::poll($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Poll</title>
+			<hookname>polldata_presave</hookname>
+			<phpcode><![CDATA[global $threadinfo;
+$this->vbcredits = VBCREDITS::action('poll', $threadinfo['postuserid'], true, false, array('forumid' => $threadinfo['forumid'], 'multiplier' => $this->fetch_field('numberoptions')));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Poll Delete</title>
+			<hookname>pollvotedata_delete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::poll($this, true);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Vote Save</title>
+			<hookname>pollvotedata_postsave</hookname>
+			<phpcode><![CDATA[VBCREDITS::apply($this->vbcredits, $this->fetch_field('pollid'));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Vote</title>
+			<hookname>pollvotedata_presave</hookname>
+			<phpcode><![CDATA[global $threadinfo;
+if (!$this->condition AND $userid = $this->fetch_field('userid')) $this->vbcredits = VBCREDITS::action('vote', $userid, true, false, array('forumid' => $threadinfo['forumid'], 'ownerid' => $threadinfo['postuserid']));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Postbit Display</title>
+			<hookname>postbit_display_complete</hookname>
+			<phpcode><![CDATA[if (empty($template_hook)) $template_hook = array();
+VBCREDITS::display('postbit', $post, $template_hook);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Posting Delete</title>
+			<hookname>postdata_delete</hookname>
+			<phpcode>if ($physicaldel) VBCREDITS_VBULLETIN::delpost($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Posting Save</title>
+			<hookname>postdata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::post($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Posting</title>
+			<hookname>postdata_presave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::prepost($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Cache</title>
+			<hookname>postdata_presave</hookname>
+			<phpcode>VBCREDITS::charged_content($this, $return_value);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Define</title>
+			<hookname>postdata_start</hookname>
+			<phpcode><![CDATA[$this->validfields['chargecontent'] = array(TYPE_STR, REQ_NO);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Private Message</title>
+			<hookname>private_insertpm_process</hookname>
+			<phpcode><![CDATA[for ($x = ( $vbulletin->options['credits_action_message_multiple'] ? sizeof($pmdm->info['recipients']) : 1 ); $x > 0; $x--) VBCREDITS::action('message', $vbulletin->userinfo['userid'], null, false, array('multiplier' => $pm['message']));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Define Navtab</title>
+			<hookname>process_templates_complete</hookname>
+			<phpcode><![CDATA[if ($vbulletin->options['credits_enable_navtab'])
+{	//apply the navtab
+	if (THIS_SCRIPT == 'credits') $vbulletin->options['selectednavtab'] = 'vbcredits';
+	$template_hook['navtab_middle'] .= vB_Template::create('credits_navtab')->render();
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Add Friend Complete</title>
+			<hookname>profile_doaddlist_complete</hookname>
+			<phpcode><![CDATA[VBCREDITS::apply($vbcredits[0], $userinfo['userid']);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Add Friend Start</title>
+			<hookname>profile_doaddlist_start</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::friend();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Remove Friend Complete</title>
+			<hookname>profile_doremovelist_complete</hookname>
+			<phpcode><![CDATA[foreach ($vbcredits AS $pos => $id) VBCREDITS::apply($id, ( $pos ? $vbulletin->userinfo['userid'] : $userinfo['userid'] ));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Remove Friend Start</title>
+			<hookname>profile_doremovelist_start</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::friend(true);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Manage Friends</title>
+			<hookname>profile_updatelist_process</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::contacts();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Receive Reputation</title>
+			<hookname>reputation_add_complete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::reputation();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Grant Reputation</title>
+			<hookname>reputation_add_process</hookname>
+			<phpcode><![CDATA[$vbcredits = VBCREDITS::action('approval', $vbulletin->userinfo['userid'], true, false, array('forumid' => $threadinfo['forumid'], 'multiplier' => ( $vbulletin->options['credits_action_approval_absolute'] ? abs($score) : $score )));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Strip</title>
+			<hookname>search_results_postbit</hookname>
+			<phpcode><![CDATA[global $vb4;
+$post['posttext'] = ( $vb4 ? $this->post->get_field('pagetext') : $itemids[$post['postid']]['pagetext'] );
+VBCREDITS::charge_strip($post);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - View Thread</title>
+			<hookname>showpost_start</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::read();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Output</title>
+			<hookname>showthread_complete</hookname>
+			<phpcode>VBCREDITS::charge_output();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Load</title>
+			<hookname>showthread_postbit_create</hookname>
+			<phpcode>VBCREDITS::cache_charge();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - View Thread</title>
+			<hookname>showthread_post_start</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::read();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Load Thread Credits</title>
+			<hookname>showthread_query</hookname>
+			<phpcode>VBCREDITS::user($hook_query_fields, $hook_query_joins);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Delete</title>
+			<hookname>socgroupdata_delete</hookname>
+			<phpcode><![CDATA[VBCREDITS::action('group', $this->fetch_field('creatoruserid'), $this->fetch_field('groupid'), true);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Save</title>
+			<hookname>socgroupdata_postsave</hookname>
+			<phpcode><![CDATA[VBCREDITS::apply($this->vbcredits, $this->fetch_field('groupid'));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group</title>
+			<hookname>socgroupdata_presave</hookname>
+			<phpcode><![CDATA[if (!$this->condition) $this->vbcredits = VBCREDITS::action('group', $this->fetch_field('creatoruserid'), true);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Member Delete</title>
+			<hookname>socgroupmemberdata_delete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::member($this, true);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Member Save</title>
+			<hookname>socgroupmemberdata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::member($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Social Group Member</title>
+			<hookname>socgroupmemberdata_presave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::premember($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Template Group</title>
+			<hookname>template_groups</hookname>
+			<phpcode><![CDATA[$only['credits'] = 'DragonByte Tech: vBCredits II Deluxe';]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Strip</title>
+			<hookname>threadbit_process</hookname>
+			<phpcode>VBCREDITS::charge_strip($thread);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Thread Delete</title>
+			<hookname>threaddata_delete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::delthread($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Sticky</title>
+			<hookname>threaddata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::thread($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Thread Undelete</title>
+			<hookname>threaddata_presave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::prethread($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Store</title>
+			<hookname>threadfpdata_doset</hookname>
+			<phpcode><![CDATA[if ($fieldname == 'chargecontent') $tables = array('post');]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Thread Save</title>
+			<hookname>threadfpdata_postsave</hookname>
+			<phpcode><![CDATA[VBCREDITS::apply($this->vbcredits, $this->fetch_field('threadid'));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Thread</title>
+			<hookname>threadfpdata_presave</hookname>
+			<phpcode><![CDATA[if ($this->fetch_field('visible') == 1) $this->vbcredits = VBCREDITS::action('thread', $this->fetch_field('postuserid'), true, false, array('forumid' => $this->fetch_field('forumid'), 'multiplier' => $this->post['pagetext']));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Cache</title>
+			<hookname>threadfpdata_presave</hookname>
+			<phpcode>VBCREDITS::charged_content($this, $return_value);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Charge Content Define</title>
+			<hookname>threadfpdata_start</hookname>
+			<phpcode><![CDATA[$this->validfields['chargecontent'] = array(TYPE_STR, REQ_NO);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Rating Delete</title>
+			<hookname>threadratedata_delete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::rating($this, true);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Rating Save</title>
+			<hookname>threadratedata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::rating($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Rating</title>
+			<hookname>threadratedata_presave</hookname>
+			<phpcode><![CDATA[if (($userid = $this->fetch_field('userid')) AND $this->existing['vote'] != $this->fetch_field('vote')) $this->vbcredits = VBCREDITS::action('rate', $userid, true, false, array('forumid' => $this->info['thread']['forumid'], 'multiplier' => $this->fetch_field('vote'), 'ownerid' => $this->info['thread']['postuserid']));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Tag Delete</title>
+			<hookname>threadtag_domanage_delete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::deltag();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Tag</title>
+			<hookname>threadtag_domanage_postdelete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::tag();</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - User Delete</title>
+			<hookname>userdata_delete</hookname>
+			<phpcode><![CDATA[$this->dbobject->query_write("DELETE FROM " . TABLE_PREFIX . "credits_transaction WHERE userid = " . $this->existing['userid']);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Induction and Referral</title>
+			<hookname>userdata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::user($this, $usergroups_changed);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Profile Fields</title>
+			<hookname>userdata_presave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::userfields($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Profile Picture Delete</title>
+			<hookname>userpicdata_delete</hookname>
+			<phpcode><![CDATA[if ($this->table == 'customprofilepic') VBCREDITS::action('picture', $this->fetch_field('userid'), null, true);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Profile Picture Save</title>
+			<hookname>userpicdata_postsave</hookname>
+			<phpcode><![CDATA[VBCREDITS::apply($this->vbcredits, null);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Profile Picture</title>
+			<hookname>userpicdata_presave</hookname>
+			<phpcode><![CDATA[if ($this->table == 'customprofilepic' AND !$this->condition) $this->vbcredits = VBCREDITS::action('picture', $this->fetch_field('userid'), true);]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Visitor Message Delete</title>
+			<hookname>visitormessagedata_delete</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::visitor($this, true);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Visitor Message Save</title>
+			<hookname>visitormessagedata_postsave</hookname>
+			<phpcode>VBCREDITS_VBULLETIN::visitor($this);</phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - Visitor Message</title>
+			<hookname>visitormessagedata_presave</hookname>
+			<phpcode><![CDATA[if (($userid = $this->fetch_field('postuserid')) != $this->fetch_field('userid')) $this->vbcredits = VBCREDITS::action('visitor', $userid, true, false, array('multiplier' => $this->fetch_field('pagetext')));]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="1">
+			<title>vBCredits II - XML Shutdown</title>
+			<hookname>xml_print_output</hookname>
+			<phpcode>$full_shutdown = true;</phpcode>
+		</plugin>
+	</plugins>
+	<phrases>
+		<phrasetype name="Control Panel Global" fieldname="cpglobal">
+			<phrase name="credits_menu_action" date="1289776814" username="Darkwaltz4" version="1.3.0"><![CDATA[Install Modular Actions]]></phrase>
+			<phrase name="credits_menu_conversion" date="1291012276" username="Darkwaltz4" version="2.0.0"><![CDATA[Currency Pricing Conversions]]></phrase>
+			<phrase name="credits_menu_currency" date="1289775860" username="Darkwaltz4" version="1.3.0"><![CDATA[Multiple Currency Integration]]></phrase>
+			<phrase name="credits_menu_display" date="1289775912" username="Darkwaltz4" version="1.3.0"><![CDATA[Automatic Template Edits]]></phrase>
+			<phrase name="credits_menu_event" date="1290472551" username="Darkwaltz4" version="2.0.0"><![CDATA[Activity Amounts Configuration]]></phrase>
+			<phrase name="credits_menu_redemption" date="1290903656" username="Darkwaltz4" version="2.0.0"><![CDATA[Redemption Codes and Links]]></phrase>
+			<phrase name="credits_menu_transaction" date="1289775801" username="Darkwaltz4" version="1.3.0"><![CDATA[Browse and Moderate Logs]]></phrase>
+			<phrase name="credits_menu_user" date="1289776098" username="Darkwaltz4" version="1.3.0"><![CDATA[Recalculate User Accounts]]></phrase>
+		</phrasetype>
+		<phrasetype name="Control Panel Home Pages" fieldname="cphome">
+			<phrase name="credits_menu_config" date="1289856865" username="Darkwaltz4" version="1.3.0"><![CDATA[Action Specific Configuration
+]]></phrase>
+			<phrase name="credits_menu_global" date="1289775663" username="Darkwaltz4" version="1.3.0"><![CDATA[vBCredits Configuration]]></phrase>
+		</phrasetype>
+		<phrasetype name="Control Panel User Groups" fieldname="cpusergroup">
+			<phrase name="credits_adjust" date="1278058245" username="Darkwaltz4" version="2.0.0"><![CDATA[Can Adjust Currencies<dfn>Grants access to arbitrary adjustment with the currency popup.</dfn>]]></phrase>
+			<phrase name="credits_charge" date="1290463762" username="Darkwaltz4" version="2.0.0"><![CDATA[Charged Content<dfn>This is the maximum number of times users can charge for content in a single post.</dfn>]]></phrase>
+			<phrase name="credits_hidden" date="1262472748" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Show Inaccessible Currencies<dfn>Otherwise only currencies that can be earned or spent will be shown in Displays.</dfn>]]></phrase>
+			<phrase name="credits_locked" date="1262464093" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Excluded<dfn>This group will be treated as if they can't earn or spend any currencies.</dfn>]]></phrase>
+			<phrase name="credits_special" date="1262473451" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Can See Private Currencies]]></phrase>
+			<phrase name="credits_usergroup_perms" date="1262470654" username="Darkwaltz4" version="2.0.0b1"><![CDATA[vBCredits Permissions]]></phrase>
+			<phrase name="credits_viewlog" date="1279739980" username="Darkwaltz4" version="1.0.3"><![CDATA[Can View Any Transaction Log]]></phrase>
+		</phrasetype>
+		<phrasetype name="vBCredits General" fieldname="credits">
+			<phrase name="credits_adjust_success" date="1291184645" username="Darkwaltz4" version="2.0.0"><![CDATA[The adjustment was applied successfully]]></phrase>
+			<phrase name="credits_all_actions" date="1280366158" username="Darkwaltz4" version="1.2.0"><![CDATA[All Actions]]></phrase>
+			<phrase name="credits_all_currencies" date="1280366107" username="Darkwaltz4" version="1.2.0"><![CDATA[All Currencies]]></phrase>
+			<phrase name="credits_latest_transactions" date="1280366497" username="Darkwaltz4" version="1.2.0"><![CDATA[Latest Transactions]]></phrase>
+			<phrase name="credits_latest_transactions_user" date="1280367497" username="Darkwaltz4" version="1.2.0"><![CDATA[Latest Transactions for <a href="member.php?u={1}">{2}</a>]]></phrase>
+			<phrase name="credits_payment_failure" date="1291943768" username="Darkwaltz4" version="2.0.0"><![CDATA[Unable to initiate payment as minimum amount needed was not met]]></phrase>
+			<phrase name="credits_redeemed_failure" date="1291160769" username="Darkwaltz4" version="2.0.0"><![CDATA[Unable to Redeem Code]]></phrase>
+			<phrase name="credits_redeemed_success" date="1291160728" username="Darkwaltz4" version="2.0.0"><![CDATA[Code Redeemed Successfully]]></phrase>
+			<phrase name="credits_transfer_failure" date="1291186899" username="Darkwaltz4" version="2.0.0"><![CDATA[Could not complete transfer]]></phrase>
+			<phrase name="credits_transfer_success" date="1280518928" username="Darkwaltz4" version="1.2.0"><![CDATA[The transfer was a success!]]></phrase>
+			<phrase name="note" date="1280366300" username="Darkwaltz4" version="1.2.0"><![CDATA[Note]]></phrase>
+		</phrasetype>
+		<phrasetype name="vBCredits Administration" fieldname="credits_admin">
+			<phrase name="are_you_sure_want_to_delete_conversion_x" date="1291055208" username="Darkwaltz4" version="2.0.0"><![CDATA[Are you <b>sure</b> you want to delete this conversion? The transactions from users purchasing under it will be kept.<br /><span class="smallfont">({2}: {3})</span><br /><br /> {4} This action cannot be undone.]]></phrase>
+			<phrase name="are_you_sure_want_to_delete_currency_x" date="1280636801" username="Darkwaltz4" version="1.2.0"><![CDATA[Are you <b>sure</b> you want to delete the currency called '{1}'? All associated events and transactions will be deleted as well. If you want to reverse them first, use the tool in the account manager and then try deleting this currency again.<br /><span class="smallfont">({2}: {3})</span><br /><br /> {4} This action cannot be undone.]]></phrase>
+			<phrase name="are_you_sure_want_to_delete_event_x" date="1280636776" username="Darkwaltz4" version="1.2.0"><![CDATA[Are you <b>sure</b> you want to delete this event? All associated transactions will be deleted as well. If you want to reverse them first, use the tool in the account manager and then try deleting this event again.<br /><span class="smallfont">({2}: {3})</span><br /><br /> {4} This action cannot be undone.]]></phrase>
+			<phrase name="are_you_sure_want_to_delete_events_x" date="1290818161" username="Darkwaltz4" version="2.0.0"><![CDATA[Are you <b>sure</b> you want to delete these events? All associated transactions will be deleted as well. If you want to reverse them first, use the tool in the account manager and then try deleting these events again.<br /><span class="smallfont">(eventids: {1})</span><br /><br />This action cannot be undone.]]></phrase>
+			<phrase name="are_you_sure_want_to_delete_redemption_x" date="1290919987" username="Darkwaltz4" version="2.0.0"><![CDATA[Are you <b>sure</b> you want to delete the redemption called '{1}'? The transactions from users redeeming it will be kept.<br /><span class="smallfont">({2}: {3})</span><br /><br /> {4} This action cannot be undone.]]></phrase>
+			<phrase name="are_you_sure_want_to_delete_transaction_x" date="1269923756" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Are you <b>sure</b> you want to delete this transaction?<br /><span class="smallfont">({2}: {3})</span><br /><br /> {4} This action cannot be undone.]]></phrase>
+			<phrase name="credits_acp_editusers" date="1261875583" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Mass Update Users]]></phrase>
+			<phrase name="credits_actions_info" date="1281972179" username="Darkwaltz4" version="1.2.0"><![CDATA[Actions are specific places throughout your site where currencies can be involved. Each one has a set of properties that determine the available features during each action. To charge or award currencies for an action, you must create an event that defines what should happen. Additional actions can be installed via third party addons as underlying plugins are required.]]></phrase>
+			<phrase name="credits_admin_selectall" date="1291603055" username="Darkwaltz4" version="2.0.0"><![CDATA[To indicate "any", nothing needs to be selected. Is that what you wanted?]]></phrase>
+			<phrase name="credits_advanced_toggle" date="1291056919" username="Darkwaltz4" version="2.0.0"><![CDATA[Show Advanced Options]]></phrase>
+			<phrase name="credits_change_search" date="1281983998" username="Darkwaltz4" version="1.2.0"><![CDATA[Change Search]]></phrase>
+			<phrase name="credits_conversions_info" date="1291012199" username="Darkwaltz4" version="2.0.0"><![CDATA[You can sell your currencies for actual money through any of vBulletin's payment processors. Because users can choose just how much they want to buy, you set tiers and prices for each of them. The denominations and processors are up to you, as well as whether the qualifying tier will take effect for the whole amount or allow the lower tiers to account for their portions.]]></phrase>
+			<phrase name="credits_currencies_info" date="1281972081" username="Darkwaltz4" version="1.2.0"><![CDATA[Currencies are the numeric representation of how involved with a site that users are. You can define as many as you want and link them up to third party systems. Together with actions, you can define events for users to earn and spend currencies for virtually anything they do. All movement of currencies can be limited and will be recorded as transactions.]]></phrase>
+			<phrase name="credits_currency_column" date="1279766259" username="Darkwaltz4" version="1.1.0"><![CDATA[Column<dfn>After creation, this should stay the same even if you change the title later or loss of data may result. If you are manually creating this currency, the column should generally look like the title, except only with lowercase letters and underscores. If this column does not exist on the above table, it will be added.</dfn>]]></phrase>
+			<phrase name="credits_currency_decimals" date="1277780064" username="Darkwaltz4" version="2.0.0"><![CDATA[Rounding<dfn>This is the number of decimal points you wish to round this currency to when it is publicly displayed. Internally, the actual amount will still be used in formulas.</dfn>]]></phrase>
+			<phrase name="credits_currency_earnmax" date="1277780520" username="Darkwaltz4" version="2.0.0"><![CDATA[Maximum Earned<dfn>Users will be unable to exceed this amount earned. Use blank for no maximum.</dfn>]]></phrase>
+			<phrase name="credits_currency_formula" date="1281982843" username="Darkwaltz4" version="1.2.0"><![CDATA[{1} Formula]]></phrase>
+			<phrase name="credits_currency_import" date="1281728058" username="Darkwaltz4" version="1.2.0"><![CDATA[Import Currency<dfn>The currency wizard has detected these other currencies present on your system. Select them from the list to automatically fill in the technical details, or leave blank and manually define a custom currency.</dfn>]]></phrase>
+			<phrase name="credits_currency_inbound" date="1277780613" username="Darkwaltz4" version="2.0.0"><![CDATA[Transfer To<dfn>If enabled, other currencies may be transferred to this one.</dfn>]]></phrase>
+			<phrase name="credits_currency_maxtime" date="1277780545" username="Darkwaltz4" version="2.0.0"><![CDATA[Limit Period<dfn>Timespan in seconds that the above maximum is enforced. Use blank for all time.</dfn>]]></phrase>
+			<phrase name="credits_currency_negallow" date="1277780200" username="Darkwaltz4" version="2.0.0"><![CDATA[Allow negative display]]></phrase>
+			<phrase name="credits_currency_negative" date="1277780123" username="Darkwaltz4" version="2.0.0"><![CDATA[Negative Handling<dfn>How to treat negative amounts that sometimes occur from uncancelable actions and event negation.</dfn>]]></phrase>
+			<phrase name="credits_currency_negreset" date="1277780151" username="Darkwaltz4" version="2.0.0"><![CDATA[Reset to 0 when negative]]></phrase>
+			<phrase name="credits_currency_negshow" date="1277780177" username="Darkwaltz4" version="2.0.0"><![CDATA[Show 0 but keep negative]]></phrase>
+			<phrase name="credits_currency_new" date="1277779852" username="Darkwaltz4" version="2.0.0"><![CDATA[Create New Currency]]></phrase>
+			<phrase name="credits_currency_outbound" date="1277780642" username="Darkwaltz4" version="2.0.0"><![CDATA[Transfer From<dfn>If enabled, this currency can be transferred to other applicable currencies.</dfn>]]></phrase>
+			<phrase name="credits_currency_prefix" date="1277779945" username="Darkwaltz4" version="2.0.0"><![CDATA[Use vBulletin Table Prefix]]></phrase>
+			<phrase name="credits_currency_privacy" date="1277780269" username="Darkwaltz4" version="2.0.0"><![CDATA[Privacy Filter<dfn>The ability to see private currencies is a usergroup permission.</dfn>]]></phrase>
+			<phrase name="credits_currency_privall" date="1277780493" username="Darkwaltz4" version="2.0.0"><![CDATA[Show to everyone]]></phrase>
+			<phrase name="credits_currency_privself" date="1279739831" username="Darkwaltz4" version="1.0.3"><![CDATA[Show to self and designated usergroups]]></phrase>
+			<phrase name="credits_currency_privspecial" date="1279739847" username="Darkwaltz4" version="1.0.3"><![CDATA[Show to designated usergroups]]></phrase>
+			<phrase name="credits_currency_table" date="1277779917" username="Darkwaltz4" version="2.0.0"><![CDATA[Table<dfn>This must already exist in your database and somehow reference the vBulletin user table as defined below.</dfn>]]></phrase>
+			<phrase name="credits_currency_transcur" date="1277780832" username="Darkwaltz4" version="2.0.0"><![CDATA[Currency<dfn>This tool will add any amounts to this currency that users had from these detected currencies. Leave blank to not transfer anything, or fill in the details yourself.</dfn>]]></phrase>
+			<phrase name="credits_currency_transfer" date="1277780788" username="Darkwaltz4" version="2.0.0"><![CDATA[Transfer Currency]]></phrase>
+			<phrase name="credits_currency_usercol" date="1277780030" username="Darkwaltz4" version="2.0.0"><![CDATA[User Column<dfn>Database column that contains the userid or username as above.</dfn>]]></phrase>
+			<phrase name="credits_currency_userid" date="1277780004" username="Darkwaltz4" version="2.0.0"><![CDATA[Uses User ID<dfn>Otherwise the table will be expected to be joined by username.</dfn>]]></phrase>
+			<phrase name="credits_currency_value" date="1277780575" username="Darkwaltz4" version="2.0.0"><![CDATA[Relative Value<dfn>This is the overall value of this currency compared to all other currencies. Generally this only matters when determining total assets and transfering between currencies. You should establish at least one currency with a value of 1 as a base against the rest.</dfn>]]></phrase>
+			<phrase name="credits_days_registered" date="1261873737" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Days Registered]]></phrase>
+			<phrase name="credits_display_combined" date="1282012827" username="Darkwaltz4" version="1.2.0"><![CDATA[Combined Currencies<dfn>If none are selected then all currencies will be included. The relative values of each currency will adjust the total. Ctrl/cmd+click or click+drag to select more than one.</dfn>]]></phrase>
+			<phrase name="credits_display_currencies" date="1282012846" username="Darkwaltz4" version="1.2.0"><![CDATA[Displayed Currencies<dfn>If none are selected then all currencies will be shown. Ctrl/cmd+click or click+drag to select more than one.</dfn>]]></phrase>
+			<phrase name="credits_displays_info" date="1281972128" username="Darkwaltz4" version="1.2.0"><![CDATA[Displays format and display the current currency information for your users. They are a template based approach which uses hooks instead of manual edits. You can easily select the currencies to include as well as create a special cumulative field. Additional displays can be installed via third party addons as underlying plugins are required.]]></phrase>
+			<phrase name="credits_earn_currency" date="1281971605" username="Darkwaltz4" version="1.2.0"><![CDATA[Earn {1}]]></phrase>
+			<phrase name="credits_event_forums" date="1282012861" username="Darkwaltz4" version="1.2.0"><![CDATA[Forums<dfn>The specific forums this event occurs. If none are selected then all forums will be applicable. Ctrl/cmd+click or click+drag to select more than one.</dfn>]]></phrase>
+			<phrase name="credits_event_usergroups" date="1282012876" username="Darkwaltz4" version="1.2.0"><![CDATA[Usergroups<dfn>The specific usergroups this event applies to. If none are selected then all users will be qualified. Ctrl/cmd+click or click+drag to select more than one.</dfn>]]></phrase>
+			<phrase name="credits_events_info" date="1281972394" username="Darkwaltz4" version="1.2.0"><![CDATA[Events are where you define exactly what happens during an action. You define what usergroups and forums that apply, as well as whether users will earn or spend currency for that action. All actions are recorded as transactions. You can assign multiple events to the same actions and criteria, and the best one will be used according to the situation.]]></phrase>
+			<phrase name="credits_formulas_info" date="1281972337" username="Darkwaltz4" version="1.2.0"><![CDATA[You may modify currency amounts directly or create a simple formula. Both the amounts listed and the formulas work together; the formula values come from what is shown in the results table.<br /><br />Formulas can include numbers, spaces, and the following: <b>+</b> for Addition, <b>-</b> for Subtraction, <b>*</b> for Multiplication, <b>/</b> for Division,<br /><b>(</b>subformulas<b>)</b>, <b>D</b> for Days Registered, <b>P</b> for Post Count, <b>R</b> for Reputation, <b>I</b> for Infraction Points, <b>[Currency Name]</b> for Specific Currency<br /><br />See the help text for examples and extended instructions. To simply update currencies, leave the default formulas.<br /><b>The mass changes made with this tool cannot be undone and are not recorded.</b>]]></phrase>
+			<phrase name="credits_greater_equal" date="1281971039" username="Darkwaltz4" version="1.2.0"><![CDATA[{1} are greater than or equal to]]></phrase>
+			<phrase name="credits_less_than" date="1281971100" username="Darkwaltz4" version="1.2.0"><![CDATA[{1} are less than]]></phrase>
+			<phrase name="credits_no_transactions" date="1281983679" username="Darkwaltz4" version="1.2.0"><![CDATA[No Transactions Found]]></phrase>
+			<phrase name="credits_percent_section" date="1281983627" username="Darkwaltz4" version="1.2.0"><![CDATA[% Section]]></phrase>
+			<phrase name="credits_percent_total" date="1281983598" username="Darkwaltz4" version="1.2.0"><![CDATA[% Total]]></phrase>
+			<phrase name="credits_processing_transactions" date="1281970690" username="Darkwaltz4" version="1.2.0"><![CDATA[Processing Pending Transactions]]></phrase>
+			<phrase name="credits_processing_users" date="1281971794" username="Darkwaltz4" version="1.2.0"><![CDATA[Processing Users]]></phrase>
+			<phrase name="credits_rebuild_recount" date="1269835311" username="Darkwaltz4" version="2.0.0b3"><![CDATA[It is recommended that you <a href="misc.php?do=chooser#credits_transactions" target="_blank">update counters</a> now to process the new pending transactions.]]></phrase>
+			<phrase name="credits_recalculate_info" date="1281972283" username="Darkwaltz4" version="1.2.0"><![CDATA[You can prune transactions, recalculate past events, or calculate actions from times prior to the existence of those events by selecting the actions and time periods you wish to process.]]></phrase>
+			<phrase name="credits_redemptions_info" date="1290923155" username="Darkwaltz4" version="2.0.0"><![CDATA[Redemptions are an easy way to award currency automatically as part of promotions or incentives to visit third party pages. Insert or generate as many single-use codes as you want, or a single master code that you control how long it can be used. Combined with events, you could specify who can use redemptions or how often.]]></phrase>
+			<phrase name="credits_spend_currency" date="1281971688" username="Darkwaltz4" version="1.2.0"><![CDATA[Spend {1}]]></phrase>
+			<phrase name="credits_transaction_stats" date="1281973087" username="Darkwaltz4" version="1.2.0"><![CDATA[{1} {2} these transactions, {3}% of {4} {2} site total]]></phrase>
+			<phrase name="credits_transaction_statsgroup" date="1282012893" username="Darkwaltz4" version="1.2.0"><![CDATA[Statistics Grouping<dfn>Break down the statistics according to any unique combination of these properties. Ctrl/cmd+click or click+drag to select more than one.</dfn>]]></phrase>
+			<phrase name="credits_transactions_info" date="1282024366" username="Darkwaltz4" version="1.2.0"><![CDATA[Transactions are the records of every completed or moderated event that has occurred. They can be accepted or denied, and their messages can be updated. You can select the range of dates to view, and they are always listed moderated first, and then latest first. Statistics will be built according to the subset of transactions you are displaying, and they can be grouped in multiple ways.]]></phrase>
+			<phrase name="credits_transactions_updated" date="1270009874" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Updated {1} transactions{2}.]]></phrase>
+			<phrase name="credits_transfer" date="1277780983" username="Darkwaltz4" version="2.0.0"><![CDATA[Transfer]]></phrase>
+			<phrase name="credits_update_transactions" date="1281983965" username="Darkwaltz4" version="1.2.0"><![CDATA[Update Transactions]]></phrase>
+			<phrase name="credits_update_users" date="1281982562" username="Darkwaltz4" version="1.2.0"><![CDATA[Update Users]]></phrase>
+			<phrase name="credits_users_actions" date="1282012906" username="Darkwaltz4" version="1.2.0"><![CDATA[Rebuild Actions<dfn>Specific actions for calculation or pruning. Actions with * cannot calculate beyond their original transactions; they will be retried instead. Ctrl/cmd+click or click+drag to select more than one.</dfn>]]></phrase>
+			<phrase name="credits_users_allactions" date="1281982928" username="Darkwaltz4" version="1.2.0"><![CDATA[Target Any Action<dfn>Prune transactions from all actions, otherwise just the selected ones. For major forum resets.</dfn>]]></phrase>
+			<phrase name="credits_users_alltime" date="1281982980" username="Darkwaltz4" version="1.2.0"><![CDATA[Target Any Time<dfn>Prune transactions occurring since the beginning of the forum, otherwise just during the time span. For major forum resets.</dfn>]]></phrase>
+			<phrase name="credits_users_allusers" date="1291842926" username="Darkwaltz4" version="2.0.0"><![CDATA[Process All Pages of Users<dfn>Updating users is server intensive, so by default only the users shown on this page of results are processed at a time. Enable this to process all remaining pages at once. Requires JavaScript.</dfn>]]></phrase>
+			<phrase name="credits_users_deletion" date="1281983054" username="Darkwaltz4" version="1.2.0"><![CDATA[Prune Existing Transactions<dfn>Delete any eligible transactions found with these criteria. You should probably select this when recalculating to avoid doubled transactions, but can be used just for pruning.</dfn>]]></phrase>
+			<phrase name="credits_users_enddate" date="1281983126" username="Darkwaltz4" version="1.2.0"><![CDATA[End Date<dfn>Latest inclusive time to process actions.</dfn>]]></phrase>
+			<phrase name="credits_users_info" date="1281971403" username="Darkwaltz4" version="1.2.0"><![CDATA[Here you can directly manipulate the currency amounts for each user on your site. Start by selecting a group of users you wish to see and they will be presented on the next screen as a list of pages. You can then update their amounts all at once, apply formulas for dynamic changes, or recalculate the actions processed for those users from any point in time.]]></phrase>
+			<phrase name="credits_users_recalculate" date="1281983091" username="Darkwaltz4" version="1.2.0"><![CDATA[Calculate Events<dfn>This will process events for the selected actions that occurred during this time span and issue new transactions.</dfn>]]></phrase>
+			<phrase name="credits_users_reversal" date="1281983018" username="Darkwaltz4" version="1.2.0"><![CDATA[Reverse Before Delete<dfn>Return associated currencies as if the transactions never happened. Recommended unless you are resetting the currencies with a formula too, such as 0.</dfn>]]></phrase>
+			<phrase name="credits_users_startdate" date="1281983156" username="Darkwaltz4" version="1.2.0"><![CDATA[Start Date<dfn>Earliest inclusive time to process actions.</dfn>]]></phrase>
+			<phrase name="credits_users_updated" date="1269835355" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Updated {1} Users. {2}]]></phrase>
+			<phrase name="label" date="1281983534" username="Darkwaltz4" version="1.2.0"><![CDATA[Label]]></phrase>
+			<phrase name="moderated" date="1281983907" username="Darkwaltz4" version="1.2.0"><![CDATA[Moderated]]></phrase>
+			<phrase name="save_active_status" date="1262378117" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Save Active Status]]></phrase>
+			<phrase name="showing_transactions_x_to_y_of_z" date="1262499560" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Showing Transactions {1} to {2} of {3}]]></phrase>
+		</phrasetype>
+		<phrasetype name="Scheduled Tasks" fieldname="cron">
+			<phrase name="task_credits_process_desc" date="1278105575" username="Darkwaltz4" version="2.0.0"><![CDATA[Small sites can enable this to process transactions without the associated users present to process them automatically.]]></phrase>
+			<phrase name="task_credits_process_log" date="1278105575" username="Darkwaltz4" version="2.0.0"><![CDATA[Processed {1} Events]]></phrase>
+			<phrase name="task_credits_process_title" date="1278105575" username="Darkwaltz4" version="2.0.0"><![CDATA[vBCredits II Deluxe - Transaction Processor]]></phrase>
+		</phrasetype>
+		<phrasetype name="Error Messages" fieldname="error">
+			<phrase name="credits_action_saved" date="1257728149" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Action Saved]]></phrase>
+			<phrase name="credits_bad_formula" date="1270009302" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Sorry, it looks like your formula was malformed]]></phrase>
+			<phrase name="credits_cancel_mult_adjust" date="1291612662" username="Darkwaltz4" version="2.0.0"><![CDATA[You need to select at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_album" date="1291616440" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, this image needs to measure at least {1} square {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_approval" date="1291615417" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need to give at least {1} {2} of reputation.]]></phrase>
+			<phrase name="credits_cancel_mult_calendar" date="1291616479" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, the description on this event needs to be at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_content" date="1291615829" username="Darkwaltz4" version="2.0.0"><![CDATA[This content needs to cost at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_describe" date="1291616580" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need to fill out at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_discuss" date="1291616099" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, this discussion needs at least {1} {2} to get started.]]></phrase>
+			<phrase name="credits_cancel_mult_donate" date="1291615304" username="Darkwaltz4" version="2.0.0"><![CDATA[You need to give at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_download" date="1291616522" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, this file needs to measure at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_message" date="1291616214" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, your message needs at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_poll" date="1291616274" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, your poll needs to have at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_post" date="1291615892" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, this post needs to have at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_rate" date="1291616308" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, your rating needs to be at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_revival" date="1291615953" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, this thread needs to be at least {1} {2} old to post in it.]]></phrase>
+			<phrase name="credits_cancel_mult_thread" date="1291616038" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, this thread needs to have at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_transfer" date="1291615333" username="Darkwaltz4" version="2.0.0"><![CDATA[You need to transfer at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_update" date="1291616139" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, your response needs at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_upload" date="1291616630" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, this file needs to measure at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_visitor" date="1291616177" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, your visitor message needs at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_mult_vote" date="1291616345" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need to select at least {1} {2}.]]></phrase>
+			<phrase name="credits_cancel_price_adjust" date="1291606260" username="Darkwaltz4" version="2.0.0"><![CDATA[This account does not have {1} {2} available to take.]]></phrase>
+			<phrase name="credits_cancel_price_album" date="1291609754" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to add this album image.]]></phrase>
+			<phrase name="credits_cancel_price_approval" date="1291608770" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to give that much reputation.]]></phrase>
+			<phrase name="credits_cancel_price_calendar" date="1291609804" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to add this event.]]></phrase>
+			<phrase name="credits_cancel_price_content" date="1291608850" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need to have {1} {2} to pay for this content.]]></phrase>
+			<phrase name="credits_cancel_price_describe" date="1291610576" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to edit your profile fields.]]></phrase>
+			<phrase name="credits_cancel_price_discuss" date="1291609281" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to start this discussion.]]></phrase>
+			<phrase name="credits_cancel_price_donate" date="1291606652" username="Darkwaltz4" version="2.0.0"><![CDATA[You do not have {1} {2} to donate.]]></phrase>
+			<phrase name="credits_cancel_price_download" date="1291610528" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to download this attachment.]]></phrase>
+			<phrase name="credits_cancel_price_friend" date="1291609451" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to add this friend.]]></phrase>
+			<phrase name="credits_cancel_price_group" date="1291609318" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to create this group.]]></phrase>
+			<phrase name="credits_cancel_price_join" date="1291609364" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to join this group.]]></phrase>
+			<phrase name="credits_cancel_price_message" date="1291609532" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to send this private message.]]></phrase>
+			<phrase name="credits_cancel_price_picture" date="1291610633" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to set a profile image.]]></phrase>
+			<phrase name="credits_cancel_price_poll" date="1291609615" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to add this poll.]]></phrase>
+			<phrase name="credits_cancel_price_post" date="1291608901" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to make this post.]]></phrase>
+			<phrase name="credits_cancel_price_profile" date="1291609574" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to view this profile.]]></phrase>
+			<phrase name="credits_cancel_price_rate" date="1291609649" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to rate this thread.]]></phrase>
+			<phrase name="credits_cancel_price_read" date="1291609223" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to view this thread.]]></phrase>
+			<phrase name="credits_cancel_price_revival" date="1291608963" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to post in a thread this old.]]></phrase>
+			<phrase name="credits_cancel_price_tag" date="1291609040" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to add this tag.]]></phrase>
+			<phrase name="credits_cancel_price_thread" date="1291609157" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to post this thread.]]></phrase>
+			<phrase name="credits_cancel_price_transfer" date="1291606670" username="Darkwaltz4" version="2.0.0"><![CDATA[You do not have {1} {2} to transfer.]]></phrase>
+			<phrase name="credits_cancel_price_update" date="1291609411" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to respond to this discussion.]]></phrase>
+			<phrase name="credits_cancel_price_upload" date="1291610788" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to upload this attachment.]]></phrase>
+			<phrase name="credits_cancel_price_visitor" date="1291609487" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to post this visitor message.]]></phrase>
+			<phrase name="credits_cancel_price_vote" date="1291609684" username="Darkwaltz4" version="2.0.0"><![CDATA[Sorry, you need {1} {2} to vote on this poll.]]></phrase>
+			<phrase name="credits_charge_error" date="1290459055" username="Darkwaltz4" version="2.0.0"><![CDATA[Unable to load content]]></phrase>
+			<phrase name="credits_charge_toomuch" date="1290466488" username="Darkwaltz4" version="2.0.0"><![CDATA[You have exceeded the frequency for charging for content per post]]></phrase>
+			<phrase name="credits_conversion_deleted" date="1291055235" username="Darkwaltz4" version="2.0.0"><![CDATA[Conversion Deleted]]></phrase>
+			<phrase name="credits_conversion_saved" date="1291004162" username="Darkwaltz4" version="2.0.0"><![CDATA[Conversion Saved]]></phrase>
+			<phrase name="credits_conversions_saved" date="1291012946" username="Darkwaltz4" version="2.0.0"><![CDATA[Conversions Saved]]></phrase>
+			<phrase name="credits_currencies_saved" date="1265664430" username="Darkwaltz4" version="2.0.0b2"><![CDATA[Currencies Saved]]></phrase>
+			<phrase name="credits_currency_deleted" date="1269925447" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Currency Deleted]]></phrase>
+			<phrase name="credits_currency_saved" date="1261540647" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Currency Saved]]></phrase>
+			<phrase name="credits_currency_transferred" date="1268277873" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Currency Transferred]]></phrase>
+			<phrase name="credits_display_saved" date="1261545508" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Display Saved]]></phrase>
+			<phrase name="credits_displays_saved" date="1262385116" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Displays Saved]]></phrase>
+			<phrase name="credits_event_deleted" date="1269924707" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Event Deleted]]></phrase>
+			<phrase name="credits_event_saved" date="1261689057" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Event Saved]]></phrase>
+			<phrase name="credits_events_imported" date="1280636219" username="Darkwaltz4" version="1.2.0"><![CDATA[Events Imported]]></phrase>
+			<phrase name="credits_events_saved" date="1265658673" username="Darkwaltz4" version="2.0.0b2"><![CDATA[Events Saved]]></phrase>
+			<phrase name="credits_missing_database" date="1270009600" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Sorry, that table or column does not exist]]></phrase>
+			<phrase name="credits_missing_field" date="1270009469" username="Darkwaltz4" version="2.0.0b3"><![CDATA[You are missing a required field]]></phrase>
+			<phrase name="credits_multplier_match" date="1272151813" username="Darkwaltz4" version="2.0.0b4"><![CDATA[Please include a plural multiplier label]]></phrase>
+			<phrase name="credits_no_actions" date="1270009237" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Sorry, there are no actions defined]]></phrase>
+			<phrase name="credits_no_displays" date="1270009386" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Sorry, there are no displays defined]]></phrase>
+			<phrase name="credits_redemption_deleted" date="1290919824" username="Darkwaltz4" version="2.0.0"><![CDATA[Redemption Deleted]]></phrase>
+			<phrase name="credits_redemption_saved" date="1290914742" username="Darkwaltz4" version="2.0.0"><![CDATA[Redemption Saved]]></phrase>
+			<phrase name="credits_redemptions_saved" date="1290925286" username="Darkwaltz4" version="2.0.0"><![CDATA[Redemptions Saved]]></phrase>
+			<phrase name="credits_transaction_deleted" date="1269924078" username="Darkwaltz4" version="2.0.0b3"><![CDATA[Transaction Deleted]]></phrase>
+			<phrase name="credits_transfer_perms" date="1278065053" username="Darkwaltz4" version="2.0.0"><![CDATA[This currency is not allowed to transfer like that]]></phrase>
+			<phrase name="credits_transfer_self" date="1291619863" username="Darkwaltz4" version="2.0.0"><![CDATA[You cannot transfer the same currency to yourself]]></phrase>
+			<phrase name="credits_transfer_setup" date="1278064924" username="Darkwaltz4" version="2.0.0"><![CDATA[Transferring of this currency has not been configured]]></phrase>
+			<phrase name="credits_transfer_value" date="1278064690" username="Darkwaltz4" version="2.0.0"><![CDATA[You did not enter a valid amount]]></phrase>
+			<phrase name="no_events_selected" date="1280634962" username="Darkwaltz4" version="1.2.0"><![CDATA[No Events Selected]]></phrase>
+			<phrase name="no_events_uploaded" date="1280635062" username="Darkwaltz4" version="1.2.0"><![CDATA[Upload does not appear to contain any events]]></phrase>
+			<phrase name="transactions_processed_successfully" date="1265676663" username="Darkwaltz4" version="2.0.0b2"><![CDATA[Transactions Processed Successfully]]></phrase>
+		</phrasetype>
+		<phrasetype name="GLOBAL" fieldname="global">
+			<phrase name="adjust" date="1278057537" username="Darkwaltz4" version="2.0.0"><![CDATA[Adjust]]></phrase>
+			<phrase name="amount" date="1278057572" username="Darkwaltz4" version="2.0.0"><![CDATA[Amount]]></phrase>
+			<phrase name="credits_account_from" date="1278057667" username="Darkwaltz4" version="2.0.0"><![CDATA[From Account]]></phrase>
+			<phrase name="credits_account_to" date="1278057640" username="Darkwaltz4" version="2.0.0"><![CDATA[To Account]]></phrase>
+			<phrase name="credits_alert_message" date="1279761275" username="Darkwaltz4" version="1.1.0"><![CDATA[Hello {1},
+
+You have {2} for a new {3}.{4}
+
+Full details may be found on your transaction log.
+{5}/credits.php?u={6}
+Have a nice day!]]></phrase>
+			<phrase name="credits_alert_subject" date="1279735292" username="Darkwaltz4" version="1.0.3"><![CDATA[{1} for {2}]]></phrase>
+			<phrase name="credits_category_accounts" date="1278059217" username="Darkwaltz4" version="2.0.0"><![CDATA[Accounts]]></phrase>
+			<phrase name="credits_category_behave" date="1277871667" username="Darkwaltz4" version="1.0"><![CDATA[Behavior]]></phrase>
+			<phrase name="credits_category_discuss" date="1277871678" username="Darkwaltz4" version="1.0"><![CDATA[Discussions]]></phrase>
+			<phrase name="credits_category_gamble" date="1277871769" username="Darkwaltz4" version="2.0.0"><![CDATA[Gambling]]></phrase>
+			<phrase name="credits_category_group" date="1277871691" username="Darkwaltz4" version="1.0"><![CDATA[Groups]]></phrase>
+			<phrase name="credits_category_misc" date="1277871699" username="Darkwaltz4" version="2.0.0"><![CDATA[Miscellaneous]]></phrase>
+			<phrase name="credits_category_network" date="1277871706" username="Darkwaltz4" version="1.0"><![CDATA[Networking]]></phrase>
+			<phrase name="credits_category_opinion" date="1277871717" username="Darkwaltz4" version="1.0"><![CDATA[Opinion]]></phrase>
+			<phrase name="credits_category_share" date="1277871725" username="Darkwaltz4" version="1.0"><![CDATA[Sharing]]></phrase>
+			<phrase name="credits_category_time" date="1277871731" username="Darkwaltz4" version="1.0"><![CDATA[Time]]></phrase>
+			<phrase name="credits_charge_owncontent" date="1290491131" username="Darkwaltz4" version="2.0.0"><![CDATA[View Owned Content]]></phrase>
+			<phrase name="credits_charge_stripped" date="1290570546" username="Darkwaltz4" version="2.0.0"><![CDATA[(Purchasable content)]]></phrase>
+			<phrase name="credits_charge_viewcontent" date="1290452631" username="Darkwaltz4" version="2.0.0"><![CDATA[View for {1} {2}]]></phrase>
+			<phrase name="credits_initiate_transfer" date="1278057731" username="Darkwaltz4" version="2.0.0"><![CDATA[Initiate Transfer]]></phrase>
+			<phrase name="credits_optional_note" date="1278057603" username="Darkwaltz4" version="2.0.0"><![CDATA[Optional Note]]></phrase>
+			<phrase name="credits_purchase_instruction" date="1291939779" username="Darkwaltz4" version="2.0.0"><![CDATA[Type desired amount to calculate price shown here after minimum met]]></phrase>
+			<phrase name="credits_size_char" date="1272152280" username="Darkwaltz4" version="2.0.0b4"><![CDATA[Character]]></phrase>
+			<phrase name="credits_size_chars" date="1272152255" username="Darkwaltz4" version="2.0.0b4"><![CDATA[Characters]]></phrase>
+			<phrase name="credits_size_word" date="1272152321" username="Darkwaltz4" version="2.0.0b4"><![CDATA[Word]]></phrase>
+			<phrase name="credits_size_words" date="1272152309" username="Darkwaltz4" version="2.0.0b4"><![CDATA[Words]]></phrase>
+			<phrase name="credits_transaction_earned" date="1281246958" username="Darkwaltz4" version="1.2.0"><![CDATA[Earned {1} {2}]]></phrase>
+			<phrase name="credits_transaction_spent" date="1280519183" username="Darkwaltz4" version="1.2.0"><![CDATA[Spent {1} {2}]]></phrase>
+			<phrase name="credits_transactions" date="1279743742" username="Darkwaltz4" version="1.0.3"><![CDATA[Transactions]]></phrase>
+			<phrase name="currency" date="1277779741" username="Darkwaltz4" version="2.0.0"><![CDATA[Currency]]></phrase>
+			<phrase name="enter_code" date="1291172052" username="Darkwaltz4" version="2.0.0"><![CDATA[Enter Code Below]]></phrase>
+			<phrase name="give" date="1278057471" username="Darkwaltz4" version="2.0.0"><![CDATA[Give]]></phrase>
+			<phrase name="most_currency" date="1277835584" username="Darkwaltz4" version="2.0.0"><![CDATA[Most {1}]]></phrase>
+			<phrase name="take" date="1278057485" username="Darkwaltz4" version="2.0.0"><![CDATA[Take]]></phrase>
+			<phrase name="unknown" date="1291172006" username="Darkwaltz4" version="2.0.0"><![CDATA[Unknown]]></phrase>
+		</phrasetype>
+		<phrasetype name="Plugin System" fieldname="plugins">
+			<phrase name="credits" date="1268364981" username="Darkwaltz4" version="2.0.0b3"><![CDATA[vBCredits]]></phrase>
+		</phrasetype>
+		<phrasetype name="vBulletin Settings" fieldname="vbsettings">
+			<phrase name="setting_credits_action_activity_interval_desc" date="1263679265" username="Darkwaltz4" version="1.0b1"><![CDATA[Number of days between each activity action.]]></phrase>
+			<phrase name="setting_credits_action_activity_interval_title" date="1263679265" username="Darkwaltz4" version="1.0b1"><![CDATA[Activity Interval]]></phrase>
+			<phrase name="setting_credits_action_activity_require_desc" date="1263679279" username="Darkwaltz4" version="1.0b1"><![CDATA[This is what the user has to do to qualify for the activity credit during the activity interval.]]></phrase>
+			<phrase name="setting_credits_action_activity_require_title" date="1263679279" username="Darkwaltz4" version="1.0b1"><![CDATA[Activity Requirement]]></phrase>
+			<phrase name="setting_credits_action_activity_start_desc" date="1264224795" username="Darkwaltz4" version="1.0b1"><![CDATA[Date in YYYY-MM-DD format to calculate the activity intervals from in order to maintain consistency and predictability.]]></phrase>
+			<phrase name="setting_credits_action_activity_start_title" date="1264224795" username="Darkwaltz4" version="1.0b1"><![CDATA[Activity Reference]]></phrase>
+			<phrase name="setting_credits_action_approval_absolute_desc" date="1264653003" username="Darkwaltz4" version="1.0b1"><![CDATA[When enabled, the positive equivalent value of the reputation being granted will be used as the multiplier, as negative reputation may undesirably deduct credits.]]></phrase>
+			<phrase name="setting_credits_action_approval_absolute_title" date="1264653028" username="Darkwaltz4" version="1.0b1"><![CDATA[Use Absolute Value when Granting Reputation]]></phrase>
+			<phrase name="setting_credits_action_content_bbcode_desc" date="1290459354" username="Darkwaltz4" version="2.0.0"><![CDATA[This BBCode will be used for designating charged content. Change this to something else to take over the tags from other content hiding plugins. Blank out this setting to disable the charged content functionality, which would expose such content for free.]]></phrase>
+			<phrase name="setting_credits_action_content_bbcode_title" date="1290459354" username="Darkwaltz4" version="2.0.0"><![CDATA[Charge Content Tag]]></phrase>
+			<phrase name="setting_credits_action_content_currency_desc" date="1290472701" username="Darkwaltz4" version="2.0.0"><![CDATA[The currency that will be used for charged content transactions. Make sure corresponding events are set to use this currency as well.<br /><br />You will need to <a href="misc.php?do=chooser">Rebuild the Post Cache</a> after making changes to either setting to update existing posts.]]></phrase>
+			<phrase name="setting_credits_action_content_currency_title" date="1290472701" username="Darkwaltz4" version="2.0.0"><![CDATA[Charge Content Currency]]></phrase>
+			<phrase name="setting_credits_action_donate_whole_desc" date="1291144972" username="Darkwaltz4" version="2.0.0"><![CDATA[To ease rounding issues, you can set a number of decimals that the target currency will be rounded up to that adjusts the source currency amounts accordingly when transferring or donating currency. Use 0 for whole number amounts.]]></phrase>
+			<phrase name="setting_credits_action_donate_whole_title" date="1291144972" username="Darkwaltz4" version="2.0.0"><![CDATA[Currency Transfer Rounding]]></phrase>
+			<phrase name="setting_credits_action_infraction_warning_desc" date="1264652941" username="Darkwaltz4" version="1.0b1"><![CDATA[Otherwise only when a user actually gets an infraction will it count.]]></phrase>
+			<phrase name="setting_credits_action_infraction_warning_title" date="1264652941" username="Darkwaltz4" version="1.0b1"><![CDATA[Include Warnings as Infractions]]></phrase>
+			<phrase name="setting_credits_action_interest_interval_desc" date="1283462845" username="Darkwaltz4" version="1.3.0"><![CDATA[Number of days between each interest action.]]></phrase>
+			<phrase name="setting_credits_action_interest_interval_title" date="1283462845" username="Darkwaltz4" version="1.3.0"><![CDATA[Interest Interval]]></phrase>
+			<phrase name="setting_credits_action_interest_start_desc" date="1283462901" username="Darkwaltz4" version="1.3.0"><![CDATA[Date in YYYY-MM-DD format to calculate the interest intervals from in order to maintain consistency and predictability.]]></phrase>
+			<phrase name="setting_credits_action_interest_start_title" date="1283462901" username="Darkwaltz4" version="1.3.0"><![CDATA[Interest Reference]]></phrase>
+			<phrase name="setting_credits_action_message_multiple_desc" date="1264653205" username="Darkwaltz4" version="1.0b1"><![CDATA[Otherwise the action will only occur once no matter how many recipients are attached to a single message.]]></phrase>
+			<phrase name="setting_credits_action_message_multiple_title" date="1264653205" username="Darkwaltz4" version="1.0b1"><![CDATA[Private Message Action per Recipient]]></phrase>
+			<phrase name="setting_credits_action_paycheck_interval_desc" date="1263679236" username="Darkwaltz4" version="1.0b1"><![CDATA[Number of days between each paycheck action.]]></phrase>
+			<phrase name="setting_credits_action_paycheck_interval_title" date="1263679236" username="Darkwaltz4" version="1.0b1"><![CDATA[Paycheck Interval]]></phrase>
+			<phrase name="setting_credits_action_paycheck_start_desc" date="1264224785" username="Darkwaltz4" version="1.0b1"><![CDATA[Date in YYYY-MM-DD format to calculate the paycheck intervals from in order to maintain consistency and predictability.]]></phrase>
+			<phrase name="setting_credits_action_paycheck_start_title" date="1264224785" username="Darkwaltz4" version="1.0b1"><![CDATA[Paycheck Reference]]></phrase>
+			<phrase name="setting_credits_action_placeholder_desc" date="1257735702" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Actions in vBCredits can be individually customized for a range of effects.]]></phrase>
+			<phrase name="setting_credits_action_placeholder_title" date="1257735702" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Actions]]></phrase>
+			<phrase name="setting_credits_action_referral_usergroup_desc" date="1263679229" username="Darkwaltz4" version="1.0b1"><![CDATA[This is the primary usergroup that a user must enter in order to trigger the referral event for their referrer. You can set up usergroup promotions based on post count, registration time, and reputation in order to strengthen the legitimacy of referrals.]]></phrase>
+			<phrase name="setting_credits_action_referral_usergroup_title" date="1263679229" username="Darkwaltz4" version="1.0b1"><![CDATA[Valid Referral Usergroup]]></phrase>
+			<phrase name="setting_credits_action_revival_threshold_desc" date="1264654730" username="Darkwaltz4" version="1.0b1"><![CDATA[Time in seconds that a thread must not receive a new reply before it is considered old.]]></phrase>
+			<phrase name="setting_credits_action_revival_threshold_title" date="1264654730" username="Darkwaltz4" version="1.0b1"><![CDATA[Defintion of Old Thread]]></phrase>
+			<phrase name="setting_credits_action_transfer_increments_desc" date="1291144785" username="Darkwaltz4" version="2.0.0"><![CDATA[To force specific currency amounts to be available during donation or transfer, specify them here as a comma separated list. Otherwise, users will be able to enter any amount they want.]]></phrase>
+			<phrase name="setting_credits_action_transfer_increments_title" date="1291144785" username="Darkwaltz4" version="2.0.0"><![CDATA[Currency Transfer Increments]]></phrase>
+			<phrase name="setting_credits_alert_method_desc" date="1281575497" username="Darkwaltz4" version="1.2.0"><![CDATA[Choose the way that transactions alerts will be sent. User quotas are ignored.]]></phrase>
+			<phrase name="setting_credits_alert_method_title" date="1281575497" username="Darkwaltz4" version="1.2.0"><![CDATA[Transaction Alert Method]]></phrase>
+			<phrase name="setting_credits_alert_sender_desc" date="1281575508" username="Darkwaltz4" version="1.2.0"><![CDATA[This user will be used as the sender for any transaction alerts that you have set up. Remove this user to suspend all alerts. To alter or translate this message, use the following links:<br /><br /> [<a href="phrase.php?do=edit&amp;e[GLOBAL][credits_alert_subject]" target="_blank">Alert Title</a>] [<a href="phrase.php?do=edit&amp;e[GLOBAL][credits_alert_message]" target="_blank">Alert Body</a>]]]></phrase>
+			<phrase name="setting_credits_alert_sender_title" date="1281575508" username="Darkwaltz4" version="1.2.0"><![CDATA[Transaction Alert Sender]]></phrase>
+			<phrase name="setting_credits_best_event_desc" date="1281247177" username="Darkwaltz4" version="1.2.0"><![CDATA[When enabled, if more than one event per currency applies to a situation, the event with the highest main amount will be used, otherwise all of them will stack.]]></phrase>
+			<phrase name="setting_credits_best_event_title" date="1281247177" username="Darkwaltz4" version="1.2.0"><![CDATA[Use Best Event]]></phrase>
+			<phrase name="setting_credits_cron_queue_desc" date="1281575490" username="Darkwaltz4" version="1.2.0"><![CDATA[All event transactions are automatically processed by the user who belongs to it. If you have a small site, updates might take a long time to appear, so you can use a scheduled task. Enable the task on this page and set it to run as much as you think your server can handle it, as well as how many records to process each time it does with this setting.
+<br /><br />
+<a href="cronadmin.php?do=modify">Scheduled Task Manager</a>]]></phrase>
+			<phrase name="setting_credits_cron_queue_title" date="1281575490" username="Darkwaltz4" version="1.2.0"><![CDATA[Scheduled Transaction Processing]]></phrase>
+			<phrase name="setting_credits_dangerous_desc" date="1289775306" username="Darkwaltz4" version="1.3.0"><![CDATA[Enabling this will cause most transactions to process immediately as they are triggered, instead of waiting for them to be processed by users loading pages. This will greatly increase the amount of work your system needs to be doing. Before enabling, carefully consider the strength of your server, amount of regular traffic, and the number of events you have created. Misjudgments may lead to server instability, however vBCredits is made to work fine without it if you are unsure.]]></phrase>
+			<phrase name="setting_credits_dangerous_title" date="1289775306" username="Darkwaltz4" version="1.3.0"><![CDATA[Process Transactions in Realtime]]></phrase>
+			<phrase name="setting_credits_enable_navtab_desc" date="1281247121" username="Darkwaltz4" version="1.2.0"><![CDATA[Places a primary button to see your latest transactions on every page. This only works with vBulletin 4]]></phrase>
+			<phrase name="setting_credits_enable_navtab_title" date="1281247121" username="Darkwaltz4" version="1.2.0"><![CDATA[Enable Navbar Tab]]></phrase>
+			<phrase name="setting_credits_enabled_desc" date="1262464681" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Master toggle for all events should you want to temporarily disable the whole system. Does not disable Displays.]]></phrase>
+			<phrase name="setting_credits_enabled_title" date="1262464681" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Enable Events]]></phrase>
+			<phrase name="setting_credits_exclude_blocks_desc" date="1264742046" username="Darkwaltz4" version="2.0.0b1"><![CDATA[When enabled, the content within [QUOTE], [PHP], [HTML], [CODE] will be ignored when calculating text sizes. Whitespace, Markup BBCodes, and Smilies will be ignored regardless.]]></phrase>
+			<phrase name="setting_credits_exclude_blocks_title" date="1264742046" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Exclude Block BBCode from Size Multipliers]]></phrase>
+			<phrase name="setting_credits_guest_views_desc" date="1264917594" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Actions which occur for the owners of content when someone else views them could potentially be seen by guests. It is recommended that this is disabled should the owner log out and view their own content.]]></phrase>
+			<phrase name="setting_credits_guest_views_title" date="1264917594" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Allow Guests to Trigger View Actions]]></phrase>
+			<phrase name="setting_credits_richest_desc" date="1281247112" username="Darkwaltz4" version="1.2.0"><![CDATA[The currency page lists the richest users of each currency in the sidebar. This is the number of richest users that will be returned.]]></phrase>
+			<phrase name="setting_credits_richest_title" date="1281247112" username="Darkwaltz4" version="1.2.0"><![CDATA[Number of Richest Users]]></phrase>
+			<phrase name="setting_credits_size_words_desc" date="1264736323" username="Darkwaltz4" version="2.0.0b1"><![CDATA[When enabled, the number of words in a text will be used for the size multipliers, otherwise it will be the number of characters.]]></phrase>
+			<phrase name="setting_credits_size_words_title" date="1264736323" username="Darkwaltz4" version="2.0.0b1"><![CDATA[Count Words for Size Multipliers]]></phrase>
+			<phrase name="setting_credits_transaction_decimals_desc" date="1281575517" username="Darkwaltz4" version="1.2.0"><![CDATA[The number of decimals to show on transaction log entry amounts, which may have confusing rounding.]]></phrase>
+			<phrase name="setting_credits_transaction_decimals_title" date="1281575517" username="Darkwaltz4" version="1.2.0"><![CDATA[Transaction Log Decimals]]></phrase>
+			<phrase name="setting_credits_transactions_desc" date="1281247103" username="Darkwaltz4" version="1.2.0"><![CDATA[The currency page lists the latest transactions for each user. This is the number of transactions to show before splitting to the next page.]]></phrase>
+			<phrase name="setting_credits_transactions_title" date="1281247103" username="Darkwaltz4" version="1.2.0"><![CDATA[Number of Transactions]]></phrase>
+			<phrase name="settinggroup_credits_settings_action" date="1257734997" username="Darkwaltz4" version="2.0.0b1"><![CDATA[vBCredits Action Options]]></phrase>
+			<phrase name="settinggroup_credits_settings_global" date="1261547559" username="Darkwaltz4" version="2.0.0b1"><![CDATA[vBCredits Global Options]]></phrase>
+		</phrasetype>
+	</phrases>
+	<options>
+		<settinggroup name="credits_settings_action" displayorder="81">
+			<setting varname="credits_action_placeholder" displayorder="1">
+				<datatype>free</datatype>
+				<optioncode>Look here for any settings that might be created after installing new actions.</optioncode>
+			</setting>
+			<setting varname="credits_exclude_blocks" displayorder="2">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_size_words" displayorder="3">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_guest_views" displayorder="4">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>0</defaultvalue>
+			</setting>
+			<setting varname="credits_action_interest_interval" displayorder="5">
+				<datatype>posint</datatype>
+				<defaultvalue>30</defaultvalue>
+			</setting>
+			<setting varname="credits_action_interest_start" displayorder="6">
+				<datatype>free</datatype>
+				<defaultvalue>2009-12-25</defaultvalue>
+			</setting>
+			<setting varname="credits_action_transfer_increments" displayorder="7">
+				<datatype>free</datatype>
+			</setting>
+			<setting varname="credits_action_donate_whole" displayorder="8">
+				<datatype>integer</datatype>
+				<defaultvalue>0</defaultvalue>
+			</setting>
+			<setting varname="credits_action_content_bbcode" displayorder="9">
+				<datatype>free</datatype>
+				<defaultvalue>charge</defaultvalue>
+			</setting>
+			<setting varname="credits_action_content_currency" displayorder="10">
+				<datatype>posint</datatype>
+				<optioncode>currency</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_action_referral_usergroup" displayorder="20">
+				<datatype>posint</datatype>
+				<optioncode>usergroup</optioncode>
+				<defaultvalue>2</defaultvalue>
+			</setting>
+			<setting varname="credits_action_paycheck_interval" displayorder="30">
+				<datatype>posint</datatype>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_action_paycheck_start" displayorder="31">
+				<datatype>free</datatype>
+				<defaultvalue>2009-12-25</defaultvalue>
+			</setting>
+			<setting varname="credits_action_activity_interval" displayorder="40">
+				<datatype>posint</datatype>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_action_activity_start" displayorder="41">
+				<datatype>free</datatype>
+				<defaultvalue>2009-12-25</defaultvalue>
+			</setting>
+			<setting varname="credits_action_activity_require" displayorder="42">
+				<datatype>free</datatype>
+				<optioncode>radio:piped
+lastvisit|Sign on
+lastactivity|Some action
+lastpost|Post</optioncode>
+				<defaultvalue>lastvisit</defaultvalue>
+			</setting>
+			<setting varname="credits_action_approval_absolute" displayorder="50">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_action_infraction_warning" displayorder="60">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_action_message_multiple" displayorder="70">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>0</defaultvalue>
+			</setting>
+			<setting varname="credits_action_revival_threshold" displayorder="80">
+				<datatype>posint</datatype>
+				<defaultvalue>1209600</defaultvalue>
+			</setting>
+		</settinggroup>
+		<settinggroup name="credits_settings_global" displayorder="80">
+			<setting varname="credits_enabled" displayorder="10">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_best_event" displayorder="20">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_enable_navtab" displayorder="30">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_richest" displayorder="40">
+				<datatype>integer</datatype>
+				<defaultvalue>10</defaultvalue>
+			</setting>
+			<setting varname="credits_transactions" displayorder="50">
+				<datatype>integer</datatype>
+				<defaultvalue>20</defaultvalue>
+			</setting>
+			<setting varname="credits_transaction_decimals" displayorder="60">
+				<datatype>posint</datatype>
+				<defaultvalue>0</defaultvalue>
+			</setting>
+			<setting varname="credits_alert_sender" displayorder="70">
+				<datatype>username</datatype>
+				<optioncode>username</optioncode>
+				<validationcode>return ($data !== false);</validationcode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="credits_alert_method" displayorder="80">
+				<datatype>free</datatype>
+				<optioncode>radio:piped
+pm|Private Message
+mail|Email</optioncode>
+				<defaultvalue>pm</defaultvalue>
+			</setting>
+			<setting varname="credits_cron_queue" displayorder="90">
+				<datatype>posint</datatype>
+				<defaultvalue>10</defaultvalue>
+			</setting>
+			<setting varname="credits_dangerous" displayorder="100">
+				<datatype>boolean</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+		</settinggroup>
+	</options>
+	<helptopics>
+	</helptopics>
+	<cronentries>
+		<cron varname="credits_process" active="0" loglevel="0">
+			<filename>./dbtech/credits/credits_process.php</filename>
+			<scheduling weekday="-1" day="-1" hour="-1" minute="0,10,20,30,40,50" />
+		</cron>
+	</cronentries>
+	<faqentries>
+	</faqentries>
+</product>

@@ -1,5 +1,172 @@
 <?php
-//#################################################################################################
+/**
+ *
+ */
+//Template gamebanks.tpl.php
+
+
+function gamebank_add_form($form_state){
+	$form = array();
+ 	$value = drupal_map_assoc(array('1' => 'Viettel','2' => 'MobiFone','3' => 'Vinaphone','4' => 'Gate'));
+	$form['lstTelco'] = array(
+		'#type' => 'select',
+		'#title' => t('Chon nha mang'),
+		'#default_value' => 1,
+		'#options'=>$value,
+	);
+ 
+	$form['txtSeri'] = array(
+		'#title' => 'Card Serial',
+		'#type' => 'textfield',
+		'#required' => TRUE,
+		'#size' => '30',
+		'#required' => '',	
+	);
+ 
+	$form['txtCode'] = array(
+		'#title' => 'Card Code',
+		'#type' => 'textfield',
+		'#required' => TRUE,
+		'#size' => '30',
+		'#required' => '',
+	);
+ 
+	$form['payment'] = array(
+		'#type' => 'submit',
+		'#value' => t('Nạp thẻ'),		
+	);
+	$form['#submit'][] = 'gamebank_process';
+	
+	return $form;
+}
+
+
+function gamebank_process($form_id, &$form_value) {
+	date_default_timezone_set('Asia/Saigon');
+	if ($_POST['op'] == 'Nạp thẻ') {
+		global $user;
+		$setting = new gamebank_setting();
+		$cardtype =trim($form_value['values']['lstTelco']);
+		$code = trim($form_value['values']['txtCode']);
+		$seri = trim($form_value['values']['txtSeri']);
+		
+		$gamebank_account = $setting->gamebank_account;		
+		$client = new nusoap_client('http://pay.gamebank.vn/service/cardServiceV2.php?wsdl', true);
+		/*
+			<option value="1">Viettel</option>
+			<option value="2">MobiFone</option>
+			<option value="3">Vinaphone</option>
+			<option value="4">Gate</option>
+			<option value="5">Vcoin</option>
+		 */
+		$telco = 5;
+		switch ($cardtype){
+			case 'Viettel':
+				$telco = 1;
+				break;				
+			case 'MobiFone':
+				$telco = 2;
+				break;
+			case 'Vinaphone':
+				$telco = 3;
+				break;
+			case 'Gate':
+				$telco = 4;
+				break;
+			default:
+				$telco = 5;
+				break;
+		}
+			
+		$result = $client -> call("creditCard", array("seri" => $seri, "code" => $code, "cardtype" => $telco, "gamebank_account" => $gamebank_account,"option"=>'drupal 7', "website" => $_SERVER['SERVER_NAME']));
+
+		//print_r($result);
+		$time = date('Y-m-d');
+		$status = '';
+		$sotien_nhanduoc = 0;
+		//$result[0] = 10000;
+		if ($result[0] >= 10000) {
+			//echo "Nap thanh cong ".$result[0];
+			//Nap tien thanh cong, $result['resultCode'] là mệnh giá thẻ khách nạp
+			//Chuyen menh gia 1:1, 10000= 10000 coins //Cai nay chac ban biet roi ? um
+			
+			$array_chuyen =  _gb_installing_value($setting->gamebank_change);
+			/**
+			 * Ty le 0% ...
+			 */			
+			$array_khuyenmai = _gb_installing_value($setting->gamebank_percent);
+			$tien = $result[0];
+			$sotien_nhanduoc = $array_chuyen[$tien] + ($tien * $array_khuyenmai[$cardtype]) / 100;
+			$status = "Ban da nap thanh cong $sotien_nhanduoc vao tai khoan";
+			$sql = "update {user} set coins = coins + $sotien_nhanduoc where uid = '". $user->uid;
+
+			db_query($sql);
+		} else {
+			//Lỗi nạp tiền, dựa vào bảng mã lỗi để show thông tin khách hàng lên			
+			switch($result[0]) {
+				case -3 :
+					$status = "The khong su dung duoc";
+					break;
+				case -10 :
+					$status = "Nhap sai dinh dang the";
+					break;
+				case -1001 :
+					$status = "Nhap sai qua 3 lan ";
+					break;
+				case -1002 :
+					$status = "Loi he thong ";
+					break;
+				case -1003 :
+					$status = "IP khong duoc phep truy cap vui long quay lai sau 5 phut";
+					break;
+				case -1004 :
+					$status = "Ten dang nhap gamebank khong dung";
+					break;
+				case -1005 :
+					$status = "Loai the khong dung";
+					break;
+				case -1006 :
+					$status = "He thong dang bao tri";
+					break;
+				default :
+					$status = "Ket noi voi Gamebank that bai";
+			}
+		}
+		
+		$history = new payment($seri,$code,$result[0],$sotien_nhanduoc);
+		$history->insertItemp($user->name);
+		
+		drupal_set_message("$status");		
+	}
+}
+
+
+
+
+
+/**
+ * function installing_value
+ * @access public 
+ * @param $string_array string (option of change and percent)
+ * @return  array (array of change or percent)
+ */	 
+function _gb_installing_value($string_array = ''){		
+	$currency_array = explode(";",$string_array);
+	$currencys = array();
+	foreach ($currency_array as $key => $value)
+	{
+		$option = explode(":",$value);
+		if($option[0]){
+			$currencys[$option[0]] = $option[1];
+		}
+	}
+	return $currencys;
+}
+
+
+
+
+
 
 /*
 $Id: nusoap.php,v 1.123 2010/04/26 20:15:08 snichol Exp $
@@ -8222,210 +8389,4 @@ if (!extension_loaded('soap')) {
 	class soapclient extends nusoap_client {
 	}
 }
-
-//##################################################################################################
-
-
-
-
-//################################################################################## Class Gamebank
-
-/**
- * Create class object to update current user
- */ 
-if(!class_exists('Gamebank')){
-	class Gamebank
-	{
-		protected $userid;
-		protected $userpayment;
-		/*Construct create object
-		 * Validate
-		 * $_userid is an id of user in request $vbulletin->userinfo['userid'];
-		 * $upayment is a new coins of user
-		 */
-		function __construct($_userid = '', $upayment = '') {
-			$this -> userid = $_userid;
-			$this -> userpayment = $upayment;
-		}
-	
-		//Function update coins of current user
-		public function UpdatePayment() { 
-			$options = XenForo_Application::get('options');	
-			$db = XenForo_Application::get('db');			
-			$gamebank_column = $options->gamebank_column;
-					
-			$sql = "update ".$options->gamebank_prefix."user set $gamebank_column = $gamebank_column + " . $this->userpayment . " where user_id = " . $this->userid;
-			
-			return $result = $db -> query($sql);
-		}
-	
-	}
-}
-// ###############################################################################################
-
-//<xen:include template="gamebank_payment_card"/>
-
-/*
- * 
- * <xen:hook name="gamebank_menu" />
- * <!-- responsive popup -->
- * template gamebank_payment_navtab 
- * 
- * is="{$xenOptions.gamebank_enable} == '1'">
- * 
- */
-
-class Gamebank_index{
-	
-	protected $_renderers = array();
-	
-	public function __construct()
-	{
-		$renderers = array();
-		$this->_registerDefaultRenderers($renderers);
-				
-		XenForo_CodeEvent::fire('widget_framework_ready', array(&$renderers));		
-		foreach ($renderers as $renderer)
-		{
-			$this->_renderers[] = $renderer;
-		}
-	}
-	
-	
-	public static function Gamebank_Template($hookName, &$contents, array $hookParams, XenForo_Template_Abstract $template)
-	{
-		switch ($hookName) {
-			case 'navigation_visitor_tabs_middle':
-				$Gamebank_navbar_contents = $template->create('gamebank_payment_navtab', $template->getParams());
-				$contents = $Gamebank_navbar_contents .  $contents;
-				break;
-			case 'member_view_tabs_content':
-				break;
-		}
-	}
-	public static function Installation()
-	{
-		$options = XenForo_Application::get('options');	
-		$db = XenForo_Application::get('db');
-		$tablename = 	$options->gamebank_prefix.'payment_history';
-		$sql = "CREATE TABLE IF NOT EXISTS `$tablename` (
-					  `historyid` int(11) NOT NULL AUTO_INCREMENT,
-					  `username` text COLLATE utf8_unicode_ci NOT NULL,
-					  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-					  `cardserial` text COLLATE utf8_unicode_ci NOT NULL,
-					  `cardnumber` text COLLATE utf8_unicode_ci NOT NULL,
-					  `coins` int(11) NOT NULL DEFAULT '0',
-					  `status` int(11) NOT NULL DEFAULT '-1007',
-					  PRIMARY KEY (`historyid`)
-					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
-
-		$db -> query($sql);
-	}
-	public static function UnInstallation(){
-		
-	}
-	public static function LoadClass($class, array &$extend){
-		//$extend[] = 'Gamebank_lib_nusoap';
-		//$extend[] = 'Gamebank_lib_gamebank';
-		
-	}
-	/**
-	 * get request POST or GET query
-	 */
-	public static function GetRequest($name){
-		if(isset($_REQUEST[$name])){
-			return $_REQUEST[$name];
-		}
-		return "";
-	}
-	
-	public static function Process(XenForo_Visitor &$visitor){
-		include_once 'lib/payment_history.php';
-		$options = XenForo_Application::get('options');	
-		$userid = $visitor->user_id;
-		if(isset($_POST['payment'])){
-			$telco = Gamebank_index::GetRequest('lstTelco');
-			$code = Gamebank_index::GetRequest('txtCode');
-			$seri = Gamebank_index::GetRequest('txtSeri');
-			$gamebank_account = $options->gamebank_account;	
-
-			$client = new nusoap_client('http://pay.gamebank.vn/service/cardServiceV2.php?wsdl',true);
-		
-			$result = $client->call("creditCard",array("seri"=>$seri,"code"=> $code,"cardtype"=> $telco, "gamebank_account"=>$gamebank_account, "option" => "nap bang xenforo","website"=> $_SERVER['SERVER_NAME']));
-			
-			//print_r($result);
-			if($result[0] >= 10000)
-			{						
-				echo "Nap thanh cong ".$result[0];
-				$upayment = $options->gamebank_10000;
-				$status = 10000;
-				switch ($result[0]) {
-					case 10000:
-						$upayment = $options->gamebank_10000;		
-						break;
-					case 20000:
-						$upayment = $options->gamebank_20000;						
-						break;
-					case 30000:
-						$upayment = $options->gamebank_30000;
-						break;
-					case 50000:
-						$upayment = $options->gamebank_50000;
-						break;
-					case 100000:
-						$upayment = $options->gamebank_100000;
-						break;
-					case 200000:
-						$upayment = $options->gamebank_200000;
-						break;
-					case 300000:
-						$upayment = $options->gamebank_300000;
-						break;
-					case 500000:
-						$upayment = $options->gamebank_500000;
-						break;
-					case 1000000:
-						$upayment = $options->gamebank_1000000;
-						break;
-				};
-				
-				$usercur = new Gamebank($userid,$upayment);
-				$usercur->UpdatePayment();
-				//Nap tien thanh cong, $result[0] là mệnh giá thẻ khách nạp
-				?>
-				<script type='text/javascript'>
-					alert('Bạn đã nạp tiền thành công: <?php echo $upayment; ?>'); 
-					top.window.location.reload();
-				</script>
-				<?php
-			}
-			else
-			{
-				//Lỗi nạp tiền, dựa vào bảng mã lỗi để show thông tin khách hàng lên
-				$resul_code = '';
-				$status = $result[0];
-				switch($result[0])
-				{
-					case -3: $resul_code =  "The khong su dung duoc" ;break;
-					case -10: $resul_code =  "Nhap sai dinh dang the";break;
-					case -1001: $resul_code =  "Nhap sai qua 3 lan ";break;
-					case -1002; $resul_code =  "Loi he thong ";break;
-					case -1003: $resul_code =  "IP khong duoc phep truy cap vui long quay lai sau 5 phut";break;
-					case -1004: $resul_code =  "Ten dang nhap gamebank khong dung"; break;
-					case -1005: $resul_code =  "Loai the khong dung";break;
-					case -1006: $resul_code =  "He thong dang bao tri";break;
-					default: $resul_code =  "Ket noi voi Gamebank that bai";
-				}
-				?>
-				<script type="text/javascript">
-					alert("<?php echo $resul_code; ?>");
-					top.window.location.reload();
-				</script>
-				<?php
-			}
-			
-			$userpaye = new payment($seri,$code,$status,$result[0]);
-			$userpaye->insertItemp();
-		}
-	}	
-}
+?>

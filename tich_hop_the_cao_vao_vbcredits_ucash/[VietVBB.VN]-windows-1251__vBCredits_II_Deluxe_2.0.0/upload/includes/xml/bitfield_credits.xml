@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<bitfields product="credits">
+	<bitfielddefs>
+		<group name="ugp">
+			<group name="creditspermissions">
+				<bitfield name="credits_locked" group="credits_usergroup_perms" phrase="credits_locked" install="1,3,4">1</bitfield>
+				<bitfield name="credits_hidden" group="credits_usergroup_perms" phrase="credits_hidden">2</bitfield>
+				<bitfield name="credits_special" group="credits_usergroup_perms" phrase="credits_special" install="5,6,7">4</bitfield>
+				<bitfield name="credits_adjust" group="credits_usergroup_perms" phrase="credits_adjust" install="5,6,7">8</bitfield>
+				<bitfield name="credits_viewlog" group="credits_usergroup_perms" phrase="credits_viewlog" install="5,6,7">16</bitfield>
+				<bitfield name="credits_charge" intperm="true" group="credits_usergroup_perms" phrase="credits_charge">1</bitfield>
+			</group>
+		</group>
+	</bitfielddefs>
+</bitfields>

@@ -1,0 +1,4 @@
+﻿<vb:if condition="$vboptions['gbservicesonoff']">
+<li><a href="gamebank_card_services.php?do=transaction">Transaction</a></li>
+<li><a href="gamebank_card_services.php?do=histransaction">History Transaction</a></li>
+</vb:if>

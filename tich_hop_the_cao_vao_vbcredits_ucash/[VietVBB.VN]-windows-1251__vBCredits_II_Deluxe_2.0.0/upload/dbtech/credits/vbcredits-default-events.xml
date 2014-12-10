@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<vbcredits>
+	<events>
+		<event actionid="redeem" enabled="1" moderate="0" main_add="0" main_sub="0" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="1" />
+		<event actionid="purchase" enabled="1" moderate="0" main_add="0" main_sub="0" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="1" />
+		<event actionid="interest" enabled="1" moderate="0" main_add="0" main_sub="0" mult_add="0.01" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="infraction" enabled="1" moderate="0" main_add="-20" main_sub="20" mult_add="-1" mult_sub="1" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="friend" enabled="1" moderate="0" main_add="5" main_sub="-5" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="referral" enabled="1" moderate="0" main_add="100" main_sub="0" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="vote" enabled="1" moderate="0" main_add="1" main_sub="1" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="poll" enabled="1" moderate="0" main_add="5" main_sub="-5" mult_add="-1" mult_sub="1" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="rate" enabled="1" moderate="0" main_add="1" main_sub="-1" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="upload" enabled="1" moderate="0" main_add="-1" main_sub="1" mult_add="-0.001" mult_sub="0.001" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="post" enabled="1" moderate="0" main_add="5" main_sub="-5" mult_add="0.01" mult_sub="-0.01" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="thread" enabled="1" moderate="0" main_add="10" main_sub="-10" mult_add="0.01" mult_sub="-0.01" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="paycheck" enabled="1" moderate="0" main_add="10" main_sub="0" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="0" />
+		<event actionid="birthday" enabled="1" moderate="0" main_add="100" main_sub="0" mult_add="1" mult_sub="0" delay="0" frequency="1" maxtime="31536000" applymax="1" upperrand="0" multmax="40" minaction="0" curtarget="0" alert="1" />
+		<event actionid="induction" enabled="1" moderate="0" main_add="100" main_sub="0" mult_add="0" mult_sub="0" delay="0" frequency="1" applymax="1" upperrand="10" minaction="0" curtarget="0" alert="0" />
+		<event actionid="adjust" enabled="1" moderate="0" main_add="0" main_sub="0" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="1" />
+		<event actionid="donate" enabled="1" moderate="0" main_add="0" main_sub="0" mult_add="-0.05" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="1" alert="1" />
+		<event actionid="transfer" enabled="1" moderate="0" main_add="0" main_sub="0" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" minaction="0" curtarget="0" alert="1" />
+		<event actionid="content" enabled="1" moderate="0" main_add="0" main_sub="0" mult_add="0" mult_sub="0" delay="0" frequency="1" upperrand="0" multmax="100" minaction="2" curtarget="0" alert="1" />
+	</events>
+</vbcredits>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="gamebank_services" active="1">
+	<title>Gamebank Card Services</title>
+	<description>Gamebank Card Services</description>
+	<version>1.0</version>
+	<url>http://gamebank.vn</url>
+	<versioncheckurl>http://gamebank.vn</versioncheckurl>
+	<dependencies>
+		<dependency dependencytype="vbulletin" minversion="4.0.0 beta 4" maxversion="4.9.9 alpha 1" />
+	</dependencies>
+	<codes>
+		<code version="*">
+			<installcode />
+			<uninstallcode />
+		</code>
+		<code version="6.01">
+			<installcode><![CDATA[$db->hide_errors();
+	$db->query_write("CREATE TABLE IF NOT EXISTS ".TABLE_PREFIX."user_gbcard (
+		trid int(11) unsigned NOT NULL AUTO_INCREMENT,
+		userid int(11) NOT NULL,
+		username varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+		seri varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+		nametype varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+		sale_date int(11) NOT NULL,
+		status varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+		gb_tran_id varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+		money int(11) NOT NULL,
+		PRIMARY KEY (trid)
+	)");
+
+	$db->query_write("ALTER TABLE `". TABLE_PREFIX ."user` ADD `user_money` INT( 10 ) UNSIGNED DEFAULT '0' NOT NULL");
+	$db->query_write("ALTER TABLE `". TABLE_PREFIX ."session` ADD (
+			`uid` varchar(255) DEFAULT NULL,
+			`tentv` varchar(255) DEFAULT NULL,
+			`seri` varchar(255) DEFAULT NULL,
+			`loaithe` varchar(255) DEFAULT NULL,
+			`menhgia` varchar(255) DEFAULT NULL,
+			`ngaymua` varchar(255) DEFAULT NULL,
+			`lstTelco` varchar(255) DEFAULT NULL
+	)");
+	
+
+$db->show_errors();
+			]]></installcode>
+			<uninstallcode><![CDATA[$db->hide_errors();
+$db->query_write("DROP TABLE `".TABLE_PREFIX."user_gbcard`"); 
+$db->query_write("ALTER TABLE `". TABLE_PREFIX ."user` DROP COLUMN `user_money`"); 
+$db->query_write("ALTER TABLE `". TABLE_PREFIX ."session` DROP COLUMN `uid`"); 
+$db->query_write("ALTER TABLE `". TABLE_PREFIX ."session` DROP COLUMN `tentv`"); 
+$db->query_write("ALTER TABLE `". TABLE_PREFIX ."session` DROP COLUMN `seri`"); 
+$db->query_write("ALTER TABLE `". TABLE_PREFIX ."session` DROP COLUMN `loaithe`"); 
+$db->query_write("ALTER TABLE `". TABLE_PREFIX ."session` DROP COLUMN `menhgia`"); 
+$db->query_write("ALTER TABLE `". TABLE_PREFIX ."session` DROP COLUMN `ngaymua`"); 
+$db->query_write("ALTER TABLE `". TABLE_PREFIX ."session` DROP COLUMN `lstTelco`"); 
+
+
+$db->show_errors();]]></uninstallcode>
+		</code>
+	</codes>
+	<templates>
+		<template name="gbcard_form" templatetype="template" date="1350877406" username="admin" version="1.0"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<h2 class="blockhead">Transaction</h2>
+<form method="post" action="gamebank_card_services.php?do=transaction" id="form">
+<table width="300px" border="0" cellpadding="3" cellspacing="3" align="center">
+	<tr>
+    	<td colspan="2" align="center">
+        	<h2>nạp thẻ điện thoại</h2>
+      </td>
+
+  </tr>
+  <tr>
+    	<td align="right" width="40%">
+        Nhà mạng : 
+      </td>
+      <td>
+       	<select id="lstTelco" name="lstTelco">
+	        <option value="1">Viettel</option>
+					<option value="2">MobiFone</option>
+					<option value="3">Vinaphone</option>
+					<option value="4">Gate</option>
+					<option value="5">VTC</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+
+    	<td align="right">
+        Số Seri :
+      </td>
+      <td>
+      	<input type="text" id="txtSeri" name="txtSeri" />
+      </td>
+    </tr>
+    <tr>
+			<td align="right">
+       	Mã số :
+      </td>
+      <td>
+       	<input type="text" id="txtCode" name="txtCode" />
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+			<td>
+				<p><img src="lib/captcha/imagebuilder.php" border="1">  </p>
+				<p>Mã xác nhận<br>
+				<input MAXLENGTH=8 SIZE=8 name="userstring" type="text" value="">
+			</td>
+    </tr>
+     <tr>
+    	<td align="right">
+        <input type="hidden" name="s" value="{vb:raw session.sessionhash}" />
+				<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+      </td>
+      <td>
+      	<input name="ok" type="submit" value="Nạp thẻ" />
+      </td>
+    </tr>
+</table>
+</form>
+<span style="color:red";>{vb:raw message}</span>
+		]]></template>
+		<template name="gbcard_history" templatetype="template" date="1262531090" username="Gamebank.vn" version="1.0"><![CDATA[
+<h2 class="blockhead">History Transaction</h2>
+{vb:raw his}
+		]]></template>
+	</templates>
+	<stylevardfns>
+	</stylevardfns>
+	<stylevars>
+	</stylevars>
+	<plugins>
+	</plugins>
+	<phrases>
+		<phrasetype name="Control Panel Global" fieldname="cpglobal">
+			<phrase name="gamebank_services" date="1262152230" username="Abe" version=""><![CDATA[GameBank Services]]></phrase>
+			<phrase name="gamebank_services_card" date="1262152219" username="Abe" version=""><![CDATA[GameBank Services]]></phrase>
+			<phrase name="gamebank_services_recounters" date="1262152238" username="Abe" version=""><![CDATA[History Transaction]]></phrase>
+			<phrase name="gamebank_services_settings" date="1262152249" username="Abe" version=""><![CDATA[Gamebank Service Settings]]></phrase>
+			<phrase name="gamebank_services_thongke" date="1262152240" username="Abe" version=""><![CDATA[Statistics]]></phrase>
+		</phrasetype>
+		<phrasetype name="vBulletin Settings" fieldname="vbsettings">
+			<phrase name="setting_gbaccount_desc" date="1350615359" username="admin" version="1.0"><![CDATA[Tài khoản bạn tạo tại <a href='http://gamebank.vn' >Gamebank.vn</a>]]></phrase>
+			<phrase name="setting_gbaccount_title" date="1350615359" username="admin" version="1.0"><![CDATA[Gamebank Account]]></phrase>
+			<phrase name="setting_gbcardlist2_desc" date="1218040714" username="admin" version=""><![CDATA[Another test option checkbox]]></phrase>
+			<phrase name="setting_gbcardlist2_title" date="1218040714" username="admin" version=""><![CDATA[Another test option checkbox]]></phrase>
+			<phrase name="setting_gbcardtype100_desc" date="1351826765" username="admin" version="1.0"><![CDATA[Cấu hình cho phép khách hàng nạp 100.000 thì sẻ được tương ứng bao nhiêu điểm ?]]></phrase>
+			<phrase name="setting_gbcardtype100_title" date="1351826765" username="admin" version="1.0"><![CDATA[Thẻ 100.000]]></phrase>
+			<phrase name="setting_gbcardtype10_desc" date="1351826612" username="admin" version="1.0"><![CDATA[Cấu hình cho phép khách hàng nạp 10.000 thì sẻ được tương ứng bao nhiêu điểm ?]]></phrase>
+			<phrase name="setting_gbcardtype10_title" date="1351826612" username="admin" version="1.0"><![CDATA[Thẻ 10.000]]></phrase>
+			<phrase name="setting_gbcardtype200_desc" date="1351826800" username="admin" version="1.0"><![CDATA[Cấu hình cho phép khách hàng nạp 200.000 thì sẻ được tương ứng bao nhiêu điểm ?]]></phrase>
+			<phrase name="setting_gbcardtype200_title" date="1351826800" username="admin" version="1.0"><![CDATA[Thẻ 200.000]]></phrase>
+			<phrase name="setting_gbcardtype20_desc" date="1351826665" username="admin" version="1.0"><![CDATA[Cấu hình cho phép khách hàng nạp 20.000 thì sẻ được tương ứng bao nhiêu điểm ?]]></phrase>
+			<phrase name="setting_gbcardtype20_title" date="1351826665" username="admin" version="1.0"><![CDATA[Thẻ 20.000]]></phrase>
+			<phrase name="setting_gbcardtype500_desc" date="1351826833" username="admin" version="1.0"><![CDATA[Cấu hình cho phép khách hàng nạp 500.000 thì sẻ được tương ứng bao nhiêu điểm ?]]></phrase>
+			<phrase name="setting_gbcardtype500_title" date="1351826833" username="admin" version="1.0"><![CDATA[Thẻ 500.000]]></phrase>
+			<phrase name="setting_gbcardtype50_desc" date="1351826731" username="admin" version="1.0"><![CDATA[Cấu hình cho phép khách hàng nạp 50.000 thì sẻ được tương ứng bao nhiêu điểm ?]]></phrase>
+			<phrase name="setting_gbcardtype50_title" date="1351826731" username="admin" version="1.0"><![CDATA[Thẻ 50.000]]></phrase>
+			<phrase name="setting_gbcredit_desc" date="1351826497" username="admin" version="1.0"><![CDATA[Tên trường ( Column )  khi khách hàng nạp tiền vào tài khoản sẻ được lưu vào đây .]]></phrase>
+			<phrase name="setting_gbcredit_title" date="1351826497" username="admin" version="1.0"><![CDATA[Tên trường ( Column )]]></phrase>
+			<phrase name="setting_gbcurrency_desc" date="1351830396" username="admin" version="1.0"><![CDATA[Cấu hình đơn vị tính theo VNĐ , USD , Gold, Point .... ]]></phrase>
+			<phrase name="setting_gbcurrency_title" date="1351830396" username="admin" version="1.0"><![CDATA[Đơn vị tính]]></phrase>
+			<phrase name="setting_gbgate_desc" date="1350892174" username="admin" version="1.0"><![CDATA[S&#7917; d&#7909;ng th&#7867; Gate]]></phrase>
+			<phrase name="setting_gbgate_title" date="1350892174" username="admin" version="1.0"><![CDATA[Gate]]></phrase>
+			<phrase name="setting_gbmobi_desc" date="1350892506" username="admin" version="1.0"><![CDATA[S&#7917; d&#7909;ng th&#7867; Mobifone]]></phrase>
+			<phrase name="setting_gbmobi_title" date="1350892506" username="admin" version="1.0"><![CDATA[Mobifone]]></phrase>
+			<phrase name="setting_gbservicesonoff_desc" date="1351045188" username="admin" version="1.0"><![CDATA[Ch&#7885;n yes &#273;&#7875; Enable , no &#273;&#7875; Disable Gamebank services]]></phrase>
+			<phrase name="setting_gbservicesonoff_title" date="1351045188" username="admin" version="1.0"><![CDATA[B&#7853;t Services]]></phrase>
+			<phrase name="setting_gburl_desc" date="1350613997" username="admin" version="1.0"><![CDATA[&#272;&#432;&#7901;ng d&#7851;n t&#7899;i Gamebank Card Services]]></phrase>
+			<phrase name="setting_gburl_title" date="1350613997" username="admin" version="1.0"><![CDATA[Gamebank Services URL]]></phrase>
+			<phrase name="setting_gbusecaptcha_desc" date="1350928248" username="admin" version="1.0"><![CDATA[B&#7853;t t&#7855;t Captcha]]></phrase>
+			<phrase name="setting_gbusecaptcha_title" date="1350928248" username="admin" version="1.0"><![CDATA[Use Captcha]]></phrase>
+			<phrase name="setting_gbviettel_desc" date="1350892034" username="admin" version="1.0"><![CDATA[S&#7917; d&#7909;ng th&#7867; Viettel]]></phrase>
+			<phrase name="setting_gbviettel_title" date="1350892034" username="admin" version="1.0"><![CDATA[Viettel]]></phrase>
+			<phrase name="setting_gbvina_desc" date="1350892118" username="admin" version="1.0"><![CDATA[S&#7917; d&#7909;ng th&#7867; Vinaphone]]></phrase>
+			<phrase name="setting_gbvina_title" date="1350892118" username="admin" version="1.0"><![CDATA[Vinaphone]]></phrase>
+			<phrase name="setting_gbvtc_desc" date="1350929087" username="admin" version="1.0"><![CDATA[S&#7917; d&#7909;ng th&#7867; VTC]]></phrase>
+			<phrase name="setting_gbvtc_title" date="1350929087" username="admin" version="1.0"><![CDATA[VTC]]></phrase>
+			<phrase name="settinggroup_gamebank_services" date="1262152586" username="Abe" version="7.80"><![CDATA[Gamebank Services]]></phrase>
+		</phrasetype>
+	</phrases>
+	<options>
+		<settinggroup name="gamebank_services" displayorder="7894">
+			<setting varname="gbservicesonoff" displayorder="0">
+				<datatype>free</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="gbaccount" displayorder="30">
+				<datatype>free</datatype>
+				<defaultvalue>trongsau96</defaultvalue>
+			</setting>
+			<setting varname="gburl" displayorder="40">
+				<datatype>free</datatype>
+				<defaultvalue>http://pay.gamebank.vn/service/cardServiceV4.php/?wsdl</defaultvalue>
+			</setting>
+			<setting varname="gbusecaptcha" displayorder="60">
+				<datatype>free</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="gbviettel" displayorder="70">
+				<datatype>free</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="gbmobi" displayorder="80">
+				<datatype>free</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="gbvina" displayorder="90">
+				<datatype>free</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="gbgate" displayorder="100">
+				<datatype>free</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="gbvtc" displayorder="110">
+				<datatype>bitfield</datatype>
+				<optioncode>yesno</optioncode>
+				<defaultvalue>1</defaultvalue>
+			</setting>
+			<setting varname="gbcredit" displayorder="120">
+				<datatype>free</datatype>
+				<defaultvalue>user_money</defaultvalue>
+			</setting>
+			<setting varname="gbcardtype10" displayorder="130">
+				<datatype>free</datatype>
+				<defaultvalue>10000</defaultvalue>
+			</setting>
+			<setting varname="gbcardtype20" displayorder="140">
+				<datatype>free</datatype>
+				<defaultvalue>20000</defaultvalue>
+			</setting>
+			<setting varname="gbcardtype50" displayorder="150">
+				<datatype>free</datatype>
+				<defaultvalue>50000</defaultvalue>
+			</setting>
+			<setting varname="gbcardtype100" displayorder="160">
+				<datatype>free</datatype>
+				<defaultvalue>100000</defaultvalue>
+			</setting>
+			<setting varname="gbcardtype200" displayorder="170">
+				<datatype>free</datatype>
+				<defaultvalue>200000</defaultvalue>
+			</setting>
+			<setting varname="gbcardtype500" displayorder="180">
+				<datatype>free</datatype>
+				<defaultvalue>500000</defaultvalue>
+			</setting>
+			<setting varname="gbcurrency" displayorder="190">
+				<datatype>free</datatype>
+				<defaultvalue>Gold</defaultvalue>
+			</setting>
+		</settinggroup>
+	</options>
+	<helptopics>
+	</helptopics>
+	<cronentries>
+	</cronentries>
+	<faqentries>
+	</faqentries>
+</product>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<hooks>
+	<hooktype type="credits">
+		<hook>credits_currency_wizard</hook>
+		<hook>credits_actions_rebuild</hook>
+	</hooktype>
+</hooks>

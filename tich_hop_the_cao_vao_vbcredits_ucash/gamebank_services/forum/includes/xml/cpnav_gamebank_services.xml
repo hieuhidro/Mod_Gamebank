@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<navgroups product="gamebank_services">
+
+	<navgroup phrase="gamebank_services" permissions="canadminthreads" displayorder="82">
+
+		<navoption displayorder="10">
+			<phrase>gamebank_services_settings</phrase>
+			<link>options.php?do=options&amp;dogroup=gamebank_services</link>
+		</navoption>
+
+		<navoption displayorder="20">
+			<phrase>gamebank_services_recounters</phrase>
+			<link>gamebank_services_admin.php?do=recounters</link>
+		</navoption>
+
+
+
+	</navgroup>
+
+</navgroups>

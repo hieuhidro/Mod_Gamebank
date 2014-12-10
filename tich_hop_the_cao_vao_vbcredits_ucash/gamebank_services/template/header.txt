@@ -1,0 +1,132 @@
+﻿<li><a href="gamebank_card_services.php?do=histransaction">Tài khoản : {vb:raw bbuserinfo.user_money}&nbsp;{vb:raw vboptions.gbcurrency}</a></li>
+<vb:if condition="$vboptions['gbservicesonoff']">
+<li><a href="gamebank_card_services.php?do=transaction" id="infoid">Nạp Tiền</a></li>
+</vb:if>
+
+
+
+
+
+<script type="text/javascript" src="lib/css/jquery-latest.js"></script> 
+	
+  <link rel="stylesheet" type="text/css" href="lib/css/vietvbb_topstats.css">
+	<link rel="stylesheet" type="text/css" href="lib/css/grid.css">
+	<link rel="stylesheet" type="text/css" href="lib/css/tabs.css">
+	<link rel="stylesheet" type="text/css" href="lib/css/custom.css">
+	
+	
+	<div style="display: none;" class="vinavb_showinfo">
+		<div class="sf_block">
+			<div style="float:right; cursor: pointer;margin:0px 3px;width:10%;">
+				<a id="vinamin" title="Ẩn"><font color="black">▬</font></a> 
+				<a href="gamebank_card_services.php?do=transaction" target="_blank" title="Phóng"><font color="black" size="4"><b>□</b></font></a> 
+				<a id="vinaclose" title="Đóng"><font color="red"><b>X</b></font></a>
+			</div>
+		<div style="float:left;width:85%;margin:5px;">
+			Thành viên: <b><font color="black">{vb:raw bbuserinfo.username}</font></b><br>
+			Mã số thành viên: <font color="blue"><b>{vb:raw bbuserinfo.userid}</b></font><br>
+			Để nạp xu vào tài khoản <font color="black"><b>{vb:raw bbuserinfo.username}</b></font>, bạn làm như sau:<br>
+		</div>
+		<div class="sf_padding">
+			<!-- Tabs Section -->
+			<section class="container_6 clearfix" style="margin:10px 0 0 0; width:100%;">
+				<div class="grid_6">
+					<ul class="tabs">
+						<li><a style="padding: 0 6px;width:451px;" href="http://gamebank.vn" class="current"><font color="red"><b>Nạp thẻ cào qua Gamebank.vn</b></font></a></li>
+						
+					</ul>
+					<!-- tab "panes" -->
+					<div class="panes clearfix">
+						<section class="paneltab" style="display: block;">
+							<div class="contentpanes">
+								
+							<form method="post" action="gamebank_card_services.php?do=transaction" id="form">
+
+							<table width="300px" border="0" cellpadding="3" cellspacing="3" align="center">
+								<tr>
+										<td width="40%">
+											<p  style="font-size:13px;">Nhà mạng :</p> 
+										</td>
+										<td>&nbsp;
+											<select id="lstTelco" name="lstTelco" style="height:25px; margin-bottom:5px; margin-left: 3px;">
+	  <vb:if condition="$vboptions['gbviettel']"><option value="1">Viettel</option></vb:if>
+          <vb:if condition="$vboptions['gbmobi']"><option value="2">MobiFone</option></vb:if>
+	  <vb:if condition="$vboptions['gbvina']"><option value="3">Vinaphone</option></vb:if>
+	  <vb:if condition="$vboptions['gbgate']"><option value="4">Gate</option></vb:if>
+	  <vb:if condition="$vboptions['gbvtc']"><option value="5">VTC</option></vb:if>
+											</select>
+										</td>
+									</tr>
+									<tr>
+
+										<td>
+											<p  style="font-size:13px;">Số Seri :</p>
+										</td>
+										<td>
+											<input type="text" name="txtSeri" id="txtSeri" style="margin-bottom:5px;width:200px;height:25px;margin-left:9px;font-size:15px;">
+										</td>
+									</tr>
+									<tr>
+								<td>
+											<p  style="font-size:13px;">Mã số :</p>
+										</td>
+										<td>
+											<input type="text" id="txtCode" name="txtCode" style="margin-bottom:5px;width:200px;height:25px;margin-left:9px;font-size:15px;" />
+										</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>
+											<p><img src="lib/captcha/imagebuilder.php" border="1" style="padding-left:25px;width:150px;height:25px;margin-left:9px;margin-bottom:5px;font-size:15px;">  </p>
+										
+										</td>
+									</tr>
+									<tr>
+									<td><p  style="font-size:13px;">Mã xác nhận</p></td>
+									<td>
+									<input MAXLENGTH=8 SIZE=20 name="userstring" type="text" value="" height="48" style="width:200px;height:25px;margin-left:9px;margin-bottom:5px;font-size:15px;">
+									</td>
+									</tr>
+
+									 <tr>
+										<td>
+											<input type="hidden" name="s" value="{vb:raw session.sessionhash}" />
+				<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+										</td>
+										<td>
+											<input name="ok" type="submit" value="Nạp thẻ" style="margin-bottom:5px;padding-bottom:5px;width:75px;height:30px;margin-left:9px;font-size:13px;" />
+										</td>
+									</tr>
+							</table>
+							</form>
+
+							</div>
+						</section>
+
+						
+					</div>
+				</div>
+			</section> 
+		</div>
+		
+	</div>
+	</div>
+
+</div>
+	<div class="below_body">
+		<center>
+			<script type="text/javascript" src="lib/css/showinfo.js"></script>
+			<script type="text/javascript">
+				$('#infoid').hover(function(){
+					$(".vinavb_showinfo").slideDown(500);
+					return;
+				});		
+				$('#fdbk_tab').hover(function(){$(".vinavb_showinfo").slideDown(500);});
+				$('.imginfoid').hover(function(){$(".vinavb_showinfo").slideDown(500);});
+				$('#vinaclose').click(function(){$(".vinavb_showinfo").slideUp(0);});
+				$('#vinamin').click(function(){$(".vinavb_showinfo").slideUp(500);});
+				$('#chilaclose').click(function(){$(".vinavb_showinfo").slideUp(500);});
+			</script>
+		</center>
+	</div>

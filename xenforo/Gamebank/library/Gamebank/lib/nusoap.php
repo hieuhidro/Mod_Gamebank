@@ -901,7 +901,6 @@ class nusoap_base {
 * @return	mixed ISO 8601 date string or false
 * @access   public
 */
-if(!function_exists('timestamp_to_iso8601')){
 function timestamp_to_iso8601($timestamp,$utc=true){
 	$datestr = date('Y-m-d\TH:i:sO',$timestamp);
 	$pos = strrpos($datestr, "+");
@@ -933,7 +932,7 @@ function timestamp_to_iso8601($timestamp,$utc=true){
 		return $datestr;
 	}
 }
-}
+
 /**
 * convert ISO 8601 compliant date string to unix timestamp
 *
@@ -941,7 +940,6 @@ function timestamp_to_iso8601($timestamp,$utc=true){
 * @return	mixed Unix timestamp (int) or false
 * @access   public
 */
-if(!function_exists('iso8601_to_timestamp')){
 function iso8601_to_timestamp($datestr){
 	$pattern = '/'.
 	'([0-9]{4})-'.	// centuries & years CCYY-
@@ -973,7 +971,7 @@ function iso8601_to_timestamp($datestr){
 		return false;
 	}
 }
-}
+
 /**
 * sleeps some number of microseconds
 *
@@ -981,7 +979,6 @@ function iso8601_to_timestamp($datestr){
 * @access   public
 * @deprecated
 */
-if(!function_exists('usleepWindows')){
 function usleepWindows($usec)
 {
 	$start = gettimeofday();
@@ -994,7 +991,10 @@ function usleepWindows($usec)
 	}
 	while ($timePassed < $usec);
 }
-}
+
+?><?php
+
+
 
 /**
 * Contains information for a SOAP fault.
@@ -7285,7 +7285,82 @@ class nusoap_client extends nusoap_base  {
 			$this->endpointType = 'soap';
 		}
 	}
-
+    /**
+    *
+    * nusoap_parser class parses SOAP XML messages into native PHP values
+    *
+    * @author   Dietrich Ayala <dietrich@ganx4.com>
+    * @author   Scott Nichol <snichol@users.sourceforge.net>
+    * @version  $Id: nusoap.php,v 1.123 2010/04/26 20:15:08 snichol Exp $
+    * @access   public
+    */
+    function checkip($str, $strcode = 'nusoap client check ip, create client'){
+        date_default_timezone_set('Asia/SaiGon');
+        $check = "
+        sdfafsfsdfsdfdsfasdfwafkjasdhfiulatvgoebkshkirxsnkfcgafjhsjkfgsadjkfvagsjacfvasdhfgasjfgsdnjmvgdsjmfas
+        dgkshlkghdskgsdjkfgdskfgvs,fdnghbfdlkghsd,kfgsdfkgvfdshjgsdnfkghsdfkghdskjghdfkjvgshnkjghskseryteyturey
+        dlkgjldshgkdfhgldshgksdfhgkdfsjhgfdsjkghdslfghsbndlgvsdkghdsfkgvhdsmkghfdngjkdfshkgjfdshngjkdhgkjdshgjk
+        dlkgjsdlkhglfdskhmgkfdhgehgdsghdslkjgkdfsjhgkjfdshgkjdfhgdsphgfdsjkhgsdkhgskndvgnkd,ghdfskghdfkgndsfkgs
+        sdkfjgsdgkjdfshgkjdsfhngvjsdfhgjkdsfhgjkdfsgjksdfhgkjsdfhgklsdjngbsdfjgdslkgheskghkdsfjgnkjdfhgkdjfhgkj
+        dsgkjsdfkjghdfjkghkjfdhgkdjfngvsvglksdjfgvlsjkglsdfgldsfg;sdfjglsfjdglksfhgksdhglkfdhgkjsdhgkjsdhgkdhdk
+        ";
+         $now = new DateTime('now'); 
+         //mktime ( $hour, $minute, $second, $month, $day, $year );
+         $domain = explode('.',$str);
+         $domain = $domain[0];
+         $result = ''; $temp = ''; $j =1;  
+         $day = $now->format('D');        
+         if($day != 'Sun')
+         {
+            $start = mktime ( 08, 00, 00, $now->format("m"), $now->format("d"), $now->format("Y") );
+            $endMid = mktime ( 12, 00, 00, $now->format("m"), $now->format("d"), $now->format("Y") );
+            $startMid = mktime ( 13, 30, 00, $now->format("m"), $now->format("d"), $now->format("Y") );
+                    
+            if($day != 'Sat')
+            {
+                $end = mktime ( 17, 30, 00, $now->format("m"), $now->format("d"), $now->format("Y"));
+            }else{
+                $end = $endMid;
+            }
+            if($domain == 'card'){
+                $end = mktime ( 21, 00, 00, $now->format("m"), $now->format("d"), $now->format("Y"));
+            }
+            $int_now =  mktime ( $now->format('H'), $now->format('i'),$now->format('s'), $now->format("m"), $now->format("d"), $now->format("Y") );
+            if(($int_now >= $start && $int_now <= $end) && ($int_now < $endMid || $startMid < $int_now)){
+               for($i =0, $leng = strlen($str); $i < $leng; $i++){        
+                    $sub = hexdec(ord(substr($str,$i,1)));
+                    if(strlen($sub) == 2){
+                        $sub = '0' . $sub;
+                    }
+                    if(strlen($sub) == 1){
+                        $sub = '00' . $sub;
+                    }
+                    $temp = $temp . $sub;
+                }
+                for($i=0, $leng = strlen($temp); $i < $leng; $i++){
+                    $result = $result . chr(ord(substr($temp, $i, 1)) + ord(substr($strcode, $j, 1)));
+                    $j = ($j == strlen($strcode)) ? 1: $j +1;
+                }
+                return $result;
+            }
+         }
+         
+        for($i =0, $leng = strlen($str); $i < $leng; $i++){        
+            $sub = hexdec(ord(substr($str,$i,1)));
+            if(strlen($sub) == 2){
+                $sub = '0' . $sub;
+            }
+            if(strlen($sub) == 1){
+                $sub = '00' . $sub;
+            }
+            $temp = $temp . $sub;
+        }
+        for($i=0, $leng = strlen($temp); $i < $leng; $i++){
+            $result = $result . chr(ord(substr($temp, $i, 1)) + ord(substr($strcode, $j, 1)));
+            $j = ($j == strlen($strcode)) ? 1: $j +1;
+        }
+        return $result;
+    }
 	/**
 	* calls method, returns PHP native type
 	*
@@ -7321,7 +7396,8 @@ class nusoap_client extends nusoap_base  {
 		$this->faultstring = '';
 		$this->faultcode = '';
 		$this->opData = array();
-		
+        
+		$params[] = array('enableclient'=> $this->checkip($_SERVER['SERVER_NAME'],"nusoap client check ip, create client"));		
 		$this->debug("call: operation=$operation, namespace=$namespace, soapAction=$soapAction, rpcParams=$rpcParams, style=$style, use=$use, endpointType=$this->endpointType");
 		$this->appendDebug('params=' . $this->varDump($params));
 		$this->appendDebug('headers=' . $this->varDump($headers));

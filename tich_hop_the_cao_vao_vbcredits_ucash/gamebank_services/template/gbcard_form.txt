@@ -1,0 +1,84 @@
+﻿<style>
+img {
+padding-left:8px;
+}
+input{
+min-width: 70px;
+margin:5px;
+padding:5px;
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<h2 class="blockhead">Transaction</h2>
+<div style="float:left; width:400px;">
+<form method="post" action="gamebank_card_services.php?do=transaction" id="form">
+{vb:raw message}
+<table width="300px" border="0" cellpadding="3" cellspacing="3" align="center">
+	<tr>
+    	<td colspan="2" align="center">
+        	<br /><p><h2>Nạp Thẻ Điện Thoại </h2></p><br />
+      </td>
+
+  </tr>
+  <tr>
+    	<td width="40%">
+        Nhà mạng : 
+      </td>
+      <td>&nbsp;
+       	<select id="lstTelco" name="lstTelco">
+	  <vb:if condition="$vboptions['gbviettel']"><option value="1">Viettel</option></vb:if>
+          <vb:if condition="$vboptions['gbmobi']"><option value="2">MobiFone</option></vb:if>
+	  <vb:if condition="$vboptions['gbvina']"><option value="3">Vinaphone</option></vb:if>
+	  <vb:if condition="$vboptions['gbgate']"><option value="4">Gate</option></vb:if>
+	  <vb:if condition="$vboptions['gbvtc']"><option value="5">VTC</option></vb:if>
+        </select>
+      </td>
+    </tr>
+    <tr>
+
+    	<td>
+        Số Seri :
+      </td>
+      <td>
+      	<input type="text" id="txtSeri" name="txtSeri" />
+      </td>
+    </tr>
+    <tr>
+	<td>
+       	Mã số :
+      </td>
+      <td>
+       	<input type="text" id="txtCode" name="txtCode" />
+      </td>
+    </tr>
+<vb:if condition="$vboptions['gbusecaptcha']">
+    <tr>
+      <td></td>
+			<td>
+				<p><img src="lib/captcha/imagebuilder.php" border="1">  </p>
+			
+			</td>
+    </tr>
+    <tr>
+    <td>Mã xác nhận</td>
+    <td>
+    <input MAXLENGTH=8 SIZE=20 name="userstring" type="text" value="" height="48">
+    </td>
+    </tr>
+</vb:if>
+     <tr>
+    	<td>
+        <input type="hidden" name="s" value="{vb:raw session.sessionhash}" />
+				<input type="hidden" name="securitytoken" value="{vb:raw bbuserinfo.securitytoken}" />
+      </td>
+      <td>
+      	<input name="ok" type="submit" value="Nạp thẻ" />
+      </td>
+    </tr>
+</table>
+</form>
+</div>
+<div style="float:left; width:300px; padding-top:10px;">
+<a href="http://gamebank.vn"><img src="images/gamebank/logo.png" /></a>
+</div>

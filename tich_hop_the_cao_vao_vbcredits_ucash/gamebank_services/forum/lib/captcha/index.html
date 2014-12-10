@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>QuickCaptcha 1.0 - PHP CAPTCHA</title>
+<meta name="description" content="QuickCaptcha provides PHP CAPTCHA functionality.">
+<meta name="keywords" content="captcha php script capcha example in php"
+</head>
+
+<body>
+
+<div style="width:500px;">
+  <h1>QuickCaptcha 1.0</h1>
+  <p>QuickCaptcha provides <a href="http://en.wikipedia.org/wiki/Captcha">CAPTCHA</a> functionality to any website running on a PHP-enabled web host. The graphic image below is easily read by humans, but not so easily by computers. This makes it difficult for someone to implement an automated mechanism to use resources that integrate this feature.</p>
+  <p>QuickCaptcha allows you to specify string length, allowable characters, color contrast, and several kinds of geometric obfuscation elements. </p>
+  <div style="border:2px solid #666666; margin: 10px; padding: 10px; width:400px;">
+    <form action="result.php" METHOD="POST">
+      <p><img src="imagebuilder.php" border="1">  </p>
+      <p>Please enter the code shown above and click Submit.<br>
+        <input MAXLENGTH=8 SIZE=8 name="userstring" type="text" value="">
+        <br>
+        <input type="submit" value="Submit">
+      </p>
+    </form>
+  </div>
+  <h3>Download</h3>
+  <p><a href="http://www.web1marketing.com/resources/tools/quickcaptcha/QuickCaptcha1.0.zip">Zip file</a></p>
+  <h3>Requirements</h3>
+  <ul>
+    <li>PHP Version 4.3.2</li>
+    <li>GD Library 2.0.2 </li>
+  </ul>
+  <h3>Instructions</h3>
+  <p>Knowledge of PHP is not strictly required, but it might be helpful when adjusting the parameters in settings.php so as to avoid syntax errors. </p>
+  <ol>
+    <li>Copy the form in this page to the page where you would like it to appear in your site.</li>
+    <li>Place the remaining files into a folder of your choice.</li>
+    <li>Make the copied form point to result.php in the location you specified in step 2.</li>
+    <li>Adjust the parameters in settings.php. </li>
+  </ol>
+  <h3>License</h3>
+  <p>Provided under the <a href="http://www.gnu.org/copyleft/gpl.html">GNU GPL</a> by <a href="http://www.web1marketing.com">Web 1 Marketing, Inc.</a> </p>
+</div>
+</body>
+</html>
